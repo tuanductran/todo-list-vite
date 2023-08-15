@@ -3,9 +3,9 @@ interface Todo {
   text: string
 }
 
-/* `let todos: Todo[]` is declaring a variable named `todos` with the type `Todo[]`, which represents an array of `Todo`
+/* `let todos: Todo[] = []` is declaring a variable named `todos` with the type `Todo[]`, which represents an array of `Todo`
 objects. This variable is used to store and manipulate a list of todos. */
-let todos: Todo[]
+let todos: Todo[] = []
 
 /**
  * The `delay` function returns a promise that resolves after a delay of 800 milliseconds.
