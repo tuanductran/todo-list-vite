@@ -10,7 +10,7 @@ createRoot(document.getElementById('root') ).render(
       <main className="grow">
         <App />
       </main>
-      <Toaster toastOptions={{ position: 'bottom-left' }} />
+      <Toaster toastOptions={{ position: 'top-center' }} />
     </div>
   </StrictMode>
 )
