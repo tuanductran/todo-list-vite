@@ -77,7 +77,7 @@ export default function App() {
     <div className="app-container">
       <TodoForm onAddTodo={handleAddTodo} />
       <TodoList
-        todos={data}
+        todos={data || []}
         completedTodos={completedTodos}
         handleToggleCompletion={handleToggleCompletion}
       />
