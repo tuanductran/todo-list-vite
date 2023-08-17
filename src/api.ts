@@ -3,33 +3,46 @@ interface Todo {
   text: string
 }
 
-/* `let todos: Todo[] = []` is declaring a variable named `todos` with the type `Todo[]`, which represents an array of `Todo`
-objects. This variable is used to store and manipulate a list of todos. */
 let todos: Todo[] = []
+let currentId = Date.now()
 
-/**
- * The `delay` function returns a promise that resolves after a delay of 800 milliseconds.
- */
-const delay = () => new Promise<void>((res) => setTimeout(() => res(), 800))
+// export const delay = () => new Promise<void>((res) => setTimeout(() => res(), 800))
 
-/**
- * The function `getTodos` returns a promise that resolves to an array of `Todo` objects after a delay.
- * @returns a Promise that resolves to an array of Todo objects.
- */
+// Load todos from Local Storage if available
+const storedTodos = localStorage.getItem('todos')
+if (storedTodos) {
+  todos = JSON.parse(storedTodos)
+}
+
 export async function getTodos(): Promise<Todo[]> {
-  await delay()
+  // await delay()
   return todos
 }
 
-/**
- * The function adds a new todo item to an array of todos and returns the updated array, with a possibility of throwing an
- * error.
- * @param {Todo} todo - The `todo` parameter is of type `Todo`, which represents a single todo item.
- * @returns a Promise that resolves to an array of Todo objects.
- */
 export async function addTodo(todo: Todo): Promise<Todo[]> {
-  await delay()
-  if (Math.random() < 0.5) throw new Error('Failed to add new item!')
-  todos = [...todos, todo]
+  // await delay()
+  // if (Math.random() < 0.5) throw new Error('Failed to add new item!')
+  todos = [...todos, { ...todo, id: currentId++ }]
+  updateLocalStorage()
   return todos
 }
+
+export async function updateTodo(updatedTodo: Todo): Promise<Todo[]> {
+  // await delay()
+  todos = todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+  updateLocalStorage()
+  return todos
+}
+
+export async function deleteTodo(todoId: number): Promise<Todo[]> {
+  // await delay()
+  todos = todos.filter((todo) => todo.id !== todoId)
+  updateLocalStorage()
+  return todos
+}
+
+// Helper function to update Local Storage
+function updateLocalStorage() {
+  localStorage.setItem('todos', JSON.stringify(todos))
+}
+

@@ -4,6 +4,10 @@
     "build": {
       "outputs": ["dist/**"]
     },
+   "build:tailwind": {
+      "dependsOn": [],
+      "outputs": ["build.css"]
+    },
     "lint": {}
   }
 }

@@ -1,5 +1,6 @@
-import type { FC, FormEvent } from 'react'
+import type { FC, FormEvent, ChangeEvent } from 'react'
 import { useState } from 'react'
+import DOMPurify from 'dompurify'
 
 interface TodoFormProps {
   onAddTodo: (text: string) => void
@@ -19,43 +20,33 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
       onAddTodo(text)
       setText('')
     }
-  };
+  }
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value
+    const capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
+    setText(DOMPurify.sanitize(capitalizedValue))
+  }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="add-todo" className="todo-label">
-        Add Todo
-      </label>
-      <div className="todo-container">
-        <div className="todo-icon">
-          <svg
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            />
-          </svg>
-        </div>
-        <input
-          type="text"
-          id="add-todo"
-          className="todo-input"
-          placeholder="Add Todo..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          required
-        />
-        <button type="submit" className="todo-submit" disabled={!text.trim()}>
-          Add Todo
-        </button>
-      </div>
+    <form onSubmit={handleSubmit} className="flex mt-4">
+      <input
+        type="text"
+        name="name"
+        id="add-todo"
+        className="appearance-none border rounded w-full py-2 px-3 mr-4 text-gray-700"
+        placeholder="Add new todo..."
+        value={text}
+        onChange={handleInputChange}
+        required
+      />
+      <button
+        type="submit"
+        className="shrink p-2 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded focus:outline-none disabled:opacity-25 disabled:pointer-events-none"
+        disabled={!text.trim()}
+      >
+        Create
+      </button>
     </form>
   )
 }
