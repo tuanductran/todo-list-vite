@@ -36,6 +36,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
         id="add-todo"
         className="appearance-none border rounded w-full py-2 px-3 mr-4 text-gray-700"
         placeholder="Add new todo..."
+        maxLength={29}
         value={text}
         onChange={handleInputChange}
         required
