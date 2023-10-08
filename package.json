@@ -41,7 +41,7 @@
     "eslint-plugin-tailwindcss": "3.13.0",
     "eslint-plugin-typescript-sort-keys": "3.0.0",
     "eslint-plugin-unicorn": "48.0.1",
-    "postcss": "^8.4.29",
+    "postcss": "^8.4.31",
     "postcss-cli": "^10.1.0",
     "postcss-import": "^15.1.0",
     "postcss-lightningcss": "^1.0.0",
