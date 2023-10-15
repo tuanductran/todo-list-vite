@@ -77,8 +77,8 @@ devDependencies:
     specifier: 3.13.0
     version: 3.13.0(tailwindcss@3.3.3)
   eslint-plugin-typescript-sort-keys:
-    specifier: 3.0.0
-    version: 3.0.0(@typescript-eslint/parser@6.7.5)(eslint@8.51.0)(typescript@5.2.2)
+    specifier: 3.1.0
+    version: 3.1.0(@typescript-eslint/parser@6.7.5)(eslint@8.51.0)(typescript@5.2.2)
   eslint-plugin-unicorn:
     specifier: 48.0.1
     version: 48.0.1(eslint@8.51.0)
@@ -101,8 +101,8 @@ devDependencies:
     specifier: 0.18.0
     version: 0.18.0(prettier@3.0.3)
   prettier-plugin-tailwindcss:
-    specifier: 0.5.5
-    version: 0.5.5(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.3)
+    specifier: 0.5.6
+    version: 0.5.6(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.3)
   turbo:
     specifier: ^1.10.14
     version: 1.10.14
@@ -1762,8 +1762,8 @@ packages:
       tailwindcss: 3.3.3
     dev: true
 
-  /eslint-plugin-typescript-sort-keys@3.0.0(@typescript-eslint/parser@6.7.5)(eslint@8.51.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-bMmI4prYlf3l/1O8j8Nsz11m+XfKEHRFk9aJqP91L4Hgy7I38lnitnYElDmPQaznE1oFlGgBcnkEizNT2NLylQ==}
+  /eslint-plugin-typescript-sort-keys@3.1.0(@typescript-eslint/parser@6.7.5)(eslint@8.51.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-rgZeYfEguqKni/V7sbmgFu9/94UDAQd7YqNd0J7Qhw7SdLIGd0iBk2KgpjhRhe2ge4rPSLDIdFWwUiDqBOst6Q==}
     engines: {node: '>= 16'}
     peerDependencies:
       '@typescript-eslint/parser': ^6
@@ -3055,8 +3055,8 @@ packages:
       prettier: 3.0.3
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.5(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.3):
-    resolution: {integrity: sha512-voy0CjWv/CM8yeaduv5ZwovovpTGMR5LbzlhGF+LtEvMJt9wBeVTVnW781hL38R/RcDXCJwN2rolsgr94B/n0Q==}
+  /prettier-plugin-tailwindcss@0.5.6(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.3):
+    resolution: {integrity: sha512-2Xgb+GQlkPAUCFi3sV+NOYcSI5XgduvDBL2Zt/hwJudeKXkyvRS65c38SB0yb9UB40+1rL83I6m0RtlOQ8eHdg==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
