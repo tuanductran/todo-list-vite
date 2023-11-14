@@ -2,7 +2,7 @@
   "name": "todo-list",
   "private": true,
   "version": "1.0.0",
-  "packageManager": "pnpm@8.10.4",
+  "packageManager": "pnpm@8.10.5",
   "scripts": {
     "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
     "dev:layout": "vite",
