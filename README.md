@@ -12,8 +12,8 @@ Welcome to the React Vite Todo List, a user-friendly and responsive web applicat
 ## Get Started
 
 1. Clone the repository: `git https://github.com/tuanductran/todo-list-vite.git`
-2. Install dependencies: `pnpm install` or `yarn install`
-3. Run the development server: `pnpm dev` or `yarn dev`
+2. Install dependencies: `pnpm install`
+3. Run the development server: `pnpm dev`
 4. Open your browser and navigate to `http://localhost:3000`
 
 ## Contributions
