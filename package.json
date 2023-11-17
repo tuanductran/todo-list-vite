@@ -1,17 +1,7 @@
 {
-  "name": "todo-list",
-  "private": true,
-  "version": "1.0.0",
-  "packageManager": "pnpm@8.10.5",
-  "scripts": {
-    "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
-    "dev:layout": "vite",
-    "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
-    "build": "vite build",
-    "build:all": "pnpm build:tailwind && pnpm build",
-    "build:tailwind": "pnpm postcss css/app.css -o css/build.css --verbose",
-    "preview": "vite preview",
-    "lint": "tsc"
+  "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/tuanductran/todo-list-vite/issues"
   },
   "dependencies": {
     "clsx": "^2.0.0",
@@ -23,6 +13,7 @@
     "tailwindcss": "^3.3.5",
     "xlsx": "^0.18.5"
   },
+  "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@types/node": "^20.8.9",
@@ -51,5 +42,25 @@
     "turbo": "^1.10.16",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
-  }
+  },
+  "keywords": ["todo", "react", "vite", "tailwind"],
+  "license": "MIT",
+  "name": "todo-list",
+  "packageManager": "pnpm@8.10.5",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tuanductran/todo-list-vite.git"
+  },
+  "scripts": {
+    "build": "vite build",
+    "build:all": "pnpm build:tailwind && pnpm build",
+    "build:tailwind": "pnpm postcss css/app.css -o css/build.css --verbose",
+    "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
+    "dev:layout": "vite",
+    "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
+    "lint": "tsc",
+    "preview": "vite preview"
+  },
+  "version": "1.0.0"
 }
