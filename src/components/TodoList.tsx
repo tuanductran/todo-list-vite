@@ -44,7 +44,7 @@ const TodoList: FC<TodoListProps> = ({
             {todos.map((todo) => {
               const isTodoCompleted = completedTodos.includes(todo.id)
               return (
-                <div key={todo.id} className="flex mb-4 last:mb-0 items-center" id={`todo-item-${todo.id}`}>
+                <div key={todo.id} className="flex mb-4 last:mb-0 items-center">
                   <p className={cn('mr-auto truncate line-clamp-2 w-1/2', {
                     "line-through text-sky-500" : isTodoCompleted
                   })}>
