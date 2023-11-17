@@ -1,12 +1,27 @@
 # React Vite Todo List
 
-A user-friendly and responsive Todo List web application developed using React and Vite. This project showcases modern technologies including Tailwind CSS for styling, SWR for efficient data fetching, and React Hot Toast for displaying informative toasts.
+Welcome to the React Vite Todo List, a user-friendly and responsive web application for managing your tasks. This project is developed using React and Vite, featuring modern technologies such as Tailwind CSS for styling, SWR for efficient data fetching, and React Hot Toast for displaying informative toasts.
 
 ## Features
 
-- Easily add new tasks to your todo list.
-- Real-time data fetching and caching using SWR.
-- Responsive design created with Tailwind CSS.
-- Convenient notifications with React Hot Toast.
+- **Add Tasks Easily:** Seamlessly add new tasks to your todo list, simplifying your workflow.
+- **Real-time Data Fetching:** Utilizing SWR for efficient data fetching and caching, ensuring a smooth user experience.
+- **Responsive Design:** Enjoy a responsive design crafted with Tailwind CSS, making the application accessible on various devices.
+- **Informative Toasts:** Stay informed with convenient notifications provided by React Hot Toast.
+
+## Get Started
+
+1. Clone the repository: `git https://github.com/tuanductran/todo-list-vite.git`
+2. Install dependencies: `pnpm install` or `yarn install`
+3. Run the development server: `pnpm dev` or `yarn dev`
+4. Open your browser and navigate to `http://localhost:3000`
+
+## Contributions
+
+Feel free to contribute to this project by opening issues or submitting pull requests. Your feedback and suggestions are highly appreciated.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Enhance your task management with this React Vite-powered Todo List application. Simplify your planning and organization while enjoying a modern and efficient user experience.
