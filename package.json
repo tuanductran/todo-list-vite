@@ -16,7 +16,7 @@
   "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/node": "^20.9.1",
+    "@types/node": "^20.9.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.14",
     "@typescript-eslint/eslint-plugin": "6.11.0",
