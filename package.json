@@ -46,7 +46,7 @@
   "keywords": ["todo", "react", "vite", "tailwind"],
   "license": "MIT",
   "name": "todo-list",
-  "packageManager": "pnpm@8.10.5",
+  "packageManager": "pnpm@8.11.0",
   "private": true,
   "repository": {
     "type": "git",
