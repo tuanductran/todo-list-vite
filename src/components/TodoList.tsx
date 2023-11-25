@@ -2,11 +2,7 @@ import type { FC } from 'react'
 import { Fragment } from 'react'
 import cn from 'clsx'
 import { utils, writeFile } from 'xlsx'
-
-interface Todo {
-  id: number
-  text: string
-}
+import { Todo } from '@/type'
 
 interface TodoListProps {
   todos: Todo[]
