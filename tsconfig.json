@@ -16,8 +16,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@*": ["./*"]
+    }
   },
-  "include": ["./src", "./vite.config.ts"],
+  "include": ["vite.config.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
