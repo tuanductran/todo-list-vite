@@ -43,7 +43,12 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
   },
-  "keywords": ["todo", "react", "vite", "tailwind"],
+  "keywords": [
+    "todo",
+    "react",
+    "vite",
+    "tailwind"
+  ],
   "license": "MIT",
   "name": "todo-list",
   "packageManager": "pnpm@8.11.0",
@@ -62,5 +67,5 @@
     "lint": "tsc",
     "preview": "vite preview"
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
