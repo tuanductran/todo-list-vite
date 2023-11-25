@@ -3,7 +3,7 @@ export interface Todo {
   text: string
 }
 
-export interface TodoFormPros {
+export interface TodoFormProps {
   onAddTodo: (text: string) => void
 }
 
