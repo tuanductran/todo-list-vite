@@ -1,1 +1,20 @@
-prettier
+name: Prettier
+
+on:
+  schedule:
+    - cron: '0 */3 * * *' # every 3 hours
+  push:
+    branches: [master]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.0
+      - name: Install dependencies
+        run: pnpm install
+      - name: Prettier
+        run: npx prettier --write .
