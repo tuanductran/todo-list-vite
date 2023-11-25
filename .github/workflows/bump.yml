@@ -1,0 +1,30 @@
+name: "Bump Version"
+
+on:
+  push:
+    branches:
+      - "master"
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    name: "Bump Version"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@v4"
+        with:
+          ref: ${{ github.ref }}
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: 18
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
