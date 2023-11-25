@@ -1,4 +1,4 @@
-import { Todo } from 'type'
+import { Todo } from '@/type'
 
 let todos: Todo[] = []
 let currentId = Date.now()
