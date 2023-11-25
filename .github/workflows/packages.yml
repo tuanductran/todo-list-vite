@@ -1,4 +1,4 @@
-name: "Bump Version"
+name: "Update Version Packages"
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   bump-version:
-    name: "Bump Version on master"
+    name: "Update Version Packages"
     runs-on: ubuntu-latest
 
     steps:
@@ -24,11 +24,11 @@ jobs:
         uses: "actions/setup-node@v4"
         with:
           node-version: 18
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
-        with:
-          tag-prefix: ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.0
+      - name: Install dependencies
+        run: pnpm install
+      - name: PNPM update latest
+        run: pnpm up --latest
       - name: "cat package.json"
         run: cat ./package.json
