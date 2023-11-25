@@ -1,7 +1,4 @@
-interface Todo {
-  id: number
-  text: string
-}
+import { Todo } from './types'
 
 let todos: Todo[] = []
 let currentId = Date.now()
