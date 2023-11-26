@@ -2,6 +2,13 @@
 
 Welcome to the React Vite Todo List, a user-friendly and responsive web application for managing your tasks. This project is developed using React and Vite, featuring modern technologies such as Tailwind CSS for styling, SWR for efficient data fetching, and React Hot Toast for displaying informative toasts.
 
+## Branch Structure
+
+This repository follows a branching model with two main branches:
+
+- **master:** The stable branch containing production-ready code.
+- **develop:** The branch dedicated to developing new features and enhancements.
+
 ## Features
 
 - **Add Tasks Easily:** Seamlessly add new tasks to your todo list, simplifying your workflow.
