@@ -3,8 +3,8 @@ import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
-import { getTodos, addTodo, updateTodo, deleteTodo } from '@/api'
-import { Todo } from '@/type'
+import { getTodos, addTodo, updateTodo, deleteTodo } from '../api'
+import { Todo } from '../type'
 
 export default function TodoPage() {
   const { data, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
