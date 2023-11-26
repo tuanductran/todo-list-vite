@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { Fragment } from 'react'
 import cn from 'clsx'
 import { utils, writeFile } from 'xlsx'
-import { Todo, TodoListProps } from '@/type'
+import { Todo, TodoListProps } from '../type'
 
 const TodoList: FC<TodoListProps> = ({
   todos,
