@@ -1,10 +1,7 @@
 import type { FC, FormEvent, ChangeEvent } from 'react'
 import { useState } from 'react'
 import DOMPurify from 'dompurify'
-
-interface TodoFormProps {
-  onAddTodo: (text: string) => void
-}
+import { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   const [text, setText] = useState('')

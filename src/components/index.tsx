@@ -4,13 +4,9 @@ import useSWR from 'swr'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
 import { getTodos, addTodo, updateTodo, deleteTodo } from '../api'
+import { Todo } from '../type'
 
-interface Todo {
-  id: number
-  text: string
-}
-
-export default function Todo() {
+export default function TodoPage() {
   const { data, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
 
   /* The line `const [completedTodos, setCompletedTodos] = useState<number[]>([])` is using the `useState` hook to create
