@@ -33,7 +33,7 @@
     "eslint-plugin-typescript-sort-keys": "3.1.0",
     "eslint-plugin-unicorn": "49.0.0",
     "postcss": "^8.4.32",
-    "postcss-cli": "^10.1.0",
+    "postcss-cli": "^11.0.0",
     "postcss-import": "^15.1.0",
     "postcss-lightningcss": "^1.0.0",
     "prettier": "3.1.0",
