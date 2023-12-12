@@ -41,7 +41,7 @@
     "prettier-plugin-tailwindcss": "0.5.9",
     "turbo": "^1.10.16",
     "typescript": "^5.3.3",
-    "vite": "^5.0.4"
+    "vite": "^5.0.8"
   },
   "keywords": [
     "todo",
