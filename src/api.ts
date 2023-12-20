@@ -3,7 +3,7 @@ import { Todo } from './type'
 let todos: Todo[] = []
 let currentId = Date.now()
 
-export const delay = () => new Promise<void>((res) => setTimeout(() => res(), 800))
+export const delay = () => new Promise<void>((res) => setTimeout(() => res(), 300))
 
 // Load todos from Local Storage if available
 const storedTodos = localStorage.getItem('todos')
