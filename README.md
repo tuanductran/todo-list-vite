@@ -21,7 +21,7 @@ This repository follows a branching model with two main branches:
 ### 1. Clone the repository
 
 ```
-git https://github.com/tuanductran/todo-list-vite.git
+git clone https://github.com/tuanductran/todo-list-vite.git
 ```
 
 ### 2. Install dependencies
