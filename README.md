@@ -18,10 +18,22 @@ This repository follows a branching model with two main branches:
 
 ## Get Started
 
-1. Clone the repository: `git https://github.com/tuanductran/todo-list-vite.git`
-2. Install dependencies: `pnpm install`
-3. Run the development server: `pnpm dev`
-4. Open your browser and navigate to `http://localhost:3000`
+1. Clone the repository:
+```
+git https://github.com/tuanductran/todo-list-vite.git
+```
+2. Install dependencies:
+```
+pnpm install
+```
+3. Run the development server:
+```
+pnpm dev
+```
+4. Open your browser and navigate to
+```
+   http://localhost:3000
+```
 
 ## Contributions
 
