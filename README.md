@@ -27,13 +27,13 @@ git clone https://github.com/tuanductran/todo-list-vite.git
 ### 2. Install dependencies
 
 ```
-npm install
+pnpm install
 ```
 
 ### 3. Run the development server
 
 ```
-npm dev
+pnpm dev
 ```
 
 ### 4. Open your browser and navigate to
