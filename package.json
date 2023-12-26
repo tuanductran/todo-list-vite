@@ -51,7 +51,7 @@
   ],
   "license": "MIT",
   "name": "todo-list",
-  "packageManager": "pnpm@8.12.1",
+  "packageManager": "pnpm@8.13.1",
   "private": true,
   "repository": {
     "type": "git",
