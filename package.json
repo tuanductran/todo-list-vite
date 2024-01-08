@@ -32,7 +32,7 @@
     "eslint-plugin-tailwindcss": "3.13.1",
     "eslint-plugin-typescript-sort-keys": "3.1.0",
     "eslint-plugin-unicorn": "50.0.1",
-    "postcss": "^8.4.32",
+    "postcss": "^8.4.33",
     "postcss-cli": "^11.0.0",
     "postcss-import": "^16.0.0",
     "postcss-lightningcss": "^1.0.0",
