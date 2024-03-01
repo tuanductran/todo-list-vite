@@ -107,7 +107,7 @@ module.exports = {
       plugins: ['typescript-sort-keys'],
       settings: {
         tailwindcss: {
-          config: 'tailwind.config.js',
+          config: 'tailwind.config.ts',
           callees: ['cn']
         }
       },
@@ -119,7 +119,7 @@ module.exports = {
       files: [
         'prettier.config.js',
         'postcss.config.js',
-        'tailwind.config.js',
+        'tailwind.config.ts',
         'vite.config.ts',
         '.eslintrc.cjs'
       ],
