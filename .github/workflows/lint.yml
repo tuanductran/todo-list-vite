@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18]
+        node-version: [20]
 
     steps:
       - name: Cancel Previous Runs
@@ -30,6 +30,12 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm i
+
+      - name: Lint Prettier
+        run: pnpm lint:prettier
+
+      - name: Lint TSC
+        run: pnpm lint:tsc
 
       - name: Lint ESLint
         run: pnpm lint
