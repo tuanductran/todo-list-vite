@@ -64,7 +64,10 @@
     "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
     "dev:layout": "vite",
     "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
-    "lint": "tsc",
+    "lint": "eslint --cache --ignore-path .gitignore --max-warnings 0 .",
+    "lint:prettier": "prettier --cache --check --ignore-path .gitignore --ignore-path .prettierignore .",
+    "lint:tsc": "tsc",
+    "prettier": "pnpm lint:prettier --write",
     "preview": "vite preview"
   },
   "version": "1.0.0"
