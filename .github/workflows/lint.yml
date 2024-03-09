@@ -1,4 +1,4 @@
-name: Lint
+name: Lint & Prettier
 
 on:
   pull_request:
@@ -30,6 +30,9 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm i
+
+      - name: Prettier
+        run: pnpm prettier
 
       - name: Lint Prettier
         run: pnpm lint:prettier
