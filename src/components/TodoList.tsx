@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { FC, useCallback } from 'react'
 import { Fragment } from 'react'
 import cn from 'clsx'
 import { utils, writeFile } from 'xlsx'
@@ -12,12 +12,12 @@ const TodoList: FC<TodoListProps> = ({
   handleDeleteTodo // Destructure the prop
 }) => {
   // Function to export todos to Excel
-  const exportToExcel = () => {
+  const exportToExcel = useCallback(() => {
     const worksheet = utils.json_to_sheet(todos)
     const workbook = utils.book_new()
     utils.book_append_sheet(workbook, worksheet, 'Todos')
     writeFile(workbook, 'todos.xlsx')
-  }
+  }, [todos])
 
   return (
     <Fragment>
