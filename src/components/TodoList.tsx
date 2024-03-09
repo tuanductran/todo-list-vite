@@ -34,19 +34,11 @@ const TodoList: FC<TodoListProps> = ({
               return (
                 <div key={todo.id} className="flex mb-4 last:mb-0 items-center">
                   <p className={cn('mr-auto truncate line-clamp-2 w-1/2', {
-                    "line-through text-sky-500" : isTodoCompleted
+                    "text-sky-500" : !isTodoCompleted
                   })}>
                     {todo.text}
                   </p>
-                  {isTodoCompleted ? (
-                    <button
-                      type="button"
-                      className="shrink p-2 ml-4 border-2 rounded hover:text-white text-gray-500 border-gray-500 hover:bg-gray-500"
-                      onClick={() => handleToggleCompletion(todo.id)}
-                    >
-                      Not Done
-                    </button>
-                  ) : (
+                  {!isTodoCompleted && (
                     <Fragment>
                       <button
                         type="button"
