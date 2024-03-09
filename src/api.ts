@@ -8,7 +8,12 @@ export const delay = () => new Promise<void>((res) => setTimeout(() => res(), 30
 // Load todos from Local Storage if available
 const storedTodos = localStorage.getItem('todos')
 if (storedTodos) {
-  todos = JSON.parse(storedTodos)
+  try {
+    todos = JSON.parse(storedTodos)
+    currentId = Math.max(...todos.map(todo => todo.id), currentId) + 1
+  } catch (error) {
+    console.error('Failed to parse todos from localStorage', error)
+  }
 }
 
 export async function getTodos(): Promise<Todo[]> {
