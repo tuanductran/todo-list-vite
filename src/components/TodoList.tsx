@@ -24,7 +24,7 @@ const TodoList: FC<TodoListProps> = ({
                     {todo.text}
                   </p>
                   {!isTodoCompleted && (
-                    <Fragment>
+                    <>
                       <button
                         type="button"
                         className="shrink p-2 ml-4 border-2 rounded hover:text-white text-sky-500 border-sky-500 hover:bg-sky-500"
@@ -44,7 +44,7 @@ const TodoList: FC<TodoListProps> = ({
                       >
                         Edit
                       </button>
-                    </Fragment>
+                    </>
                   )}
                   <button
                     type="button"
