@@ -19,7 +19,7 @@ const TodoList: FC<TodoListProps> = ({
               return (
                 <div key={todo.id} className="flex mb-4 last:mb-0 items-center">
                   <p className={cn('mr-auto truncate line-clamp-2 w-1/2', {
-                    "text-sky-500" : !isTodoCompleted
+                    "text-sky-500" : isTodoCompleted
                   })}>
                     {todo.text}
                   </p>
