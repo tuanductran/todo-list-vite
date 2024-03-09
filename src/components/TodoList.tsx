@@ -1,7 +1,5 @@
-import type { FC, useCallback } from 'react'
-import { Fragment } from 'react'
+import type { FC } from 'react'
 import cn from 'clsx'
-import { utils, writeFile } from 'xlsx'
 import { Todo, TodoListProps } from '../type'
 
 const TodoList: FC<TodoListProps> = ({
@@ -11,24 +9,11 @@ const TodoList: FC<TodoListProps> = ({
   handleUpdateTodo, // Destructure the prop
   handleDeleteTodo // Destructure the prop
 }) => {
-  // Function to export todos to Excel
-  const exportToExcel = useCallback(() => {
-    const worksheet = utils.json_to_sheet(todos)
-    const workbook = utils.book_new()
-    utils.book_append_sheet(workbook, worksheet, 'Todos')
-    writeFile(workbook, 'todos.xlsx')
-  }, [todos])
 
   return (
-    <Fragment>
+    <div>
       {todos && (
-        <Fragment>
-          <div className={cn(
-              {
-                "overscroll-contain overflow-auto h-72": todos.length > 4
-              }
-            )}
-          >
+        <div>
             {todos.map((todo) => {
               const isTodoCompleted = completedTodos.includes(todo.id)
               return (
@@ -75,21 +60,9 @@ const TodoList: FC<TodoListProps> = ({
                 </div>
               )
             })}
-          </div>
-          <div className="mt-4">
-            {todos.length > 20 && (
-              <button
-                type="button"
-                className="mx-auto w-full p-2 border-2 rounded text-sky-500 border-sky-500 hover:text-white hover:bg-sky-500"
-                onClick={exportToExcel}
-              >
-                Export to Excel
-              </button>
-            )}
-          </div>
-        </Fragment>
+        </div>
       )}
-    </Fragment>
+    </div>
   )
 }
 
