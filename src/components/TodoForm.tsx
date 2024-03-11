@@ -1,20 +1,21 @@
-import type { FC, FormEvent, ChangeEvent } from 'react'
+import type { FC, FormEvent, ChangeEvent, useEffect } from 'react'
 import { useState } from 'react'
 import DOMPurify from 'dompurify'
 import { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   const [text, setText] = useState('')
+  const [isInputEmpty, setIsInputEmpty] = useState(true)
 
-  /* The `const isInputEmpty = text.trim() === '';` line is checking if the trimmed value of the `text` state variable is
-  an empty string. It removes any leading or trailing whitespace from the `text` value and compares it to an empty
-  string. If the result is true, it means that the input is empty. */
-  const isInputEmpty = text.trim() === ''
+  useEffect(() => {
+    setIsInputEmpty(text.trim() === '')
+  }, [text])
 
   const handleSubmit = (ev: FormEvent) => {
     ev.preventDefault()
     if (!isInputEmpty) {
-      onAddTodo(text)
+      const sanitizedText = DOMPurify.sanitize(text)
+      onAddTodo(sanitizedText)
       setText('')
     }
   }
@@ -22,7 +23,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
     const capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
-    setText(DOMPurify.sanitize(capitalizedValue))
+    setText(capitalizedValue)
   }
 
   return (
@@ -41,7 +42,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
       <button
         type="submit"
         className="shrink p-2 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded focus:outline-none disabled:opacity-25 disabled:pointer-events-none"
-        disabled={!text.trim()}
+        disabled={isInputEmpty}
       >
         Create
       </button>
