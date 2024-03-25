@@ -59,7 +59,7 @@
     "url": "https://github.com/tuanductran/todo-list-vite.git"
   },
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "build:all": "pnpm build:tailwind && pnpm build",
     "build:tailwind": "pnpm postcss css/app.css -o css/build.css --verbose",
     "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
@@ -68,7 +68,8 @@
     "lint": "eslint --cache --ignore-path .gitignore --max-warnings 0 .",
     "lint:prettier": "prettier --cache --check --ignore-path .gitignore --ignore-path .prettierignore .",
     "prettier": "pnpm lint:prettier --write",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type:check": "tsc"
   },
   "version": "1.0.0"
 }
