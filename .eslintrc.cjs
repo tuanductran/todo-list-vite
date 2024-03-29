@@ -120,7 +120,7 @@ module.exports = {
         'prettier.config.js',
         'postcss.config.js',
         'tailwind.config.ts',
-        'vite.config.ts',
+        'vite.config.mjs',
         '.eslintrc.cjs'
       ],
       env: {
