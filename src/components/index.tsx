@@ -83,7 +83,7 @@ export default function TodoPage() {
             item.id === todoId ? updatedTodo : item
           ),
           rollbackOnError: true,
-          revalidate: false
+          revalidate: true // Revalidate after optimistic update
         })
         toast.success('Successfully updated the item.')
       } else {
@@ -100,7 +100,7 @@ export default function TodoPage() {
       await mutate(deleteTodo(todoId), {
         optimisticData: data?.filter(item => item.id !== todoId),
         rollbackOnError: true,
-        revalidate: false
+        revalidate: true // Revalidate after optimistic update
       })
       toast.success('Successfully deleted the item.')
     } catch (e) {
