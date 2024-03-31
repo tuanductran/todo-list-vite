@@ -131,7 +131,7 @@ export default function TodoPage() {
     <div className="size-full flex items-center justify-center">
       <div className="bg-white rounded p-6 m-4 w-full lg:w-3/4 lg:max-w-lg">
         <div className="mb-4">
-          <h1 className="text-gray-700">Todo List</h1>
+          <h1 className="block text-gray-800 text-md font-bold">Todo List</h1>
           <TodoForm onAddTodo={handleAddTodo} />
         </div>
         <TodoList
