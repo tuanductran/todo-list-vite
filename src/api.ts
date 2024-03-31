@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { Todo } from './type'
 
-function useTodos(): [Todo[], (todo: Todo) => void, (todo: Todo) => void, (id: number) => void] {
+export function useTodos(): [Todo[], (todo: Todo) => void, (todo: Todo) => void, (id: number) => void] {
   // State to manage the list of todos
   const [todos, setTodos] = useState<Todo[]>([])
 
