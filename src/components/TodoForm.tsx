@@ -1,7 +1,7 @@
-import type { FC, FormEvent, ChangeEvent, useEffect } from 'react'
-import { useState } from 'react'
 import DOMPurify from 'dompurify'
-import { TodoFormProps } from '../type'
+import type { ChangeEvent, FC, FormEvent } from 'react'
+import { useState } from 'react'
+import type { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   const [text, setText] = useState('')
@@ -22,8 +22,9 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
-    const capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
-    setText(capitalizedValue)
+    const capitalizedValue =
+      inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
+    setText(DOMPurify.sanitize(capitalizedValue))
   }
 
   return (

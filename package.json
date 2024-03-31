@@ -1,63 +1,25 @@
 {
-  "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/tuanductran/todo-list-vite/issues"
-  },
-  "dependencies": {
-    "clsx": "^2.1.0",
-    "dompurify": "^3.0.9",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1",
-    "swr": "^2.2.5",
-    "tailwindcss": "^3.4.1",
-    "xlsx": "^0.18.5"
-  },
-  "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
-  "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/dompurify": "^3.0.5",
-    "@types/node": "^20.11.24",
-    "@types/react": "^18.2.63",
-    "@types/react-dom": "^18.2.19",
-    "@typescript-eslint/eslint-plugin": "7.1.1",
-    "@typescript-eslint/parser": "7.1.1",
-    "@vitejs/plugin-react-swc": "^3.6.0",
-    "autoprefixer": "^10.4.18",
-    "concurrently": "^8.2.2",
-    "eslint": "8.57.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-react": "7.34.0",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-tailwindcss": "3.14.3",
-    "eslint-plugin-typescript-sort-keys": "3.2.0",
-    "eslint-plugin-unicorn": "51.0.1",
-    "postcss": "^8.4.35",
-    "postcss-cli": "^11.0.0",
-    "postcss-import": "^16.0.1",
-    "postcss-lightningcss": "^1.0.0",
-    "prettier": "3.2.5",
-    "prettier-plugin-pkg": "0.18.1",
-    "prettier-plugin-tailwindcss": "0.5.12",
-    "turbo": "^1.12.4",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.5"
-  },
-  "keywords": [
-    "todo",
-    "react",
-    "vite",
-    "tailwind"
-  ],
-  "license": "MIT",
   "name": "todo-list",
-  "packageManager": "pnpm@8.15.4",
-  "private": true,
+  "version": "1.0.1",
+  "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
   "repository": {
     "type": "git",
     "url": "https://github.com/tuanductran/todo-list-vite.git"
   },
+  "bugs": {
+    "url": "https://github.com/tuanductran/todo-list-vite/issues"
+  },
+  "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm@8.15.5",
+  "keywords": [
+    "todo",
+    "react",
+    "vite",
+    "millionjs",
+    "tailwind"
+  ],
   "scripts": {
     "build": "vite build",
     "build:all": "pnpm build:tailwind && pnpm build",
@@ -67,9 +29,49 @@
     "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
     "lint": "eslint --cache --ignore-path .gitignore --max-warnings 0 .",
     "lint:prettier": "prettier --cache --check --ignore-path .gitignore --ignore-path .prettierignore .",
-    "lint:tsc": "tsc",
     "prettier": "pnpm lint:prettier --write",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type:check": "tsc"
   },
-  "version": "1.0.0"
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "dompurify": "^3.0.11",
+    "million": "^3.0.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "swr": "^2.2.5",
+    "tailwindcss": "^3.4.3",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "@types/dompurify": "^3.0.5",
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.23",
+    "@typescript-eslint/eslint-plugin": "7.4.0",
+    "@typescript-eslint/parser": "7.4.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-react": "7.34.1",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-tailwindcss": "3.15.1",
+    "eslint-plugin-typescript-sort-keys": "3.2.0",
+    "eslint-plugin-unicorn": "51.0.1",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
+    "postcss-lightningcss": "^1.0.0",
+    "prettier": "3.2.5",
+    "prettier-plugin-pkg": "0.18.1",
+    "prettier-plugin-tailwindcss": "0.5.13",
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.3",
+    "vite": "5.2.7"
+  }
 }

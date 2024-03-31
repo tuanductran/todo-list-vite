@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
+import { addTodo, deleteTodo, getTodos, updateTodo } from '../api'
+import type { Todo } from '../type'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
-import { getTodos, addTodo, updateTodo, deleteTodo } from '../api'
-import { Todo } from '../type'
 
 export default function TodoPage() {
   const { data, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
@@ -66,14 +66,12 @@ export default function TodoPage() {
    */
   const handleToggleCompletion = (todoId: number) => {
     const updatedCompletedTodos = completedTodos.includes(todoId)
-      ? (
-        completedTodos.filter((id) => id !== todoId)
-      )
+      ? completedTodos.filter(id => id !== todoId)
       : [...completedTodos, todoId]
     setCompletedTodos(updatedCompletedTodos)
 
     // Show toast notification when a checkbox is checked or unchecked
-    const todo = data?.find((item) => item.id === todoId)
+    const todo = data?.find(item => item.id === todoId)
     if (todo) {
       const message = completedTodos.includes(todoId)
         ? 'Todo marked as incomplete!'
@@ -92,13 +90,20 @@ export default function TodoPage() {
    */
   const handleUpdateTodo = async (todoId: number, newText: string) => {
     try {
-      const updatedTodo = { ...data.find((item) => item.id === todoId), text: newText }
-      await mutate(updateTodo(updatedTodo), {
-        optimisticData: data?.map((item) => (item.id === todoId ? updatedTodo : item)),
-        rollbackOnError: true,
-        revalidate: false
-      })
-      toast.success('Successfully updated the item.')
+      const todoItem = data?.find(item => item.id === todoId)
+      if (todoItem) {
+        const updatedTodo = { ...todoItem, text: newText }
+        await mutate(updateTodo(updatedTodo), {
+          optimisticData: data?.map(item =>
+            item.id === todoId ? updatedTodo : item
+          ),
+          rollbackOnError: true,
+          revalidate: false
+        })
+        toast.success('Successfully updated the item.')
+      } else {
+        toast.error('Todo item not found')
+      }
     } catch (e) {
       toast.error('Failed to update the item.')
     }
@@ -112,7 +117,7 @@ export default function TodoPage() {
   const handleDeleteTodo = async (todoId: number) => {
     try {
       await mutate(deleteTodo(todoId), {
-        optimisticData: data?.filter((item) => item.id !== todoId),
+        optimisticData: data?.filter(item => item.id !== todoId),
         rollbackOnError: true,
         revalidate: false
       })
@@ -123,14 +128,14 @@ export default function TodoPage() {
   }
 
   return (
-    <div className="h-full w-full flex items-center justify-center font-sans">
+    <div className="size-full flex items-center justify-center">
       <div className="bg-white rounded p-6 m-4 w-full lg:w-3/4 lg:max-w-lg">
         <div className="mb-4">
-          <h1 className="text-gray-700">Todo List</h1>
+          <h1 className="block text-gray-800 text-2xl sm:text-3xl font-bold">Todo List</h1>
           <TodoForm onAddTodo={handleAddTodo} />
         </div>
         <TodoList
-          todos={data}
+          todos={data || []}
           completedTodos={completedTodos}
           handleToggleCompletion={handleToggleCompletion}
           handleUpdateTodo={handleUpdateTodo}
