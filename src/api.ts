@@ -1,45 +1,44 @@
+import { useState, useEffect } from 'react'
 import type { Todo } from './type'
 
-let todos: Todo[] = []
-let currentId = Date.now()
+function useTodos(): [Todo[], (todo: Todo) => void, (todo: Todo) => void, (id: number) => void] {
+  // State to manage the list of todos
+  const [todos, setTodos] = useState<Todo[]>([])
 
-export const delay = () =>
-  new Promise<void>(res => setTimeout(() => res(), 300))
+  // Load todos from localStorage (optional)
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos')
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []) // Run this effect only once on component initialization
 
-// Load todos from Local Storage if available
-const storedTodos = localStorage.getItem('todos')
-if (storedTodos) {
-  todos = JSON.parse(storedTodos)
-}
+  // Function to add a new todo item
+  const addTodo = async (todo: Todo) => {
+    try {
+      setTodos((prevTodos) => [...prevTodos, { ...todo, id: Date.now() }])
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
-export async function getTodos(): Promise<Todo[]> {
-  await delay()
-  return todos
-}
+  // Function to update an existing todo item
+  const updateTodo = async (updatedTodo: Todo) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+    )
+  }
 
-export async function addTodo(todo: Todo): Promise<Todo[]> {
-  await delay()
-  if (Math.random() < 0.5) throw new Error('Failed to add new item!')
-  todos = [...todos, { ...todo, id: currentId++ }]
-  updateLocalStorage()
-  return todos
-}
+  // Function to delete a todo item by ID
+  const deleteTodo = async (todoId: number) => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId))
+  }
 
-export async function updateTodo(updatedTodo: Todo): Promise<Todo[]> {
-  await delay()
-  todos = todos.map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo))
-  updateLocalStorage()
-  return todos
-}
+  // Update localStorage when todos change (optional)
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos])
 
-export async function deleteTodo(todoId: number): Promise<Todo[]> {
-  await delay()
-  todos = todos.filter(todo => todo.id !== todoId)
-  updateLocalStorage()
-  return todos
-}
-
-// Helper function to update Local Storage
-function updateLocalStorage() {
-  localStorage.setItem('todos', JSON.stringify(todos))
+  // Return an array containing the current todos state and functions for adding, updating, and deleting todos
+  return [todos, addTodo, updateTodo, deleteTodo]
 }
