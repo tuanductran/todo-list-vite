@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
-import { addTodo, deleteTodo, getTodos, updateTodo } from '../api'
+import useTodos from '../api'
 import type { Todo } from '../type'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
 
 export default function TodoPage() {
+  const [todos, addTodo, updateTodo, deleteTodo, getTodos] = useTodos()
   const { data, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
 
-  /* The line `const [completedTodos, setCompletedTodos] = useState<number[]>([])` is using the `useState` hook to create
-  a state variable called `completedTodos` and a corresponding setter function called `setCompletedTodos`. The initial
-  value of `completedTodos` is an empty array `[]`, and the type of the state variable is specified as `number[]` (an
-  array of numbers). */
+  // State for completed todos
   const [completedTodos, setCompletedTodos] = useState<number[]>([])
 
   // Load completed todos from Local Storage if available
@@ -23,17 +21,12 @@ export default function TodoPage() {
     }
   }, [])
 
+  // Save completed todos to Local Storage whenever they change
   useEffect(() => {
-    // Save completed todos to Local Storage whenever the completedTodos state changes
     localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
   }, [completedTodos])
 
-  /**
-   * The function `handleAddTodo` adds a new todo item to the local state and sends a request to update the data on the
-   * server, with error handling and toast notifications.
-   * @param {string} text - The `text` parameter is a string that represents the text of the new todo item that will be
-   * added.
-   */
+  // Handle adding a new todo
   const handleAddTodo = async (text: string) => {
     const newTodo: Todo = {
       id: Date.now(),
@@ -59,11 +52,7 @@ export default function TodoPage() {
     }
   }
 
-  /**
-   * The function `handleToggleCompletion` toggles the completion status of a todo item and displays a toast notification
-   * accordingly.
-   * @param {number} todoId - The `todoId` parameter is a number that represents the unique identifier of a todo item.
-   */
+  // Handle toggling completion of a todo
   const handleToggleCompletion = (todoId: number) => {
     const updatedCompletedTodos = completedTodos.includes(todoId)
       ? completedTodos.filter(id => id !== todoId)
@@ -82,12 +71,7 @@ export default function TodoPage() {
     }
   }
 
-  /**
-   * The function `handleUpdateTodo` updates the text of a todo item in the local state and sends a request to update
-   * the data on the server, with error handling and toast notifications.
-   * @param {number} todoId - The `todoId` parameter is a number that represents the unique identifier of a todo item.
-   * @param {string} newText - The `newText` parameter is a string that represents the updated text of the todo item.
-   */
+  // Handle updating a todo
   const handleUpdateTodo = async (todoId: number, newText: string) => {
     try {
       const todoItem = data?.find(item => item.id === todoId)
@@ -109,11 +93,7 @@ export default function TodoPage() {
     }
   }
 
-  /**
-   * The function `handleDeleteTodo` deletes a todo item from the local state and sends a request to delete the item
-   * on the server, with error handling and toast notifications.
-   * @param {number} todoId - The `todoId` parameter is a number that represents the unique identifier of a todo item.
-   */
+  // Handle deleting a todo
   const handleDeleteTodo = async (todoId: number) => {
     try {
       await mutate(deleteTodo(todoId), {
