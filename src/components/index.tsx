@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
-import useTodos from '../api'
+import { useTodos } from '../api'
 import type { Todo } from '../type'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
