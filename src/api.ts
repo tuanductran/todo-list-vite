@@ -39,6 +39,10 @@ function useTodos(): [Todo[], (todo: Todo) => void, (todo: Todo) => void, (id: n
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [todos])
 
-  // Return an array containing the current todos state and functions for adding, updating, and deleting todos
-  return [todos, addTodo, updateTodo, deleteTodo]
+  const getTodos = async (): Promise<Todo[]> => {
+     return todos
+   }
+
+  // Return an array containing the current todos state and functions for adding, updating, deleting todos and get todos
+  return [todos, addTodo, updateTodo, deleteTodo, getTodos]
 }
