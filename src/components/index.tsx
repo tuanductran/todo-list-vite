@@ -42,7 +42,8 @@ export default function TodoPage() {
         optimisticData: data ? [...data, newTodo] : [newTodo],
         rollbackOnError: true,
         populateCache: true,
-        revalidate: false
+        revalidate: true, // Revalidate after optimistic update
+        revalidateOnMount: true // Revalidate on component mount
       })
       toast.success('Successfully added the new item.')
     } catch (e) {
