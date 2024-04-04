@@ -2942,7 +2942,7 @@ packages:
       '@babel/types': 7.24.0
       '@rollup/pluginutils': 5.1.0
       kleur: 4.1.5
-      undici: 6.10.2
+      undici: 6.11.1
       unplugin: 1.10.1
     transitivePeerDependencies:
       - rollup
@@ -4171,8 +4171,8 @@ packages:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
 
-  /undici@6.10.2:
-    resolution: {integrity: sha512-HcVuBy7ACaDejIMdwCzAvO22OsiE6ir6ziTIr9kAE0vB+PheVe29ZvRN8p7FXCO2uZHTjEoUs5bPiFpuc/hwwQ==}
+  /undici@6.11.1:
+    resolution: {integrity: sha512-KyhzaLJnV1qa3BSHdj4AZ2ndqI0QWPxYzaIOio0WzcEJB9gvuysprJSLtpvc2D9mhR9jPDUk7xlJlZbH2KR5iw==}
     engines: {node: '>=18.0'}
     dev: false
 
