@@ -12,7 +12,7 @@
   "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
   "license": "MIT",
   "private": true,
-  "packageManager": "pnpm@8.15.5",
+  "packageManager": "pnpm@8.15.6",
   "keywords": [
     "todo",
     "react",
