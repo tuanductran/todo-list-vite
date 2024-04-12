@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 export interface Todo {
   id: number
   text: string
@@ -10,7 +12,16 @@ export interface TodoFormProps {
 export interface TodoListProps {
   todos: Todo[]
   completedTodos: number[] // Assuming the array contains the IDs of completed todos
-  handleToggleCompletion: (todoId: number) => void
-  handleUpdateTodo: (todoId: number, newText: string) => void // New prop for updating todos
-  handleDeleteTodo: (todoId: number) => void // New prop for deleting todos
+  handleEditClick: (todoId: number) => void
+  handleDeleteClick: (todoId: number) => void
+  handleToggleClick: (todoId: number) => void
+}
+
+export type TodoListFilterType = 'all' | 'active' | 'completed'
+
+export type TodoListFilterButtonProps = {
+  filterType: TodoListFilterType
+  setFilter: (filter: TodoListFilterType) => void
+  currentFilter: TodoListFilterType
+  children: ReactNode
 }

@@ -1,30 +1,27 @@
-import DOMPurify from 'dompurify'
 import type { ChangeEvent, FC, FormEvent } from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   const [text, setText] = useState('')
 
-  /* The `const isInputEmpty = text.trim() === '';` line is checking if the trimmed value of the `text` state variable is
-  an empty string. It removes any leading or trailing whitespace from the `text` value and compares it to an empty
-  string. If the result is true, it means that the input is empty. */
-  const isInputEmpty = text.trim() === ''
+  const handleSubmit = useCallback(
+    (ev: FormEvent) => {
+      ev.preventDefault()
+      const trimmedText = text.trim()
+      if (trimmedText) {
+        onAddTodo(trimmedText)
+        setText('')
+      }
+    },
+    [text, onAddTodo]
+  )
 
-  const handleSubmit = (ev: FormEvent) => {
-    ev.preventDefault()
-    if (!isInputEmpty) {
-      onAddTodo(text)
-      setText('')
-    }
-  }
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value)
+  }, [])
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value
-    const capitalizedValue =
-      inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
-    setText(DOMPurify.sanitize(capitalizedValue))
-  }
+  const canSubmit = text.trim().length > 0
 
   return (
     <form onSubmit={handleSubmit} className="flex mt-4">
@@ -36,13 +33,14 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
         placeholder="Add new todo..."
         maxLength={29}
         value={text}
-        onChange={handleInputChange}
+        onChange={handleChange}
+        autoComplete="off"
         required
       />
       <button
         type="submit"
         className="shrink p-2 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded focus:outline-none disabled:opacity-25 disabled:pointer-events-none"
-        disabled={!text.trim()}
+        disabled={!canSubmit}
       >
         Create
       </button>

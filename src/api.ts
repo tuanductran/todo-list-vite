@@ -1,20 +1,17 @@
+import toast from 'react-hot-toast'
 import type { Todo } from './type'
 
-let todos: Todo[] = []
-let currentId = Date.now()
-
-// Load todos from Local Storage if available
-const storedTodos = localStorage.getItem('todos')
-if (storedTodos) {
-  todos = JSON.parse(storedTodos)
-}
+// Initialization of todos and currentId
+let todos: Todo[] = JSON.parse(localStorage.getItem('todos') || '[]')
+let currentId = Math.max(Date.now(), ...todos.map(todo => todo.id)) + 1
 
 export async function getTodos(): Promise<Todo[]> {
   return todos
 }
 
 export async function addTodo(todo: Todo): Promise<Todo[]> {
-  todos = [...todos, { ...todo, id: currentId++ }]
+  const newTodo = { ...todo, id: currentId++ }
+  todos.push(newTodo)
   updateLocalStorage()
   return todos
 }
@@ -31,7 +28,11 @@ export async function deleteTodo(todoId: number): Promise<Todo[]> {
   return todos
 }
 
-// Helper function to update Local Storage
+// Consolidated Local Storage update function
 function updateLocalStorage() {
-  localStorage.setItem('todos', JSON.stringify(todos))
+  try {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  } catch (e) {
+    toast.error(`Failed to save todos: ${e}`)
+  }
 }
