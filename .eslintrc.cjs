@@ -13,6 +13,7 @@ const TAILWIND_CONFIG = {
 module.exports = {
   root: true,
   reportUnusedDisableDirectives: true,
+  ignorePatterns: ['vite-env.d.ts'],
   overrides: [
     // Rules for all files
     {
@@ -23,7 +24,7 @@ module.exports = {
         'plugin:import/typescript',
         'prettier'
       ],
-      plugins: ['import', 'unicorn'],
+      plugins: ['import', 'unicorn', 'sonarjs'],
       rules: {
         'prefer-object-has-own': 'error',
         'logical-assignment-operators': [
@@ -31,7 +32,6 @@ module.exports = {
           'always',
           { enforceForIfStatements: true }
         ],
-        '@typescript-eslint/prefer-optional-chain': 'error',
         'no-else-return': ['error', { allowElseIf: false }],
         'no-lonely-if': 'error',
         'prefer-destructuring': [
@@ -43,6 +43,25 @@ module.exports = {
         'unicorn/no-negated-condition': 'error',
         'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
         'object-shorthand': ['error', 'always'],
+        'unicorn/prefer-regexp-test': 'error',
+        'unicorn/no-array-for-each': 'error',
+        'unicorn/prefer-string-replace-all': 'error',
+        '@typescript-eslint/prefer-for-of': 'error',
+        quotes: ['error', 'single', { avoidEscape: true }], // Matches Prettier, but also replaces backticks
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_' // allow underscores in destructuring
+          }
+        ],
+        'prefer-object-spread': 'error',
+        'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
+        'unicorn/prefer-at': 'error',
+        'sonarjs/no-small-switch': 'error',
+        'prefer-const': ['error', { destructuring: 'all' }],
+        'unicorn/prefer-array-index-of': 'error',
+        'sonarjs/no-unused-collection': 'error',
         // todo: enable
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
@@ -97,7 +116,8 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-unnecessary-type-assertion': 'error',
         '@typescript-eslint/consistent-type-imports': 'error',
-        '@typescript-eslint/non-nullable-type-assertion-style': 'error'
+        '@typescript-eslint/non-nullable-type-assertion-style': 'error',
+        '@typescript-eslint/prefer-optional-chain': 'error'
       }
     },
     // Core
@@ -119,12 +139,17 @@ module.exports = {
       files: [
         'prettier.config.js',
         'postcss.config.js',
-        'tailwind.config.ts',
         'vite.config.mjs',
-        'eslintrc.cjs'
+        '.eslintrc.cjs'
       ],
       env: {
         node: true
+      }
+    },
+    {
+      files: ['**/*.d.ts'],
+      rules: {
+        'no-var': 'off'
       }
     }
   ]
