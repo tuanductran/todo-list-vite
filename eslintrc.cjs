@@ -121,7 +121,7 @@ module.exports = {
         'postcss.config.js',
         'tailwind.config.ts',
         'vite.config.mjs',
-        '.eslintrc.cjs'
+        'eslintrc.cjs'
       ],
       env: {
         node: true
