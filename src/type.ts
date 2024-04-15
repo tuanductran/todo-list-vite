@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 export interface Todo {
   id: number
   text: string
@@ -15,13 +13,4 @@ export interface TodoListProps {
   handleEditClick: (todoId: number) => void
   handleDeleteClick: (todoId: number) => void
   handleToggleClick: (todoId: number) => void
-}
-
-export type TodoListFilterType = 'all' | 'active' | 'completed'
-
-export type TodoListFilterButtonProps = {
-  filterType: TodoListFilterType
-  setFilter: (filter: TodoListFilterType) => void
-  currentFilter: TodoListFilterType
-  children: ReactNode
 }
