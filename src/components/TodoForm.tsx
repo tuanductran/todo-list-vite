@@ -21,8 +21,6 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
     setText(e.target.value)
   }, [])
 
-  const canSubmit = text.trim().length > 0
-
   return (
     <form onSubmit={handleSubmit} className="flex mt-4">
       <input
@@ -39,8 +37,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
       />
       <button
         type="submit"
-        className="shrink p-2 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded focus:outline-none disabled:opacity-25 disabled:pointer-events-none"
-        disabled={!canSubmit}
+        className="shrink p-2 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded focus:outline-none"
       >
         Create
       </button>
