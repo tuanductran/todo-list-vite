@@ -27,7 +27,7 @@
     "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
     "dev:layout": "vite",
     "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
-    "lint": "eslint --cache --ignore-pattern .gitignore --max-warnings 0 .",
+    "lint": "npx eslint --cache --ignore-pattern .gitignore --max-warnings 0 .",
     "lint:prettier": "prettier --cache --check --ignore-path .gitignore --ignore-path .prettierignore .",
     "prettier": "pnpm lint:prettier --write",
     "preview": "vite preview",
