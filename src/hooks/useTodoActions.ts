@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import { addTodo, deleteTodo, getTodos, updateTodo } from '../api'
@@ -6,18 +6,18 @@ import type { Todo } from '../type'
 
 function useTodoActions() {
   const { data, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
-  const completedTodos = useRef<number[]>([])
+  const [completedTodos, setCompletedTodos] = useState<number[]>([])
 
   useEffect(() => {
     const storedCompletedTodos = localStorage.getItem('completedTodos')
     if (storedCompletedTodos) {
-      completedTodos.current = JSON.parse(storedCompletedTodos)
+      setCompletedTodos(JSON.parse(storedCompletedTodos))
     }
   }, [])
 
   useEffect(() => {
     const saveCompletedTodos = () => {
-      localStorage.setItem('completedTodos', JSON.stringify(completedTodos.current))
+      localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
     }
 
     window.addEventListener('beforeunload', saveCompletedTodos)
@@ -25,7 +25,7 @@ function useTodoActions() {
     return () => {
       window.removeEventListener('beforeunload', saveCompletedTodos)
     }
-  }, [])
+  }, [completedTodos])
 
   const handleAddTodo = useCallback(
     async (text: string) => {
@@ -63,13 +63,14 @@ function useTodoActions() {
 
   const handleToggleTodo = useCallback(
     (todoId: number) => {
-      completedTodos.current = completedTodos.current.includes(todoId)
-        ? completedTodos.current.filter(id => id !== todoId)
-        : [...completedTodos.current, todoId]
+      const updatedCompletedTodos = completedTodos.includes(todoId)
+        ? completedTodos.filter(id => id !== todoId)
+        : [...completedTodos, todoId]
+      setCompletedTodos(updatedCompletedTodos)
 
       const todo = data?.find(item => item.id === todoId)
       if (todo) {
-        const message = completedTodos.current.includes(todoId)
+        const message = completedTodos.includes(todoId)
           ? 'Todo marked as incomplete!'
           : 'Todo marked as completed!'
         toast.success(message, {
@@ -77,7 +78,7 @@ function useTodoActions() {
         })
       }
     },
-    [data]
+    [completedTodos, data]
   )
 
   const handleUpdateTodo = useCallback(
@@ -159,7 +160,7 @@ function useTodoActions() {
 
   return {
     todos: data,
-    completedTodos: completedTodos.current,
+    completedTodos,
     handleAddTodo,
     handleEditClick,
     handleDeleteClick,
