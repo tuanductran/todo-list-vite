@@ -29,7 +29,12 @@ function useTodoActions() {
 
   const handleAddTodo = useCallback(
     async (text: string) => {
-      // Check if a todo list with this name already exists
+      text = text.trim()
+      if (!text) {
+        toast.error('Todo text cannot be empty.')
+        return
+      }
+
       const isTodoExist = data?.some(todo => todo.text === text)
       if (isTodoExist) {
         toast.error('A todo list with this name already exists.')
@@ -42,10 +47,6 @@ function useTodoActions() {
       }
 
       try {
-        // Update the local state immediately and fire the
-        // request. Since the API will return the updated
-        // data, there is no need to start a new revalidation
-        // and we can directly populate the cache.
         await mutate(addTodo(newTodo), {
           optimisticData: data ? [...data, newTodo] : [newTodo],
           rollbackOnError: true,
@@ -54,8 +55,6 @@ function useTodoActions() {
         })
         toast.success('Successfully added the new item.')
       } catch (e) {
-        // If the API errors, the original data will be
-        // rolled back by SWR automatically.
         toast.error('Failed to add the new item.')
       }
     },
@@ -69,7 +68,6 @@ function useTodoActions() {
         : [...completedTodos, todoId]
       setCompletedTodos(updatedCompletedTodos)
 
-      // Show toast notification when a checkbox is checked or unchecked
       const todo = data?.find(item => item.id === todoId)
       if (todo) {
         const message = completedTodos.includes(todoId)
@@ -85,6 +83,12 @@ function useTodoActions() {
 
   const handleUpdateTodo = useCallback(
     async (todoId: number, newText: string) => {
+      newText = newText.trim()
+      if (!newText) {
+        toast.error('Todo text cannot be empty.')
+        return
+      }
+
       try {
         const todoItem = data?.find(item => item.id === todoId)
         if (todoItem) {
@@ -127,7 +131,6 @@ function useTodoActions() {
     (id: number) => {
       const newText = prompt('Enter the new text:')
       if (newText !== null) {
-        // Check if a todo list with this new text already exists
         const isTodoExist = data?.some(todo => todo.text === newText)
         if (isTodoExist) {
           toast.error('A todo list with this name already exists.')
@@ -136,7 +139,7 @@ function useTodoActions() {
         handleUpdateTodo(id, newText)
       }
     },
-    [handleUpdateTodo, data] // Make sure to include data in the dependency array
+    [handleUpdateTodo, data]
   )
 
   const handleDeleteClick = useCallback(
