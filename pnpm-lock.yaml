@@ -13,7 +13,7 @@ importers:
         version: 2.1.1
       million:
         specifier: ^3.0.6
-        version: 3.1.1(rollup@4.17.2)
+        version: 3.1.4(rollup@4.17.2)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -453,8 +453,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@million/install@0.0.3':
-    resolution: {integrity: sha512-yK8NgP+73+Tby/bmQ12B96bJ7RjsLazLtFgBed1Fg1WfTCCpHTILq79yQMSD/OWgm1tt1NYV4ELaTRM6wZOeAg==}
+  '@million/install@0.0.5':
+    resolution: {integrity: sha512-9KYVwMT6yEX0k/DMo8cOQNxeFdZme/yTqncPwXgvoQ0qUAUkulvm0ivRHTYrsuPNrCA6lqsJD005D1hhuI2fGQ==}
     hasBin: true
 
   '@nodelib/fs.scandir@2.1.5':
@@ -1724,8 +1724,8 @@ packages:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
     engines: {node: '>=8.6'}
 
-  million@3.1.1:
-    resolution: {integrity: sha512-vmI3lyA3IN4QKiB0/M3uDef3lZZvgVUokWtLkc5NvxEnykY+TdSR6xatMMNDJmzMHTneayIOpc/eQu4d9Z/r2w==}
+  million@3.1.4:
+    resolution: {integrity: sha512-ZEg5EX8leO9TQK1S6Sxas7BTzo7CcNMZD9E/9VdqI3vJpgPxSMS7IEq6VO4i/hgZWC2m2b2mBTAx/Ms98hdjXg==}
     hasBin: true
 
   mime-db@1.52.0:
@@ -1770,6 +1770,11 @@ packages:
   nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@5.0.7:
+    resolution: {integrity: sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==}
+    engines: {node: ^18 || >=20}
     hasBin: true
 
   natural-compare-lite@1.4.0:
@@ -2464,8 +2469,8 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
-  undici@6.18.0:
-    resolution: {integrity: sha512-nT8jjv/fE9Et1ilR6QoW8ingRTY2Pp4l2RUrdzV5Yz35RJDrtPc1DXvuNqcpsJSGIRHFdt3YKKktTzJA6r0fTA==}
+  undici@6.18.1:
+    resolution: {integrity: sha512-/0BWqR8rJNRysS5lqVmfc7eeOErcOP4tZpATVjJOojjHZ71gSYVAtFhEmadcIjwMIUehh5NFyKGsXCnXIajtbA==}
     engines: {node: '>=18.17'}
 
   unicorn-magic@0.1.0:
@@ -2926,7 +2931,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@million/install@0.0.3':
+  '@million/install@0.0.5':
     dependencies:
       '@antfu/ni': 0.21.12
       '@axiomhq/js': 1.0.0-rc.3
@@ -2935,6 +2940,7 @@ snapshots:
       '@clack/prompts': 0.7.0
       cli-high: 0.4.1
       diff: 5.2.0
+      nanoid: 5.0.7
       posthog-node: 3.6.3
       xycolors: 0.1.1
     transitivePeerDependencies:
@@ -4360,14 +4366,14 @@ snapshots:
       braces: 3.0.2
       picomatch: 2.3.1
 
-  million@3.1.1(rollup@4.17.2):
+  million@3.1.4(rollup@4.17.2):
     dependencies:
       '@babel/core': 7.24.5
       '@babel/types': 7.24.5
-      '@million/install': 0.0.3
+      '@million/install': 0.0.5
       '@rollup/pluginutils': 5.1.0(rollup@4.17.2)
       kleur: 4.1.5
-      undici: 6.18.0
+      undici: 6.18.1
       unplugin: 1.10.1
     transitivePeerDependencies:
       - debug
@@ -4407,6 +4413,8 @@ snapshots:
       thenify-all: 1.6.0
 
   nanoid@3.3.7: {}
+
+  nanoid@5.0.7: {}
 
   natural-compare-lite@1.4.0: {}
 
@@ -5105,7 +5113,7 @@ snapshots:
 
   undici-types@5.26.5: {}
 
-  undici@6.18.0: {}
+  undici@6.18.1: {}
 
   unicorn-magic@0.1.0: {}
 
