@@ -1,3 +1,4 @@
+import { Button, Description, Field, Input, Label } from '@headlessui/react'
 import type { ChangeEvent, FC, FormEvent } from 'react'
 import { useCallback, useState } from 'react'
 import type { TodoFormProps } from '../type'
@@ -17,23 +18,20 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
     [text, onAddTodo]
   )
 
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setText(event.target.value)
-    },
-    []
-  )
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value)
+  }, [])
 
   return (
-    <form onSubmit={handleSubmit} className="flex mt-4">
-      <label htmlFor="add-todo" className="sr-only">
+    <Field as="form" onSubmit={handleSubmit} className="flex mt-4">
+      <Label htmlFor="add-todo" className="sr-only">
         Add new todo
-      </label>
-      <input
+      </Label>
+      <Input
         type="text"
         name="name"
         id="add-todo"
-        className="appearance-none border rounded w-full py-2 px-3 mr-4 text-gray-700 focus:ring-sky-500 focus:border-sky-500"
+        className="appearance-none border rounded w-full py-2 px-3 mr-4 text-gray-900 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
         placeholder="Add new todo..."
         maxLength={29}
         value={text}
@@ -42,16 +40,19 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
         autoComplete="off"
         required
       />
-      <span id="todo-length-limit" className="hidden text-xs text-red-500">
+      <Description
+        id="todo-length-limit"
+        className="hidden text-xs text-red-500"
+      >
         Maximum 29 characters
-      </span>
-      <button
+      </Description>
+      <Button
         type="submit"
-        className="shrink p-2 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded focus:outline-none"
+        className="shrink-0 p-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Create
-      </button>
-    </form>
+      </Button>
+    </Field>
   )
 }
 

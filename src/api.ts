@@ -1,51 +1,89 @@
-import toast from 'react-hot-toast'
+import type { DBSchema, IDBPDatabase } from 'idb'
+import { openDB } from 'idb'
 import type { Todo } from './type'
 
-let todos: Todo[] = JSON.parse(localStorage.getItem('todos') || '[]')
-let currentId = Math.max(Date.now(), ...todos.map(todo => todo.id)) + 1
-
-export async function getTodos(): Promise<Todo[]> {
-  return todos
+interface TodoDB extends DBSchema {
+  todos: {
+    key: number
+    value: Todo
+  }
 }
 
-export async function addTodo(todo: Todo): Promise<Todo[]> {
+let dbPromise: Promise<IDBPDatabase<TodoDB>> | null = null
+
+const getDb = (): Promise<IDBPDatabase<TodoDB>> => {
+  dbPromise ||= openDB<TodoDB>('todosDB', 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains('todos')) {
+        db.createObjectStore('todos', { keyPath: 'id', autoIncrement: true })
+      }
+    }
+  })
+  return dbPromise
+}
+
+export const getTodos = async (): Promise<Todo[]> => {
+  const db = await getDb()
+  return await db.getAll('todos')
+}
+
+export const addTodo = async (todo: Todo): Promise<void> => {
   if (!todo) {
-    toast.error('Todo cannot be null or undefined.')
-    return todos
+    throw new Error('Todo cannot be null or undefined.')
   }
 
-  const newTodo = { ...todo, id: currentId++ }
-  todos.push(newTodo)
-  updateLocalStorage()
-  return todos
+  const db = await getDb()
+  await db.put('todos', todo)
 }
 
-export async function updateTodo(updatedTodo: Todo): Promise<Todo[]> {
+export const updateTodo = async (updatedTodo: Todo): Promise<void> => {
   if (!updatedTodo) {
-    toast.error('Updated todo cannot be null or undefined.')
-    return todos
+    throw new Error('Updated todo cannot be null or undefined.')
   }
 
-  todos = todos.map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo))
-  updateLocalStorage()
-  return todos
+  const db = await getDb()
+  await db.put('todos', updatedTodo)
 }
 
-export async function deleteTodo(todoId: number): Promise<Todo[]> {
-  if (!todoId) {
-    toast.error('Todo ID cannot be null or undefined.')
-    return todos
+export const deleteTodo = async (todoId: number): Promise<void> => {
+  if (todoId == null) {
+    throw new Error('Todo ID cannot be null or undefined.')
   }
 
-  todos = todos.filter(todo => todo.id !== todoId)
-  updateLocalStorage()
-  return todos
+  const db = await getDb()
+  await db.delete('todos', todoId)
 }
 
-function updateLocalStorage() {
-  try {
-    localStorage.setItem('todos', JSON.stringify(todos))
-  } catch (e) {
-    toast.error(`Failed to save todos: ${e}`)
+export const getCompletedTodos = async (): Promise<number[]> => {
+  const db = await getDb()
+  const todos = await db.getAll('todos')
+  return todos.filter(todo => todo.completed).map(todo => todo.id)
+}
+
+export const saveCompletedTodos = async (
+  completedTodos: number[]
+): Promise<void> => {
+  const db = await getDb()
+  const tx = db.transaction('todos', 'readwrite')
+  const store = tx.objectStore('todos')
+  const allTodos = await store.getAll()
+
+  for (const todo of allTodos) {
+    if (completedTodos.includes(todo.id)) {
+      await store.put({ ...todo, completed: true })
+    } else {
+      await store.put({ ...todo, completed: false })
+    }
   }
+
+  await tx.done
+}
+
+export default {
+  getTodos,
+  addTodo,
+  updateTodo,
+  deleteTodo,
+  getCompletedTodos,
+  saveCompletedTodos
 }

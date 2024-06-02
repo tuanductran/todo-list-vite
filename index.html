@@ -1,12 +1,38 @@
 <!doctype html>
-<html lang="en" class="bg-gray-100">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple and efficient Todo List application built with React and Tailwind CSS."
+    />
+    <meta
+      name="keywords"
+      content="Todo List, React, Tailwind CSS, JavaScript, TypeScript"
+    />
+    <meta name="author" content="Tran Tuan Duc" />
     <title>Todo List</title>
     <link rel="shortcut icon" href="./vite.svg" type="image/x-icon" />
+    <script>
+      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const updateMode = () => {
+        const systemDark = darkModeQuery.matches
+        const userDark =
+          localStorage.isDarkMode === 'true' ||
+          (!('isDarkMode' in localStorage) && systemDark)
+        document.documentElement.classList.toggle('dark', userDark)
+        if (userDark === systemDark) delete localStorage.isDarkMode
+      }
+
+      darkModeQuery.addEventListener('change', updateMode)
+      window.addEventListener('storage', updateMode)
+      updateMode()
+    </script>
   </head>
-  <body class="font-sans antialiased">
+  <body
+    class="bg-gray-100 font-sans text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100"
+  >
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
   </body>
