@@ -19,7 +19,7 @@ importers:
         version: 8.0.0
       million:
         specifier: ^3.1.6
-        version: 3.1.8(rollup@4.18.0)
+        version: 3.1.9(rollup@4.18.0)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1747,8 +1747,8 @@ packages:
     resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
     engines: {node: '>=8.6'}
 
-  million@3.1.8:
-    resolution: {integrity: sha512-DXnaREO3BvC4kWinzjEGYoieJV9ucn5sS5OEef6vz0mAyloHn9qj35w4sHJLkDAQ3vJl61uerj9jWpuiGacAaw==}
+  million@3.1.9:
+    resolution: {integrity: sha512-SrmjRIN724rvW7t4ciJ17VMw4y3HHImGwc1dIIHpwNpsmlb2adUN9rm+tfKR1LzP//afdqnh3hB6R9KgoHlrWQ==}
     hasBin: true
 
   min-indent@1.0.1:
@@ -4373,7 +4373,7 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
-  million@3.1.8(rollup@4.18.0):
+  million@3.1.9(rollup@4.18.0):
     dependencies:
       '@babel/core': 7.24.6
       '@babel/types': 7.24.6
