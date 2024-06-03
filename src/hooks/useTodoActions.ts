@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
-import { addTodo, deleteTodo, getCompletedTodos, getTodos, saveCompletedTodos, updateTodo } from '../api'
+import {
+  addTodo,
+  deleteTodo,
+  getCompletedTodos,
+  getTodos,
+  saveCompletedTodos,
+  updateTodo
+} from '../api'
 import { todoReducer } from '../reducer'
 import type { Todo } from '../type'
 
