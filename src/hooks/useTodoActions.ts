@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
-import api from '../api'
+import { addTodo, deleteTodo, getCompletedTodos, getTodos, saveCompletedTodos, updateTodo } from '../api'
 import { todoReducer } from '../reducer'
 import type { Todo } from '../type'
 
 function useTodoActions() {
-  const { data: todos, mutate } = useSWR<Todo[]>('/api/todos', api.getTodos)
+  const { data: todos, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
   const [state, dispatch] = useReducer(todoReducer, {
     todos: [],
     completedTodos: []
@@ -15,7 +15,7 @@ function useTodoActions() {
   useEffect(() => {
     const fetchCompletedTodos = async () => {
       try {
-        const completedTodos = await api.getCompletedTodos()
+        const completedTodos = await getCompletedTodos()
         dispatch({ type: 'SET_COMPLETED_TODOS', payload: completedTodos })
       } catch (error) {
         console.error('Failed to fetch completed todos.', error)
@@ -38,7 +38,7 @@ function useTodoActions() {
       try {
         await mutate(
           async prevTodos => {
-            await api.addTodo(newTodo)
+            await addTodo(newTodo)
             return [...(prevTodos || []), newTodo]
           },
           {
@@ -74,14 +74,14 @@ function useTodoActions() {
           payload: updatedCompletedTodos
         })
 
-        await api.updateTodo({ ...todo, completed: !isCompleted })
+        await updateTodo({ ...todo, completed: !isCompleted })
         if (isCompleted) {
           toast.success('Todo marked as incomplete.')
         } else {
           toast.success('Todo marked as complete.')
         }
 
-        await api.saveCompletedTodos(updatedCompletedTodos)
+        await saveCompletedTodos(updatedCompletedTodos)
       } catch (error) {
         toast.error('Failed to change todo completion status.')
         dispatch({ type: 'TOGGLE_TODO', payload: todoId })
@@ -106,7 +106,7 @@ function useTodoActions() {
         try {
           await mutate(
             async prevTodos => {
-              await api.updateTodo(updatedTodo)
+              await updateTodo(updatedTodo)
               return prevTodos
                 ? prevTodos.map(item =>
                     item.id === todoId ? updatedTodo : item
@@ -137,7 +137,7 @@ function useTodoActions() {
       try {
         await mutate(
           async prevTodos => {
-            await api.deleteTodo(todoId)
+            await deleteTodo(todoId)
             return prevTodos?.filter(todo => todo.id !== todoId)
           },
           {

@@ -15,7 +15,7 @@ export default function TodoPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 m-4 w-full lg:w-3/4 lg:max-w-xl">
+      <div className="bg-white dark:bg-gray-800 rounded-adaptive shadow-lg p-8 m-4 w-full lg:w-3/4 lg:max-w-xl">
         <div className="mb-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">

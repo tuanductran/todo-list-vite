@@ -31,7 +31,7 @@ const TodoList: FC<TodoListProps> = ({
           <Button
             type="button"
             className={cn(
-              'shrink-0 p-2 ml-4 rounded transition-colors duration-300',
+              'shrink-0 p-2 ml-4 rounded-lg transition-colors duration-300',
               {
                 'bg-gray-300 hover:bg-gray-400 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100':
                   isTodoCompleted,
@@ -46,7 +46,7 @@ const TodoList: FC<TodoListProps> = ({
           {!isTodoCompleted && (
             <Button
               type="button"
-              className="shrink-0 p-2 ml-4 rounded bg-teal-300 hover:bg-teal-400 text-teal-900 dark:bg-teal-700 dark:hover:bg-teal-600 dark:text-teal-100 transition-colors duration-300"
+              className="shrink-0 p-2 ml-4 rounded-lg bg-teal-300 hover:bg-teal-400 text-teal-900 dark:bg-teal-700 dark:hover:bg-teal-600 dark:text-teal-100 transition-colors duration-300"
               onClick={() => handleEditClick(todo.id)}
             >
               Edit
@@ -54,7 +54,7 @@ const TodoList: FC<TodoListProps> = ({
           )}
           <Button
             type="button"
-            className="shrink-0 p-2 ml-4 rounded bg-red-300 hover:bg-red-400 text-red-900 dark:bg-red-700 dark:hover:bg-red-600 dark:text-red-100 transition-colors duration-300"
+            className="shrink-0 p-2 ml-4 rounded-lg bg-red-300 hover:bg-red-400 text-red-900 dark:bg-red-700 dark:hover:bg-red-600 dark:text-red-100 transition-colors duration-300"
             onClick={() => handleDeleteClick(todo.id)}
           >
             Delete
