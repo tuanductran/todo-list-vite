@@ -13,11 +13,17 @@ import { todoReducer } from '../reducer'
 import type { Todo } from '../type'
 
 function useTodoActions() {
-  const { data: todos, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
+  const { data: todos, error, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
   const [state, dispatch] = useReducer(todoReducer, {
     todos: [],
     completedTodos: []
   })
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message)
+    }
+  }, [error])
 
   useEffect(() => {
     const fetchCompletedTodos = async () => {
