@@ -29,6 +29,7 @@
     "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
     "lint": "eslint --cache --ignore-path .gitignore --max-warnings 0 .",
     "lint:prettier": "prettier --cache --check --ignore-path .gitignore --ignore-path .prettierignore .",
+    "preinstall": "npx only-allow pnpm",
     "prettier": "pnpm lint:prettier --write",
     "preview": "vite preview",
     "type:check": "tsc"
