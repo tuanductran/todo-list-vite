@@ -19,6 +19,7 @@ export interface TodoFormProps {
  */
 export interface TodoListProps {
   todos: Todo[]
+  error: boolean
   completedTodos: number[] // Assuming the array contains the IDs of completed todos
   handleEditClick: (todoId: number) => void
   handleDeleteClick: (todoId: number) => void

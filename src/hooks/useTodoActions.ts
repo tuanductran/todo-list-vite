@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react'
-import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import {
   addTodo,
@@ -9,11 +8,22 @@ import {
   saveCompletedTodos,
   updateTodo
 } from '../api'
+import { showErrorToast, showSuccessToast } from '../components/Toast'
 import { todoReducer } from '../reducer'
 import type { Todo } from '../type'
 
-function useTodoActions() {
-  const { data: todos, error, mutate } = useSWR<Todo[]>('/api/todos', getTodos)
+const useTodoActions = () => {
+  const {
+    data: todos,
+    error,
+    mutate
+  } = useSWR<Todo[]>('/api/todos', getTodos, {
+    refreshInterval: 1000,
+    revalidateOnFocus: true,
+    dedupingInterval: 2000,
+    shouldRetryOnError: true
+  })
+
   const [state, dispatch] = useReducer(todoReducer, {
     todos: [],
     completedTodos: []
@@ -21,7 +31,7 @@ function useTodoActions() {
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message)
+      showErrorToast(error.message)
     }
   }, [error])
 
@@ -30,9 +40,8 @@ function useTodoActions() {
       try {
         const completedTodos = await getCompletedTodos()
         dispatch({ type: 'SET_COMPLETED_TODOS', payload: completedTodos })
-      } catch (error) {
-        console.error('Failed to fetch completed todos.', error)
-        toast.error('Unable to load completed todos.')
+      } catch {
+        showErrorToast('Unable to load completed todos.')
       }
     }
     fetchCompletedTodos()
@@ -41,18 +50,27 @@ function useTodoActions() {
   const handleAddTodo = useCallback(
     async (text: string) => {
       const trimmedText = text.trim()
-      if (!trimmedText || todos?.some(todo => todo.text === trimmedText)) {
-        toast.error('Todo text cannot be empty or duplicate.')
+      if (!trimmedText) {
+        showErrorToast('Todo text cannot be empty.')
         return
       }
 
-      const newTodo: Todo = { id: Date.now(), text: trimmedText }
+      if (todos?.some(todo => todo.text === trimmedText)) {
+        showErrorToast('Todo text already exists.')
+        return
+      }
+
+      const newTodo: Todo = {
+        id: Date.now(),
+        text: trimmedText,
+        completed: false
+      }
 
       try {
         await mutate(
-          async prevTodos => {
+          async (prevTodos = []) => {
             await addTodo(newTodo)
-            return [...(prevTodos || []), newTodo]
+            return [...prevTodos, newTodo]
           },
           {
             optimisticData: [...(todos || []), newTodo],
@@ -62,9 +80,9 @@ function useTodoActions() {
         )
 
         dispatch({ type: 'ADD_TODO', payload: newTodo })
-        toast.success('Todo added successfully.')
-      } catch (error) {
-        toast.error('Failed to add the todo.')
+        showSuccessToast('Todo added successfully.')
+      } catch {
+        showErrorToast('Failed to add the todo.')
       }
     },
     [todos, mutate]
@@ -87,28 +105,47 @@ function useTodoActions() {
           payload: updatedCompletedTodos
         })
 
-        await updateTodo({ ...todo, completed: !isCompleted })
-        if (isCompleted) {
-          toast.success('Todo marked as incomplete.')
-        } else {
-          toast.success('Todo marked as complete.')
-        }
+        await mutate(
+          async (prevTodos = []) => {
+            await updateTodo({ ...todo, completed: !isCompleted })
+            return prevTodos.map(item =>
+              item.id === todoId ? { ...item, completed: !isCompleted } : item
+            )
+          },
+          {
+            optimisticData: todos?.map(item =>
+              item.id === todoId ? { ...item, completed: !isCompleted } : item
+            ),
+            rollbackOnError: true,
+            revalidate: false
+          }
+        )
 
+        showSuccessToast(
+          isCompleted
+            ? 'Todo marked as incomplete.'
+            : 'Todo marked as complete.'
+        )
         await saveCompletedTodos(updatedCompletedTodos)
-      } catch (error) {
-        toast.error('Failed to change todo completion status.')
+      } catch {
+        showErrorToast('Failed to change todo completion status.')
         dispatch({ type: 'TOGGLE_TODO', payload: todoId })
         dispatch({ type: 'SET_COMPLETED_TODOS', payload: state.completedTodos })
       }
     },
-    [todos, state.completedTodos]
+    [todos, state.completedTodos, mutate]
   )
 
   const handleUpdateTodo = useCallback(
     async (todoId: number, newText: string) => {
       const trimmedText = newText.trim()
       if (!trimmedText) {
-        toast.error('Todo text cannot be empty.')
+        showErrorToast('Todo text cannot be empty.')
+        return
+      }
+
+      if (todos?.some(todo => todo.text === trimmedText)) {
+        showErrorToast('Todo text already exists.')
         return
       }
 
@@ -118,13 +155,11 @@ function useTodoActions() {
 
         try {
           await mutate(
-            async prevTodos => {
+            async (prevTodos = []) => {
               await updateTodo(updatedTodo)
-              return prevTodos
-                ? prevTodos.map(item =>
-                    item.id === todoId ? updatedTodo : item
-                  )
-                : [updatedTodo]
+              return prevTodos.map(item =>
+                item.id === todoId ? updatedTodo : item
+              )
             },
             {
               optimisticData: todos?.map(item =>
@@ -136,9 +171,9 @@ function useTodoActions() {
           )
 
           dispatch({ type: 'UPDATE_TODO', payload: updatedTodo })
-          toast.success('Todo updated successfully.')
-        } catch (error) {
-          toast.error('Failed to update the todo.')
+          showSuccessToast('Todo updated successfully.')
+        } catch {
+          showErrorToast('Failed to update the todo.')
         }
       }
     },
@@ -149,9 +184,9 @@ function useTodoActions() {
     async (todoId: number) => {
       try {
         await mutate(
-          async prevTodos => {
+          async (prevTodos = []) => {
             await deleteTodo(todoId)
-            return prevTodos?.filter(todo => todo.id !== todoId)
+            return prevTodos.filter(todo => todo.id !== todoId)
           },
           {
             optimisticData: todos?.filter(todo => todo.id !== todoId),
@@ -161,9 +196,9 @@ function useTodoActions() {
         )
 
         dispatch({ type: 'DELETE_TODO', payload: todoId })
-        toast.success('Todo deleted successfully.')
-      } catch (error) {
-        toast.error('Failed to delete the todo.')
+        showSuccessToast('Todo deleted successfully.')
+      } catch {
+        showErrorToast('Failed to delete the todo.')
       }
     },
     [todos, mutate]
@@ -172,19 +207,11 @@ function useTodoActions() {
   const handleEditClick = useCallback(
     (id: number) => {
       const newText = prompt('Enter the new text:')
-      if (newText === null || newText.trim() === '') {
-        // User pressed cancel or entered an empty string, do nothing
-        return
-      }
-
-      const trimmedText = newText.trim()
-      if (todos?.some(todo => todo.text === trimmedText)) {
-        toast.error('Todo text already exists.')
-      } else {
-        handleUpdateTodo(id, trimmedText)
+      if (newText?.trim()) {
+        handleUpdateTodo(id, newText.trim())
       }
     },
-    [handleUpdateTodo, todos]
+    [handleUpdateTodo]
   )
 
   const handleDeleteClick = useCallback(
@@ -206,6 +233,7 @@ function useTodoActions() {
   return useMemo(
     () => ({
       todos,
+      error,
       completedTodos: state.completedTodos,
       handleAddTodo,
       handleEditClick,
@@ -214,6 +242,7 @@ function useTodoActions() {
     }),
     [
       todos,
+      error,
       state.completedTodos,
       handleAddTodo,
       handleEditClick,

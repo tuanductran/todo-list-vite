@@ -8,7 +8,7 @@ export default function App() {
     <>
       <Analytics />
       <SpeedInsights />
-      <Toaster toastOptions={{ position: 'top-center' }} />
+      <Toaster toastOptions={{ position: 'top-right', className: 'toast' }} />
       <TodoPage />
     </>
   )

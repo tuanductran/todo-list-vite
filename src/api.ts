@@ -1,5 +1,5 @@
-import type { DBSchema, IDBPDatabase } from 'idb'
 import { openDB } from 'idb'
+import type { DBSchema, IDBPDatabase } from 'idb'
 import type { Todo } from './type'
 
 interface TodoDB extends DBSchema {
@@ -9,53 +9,47 @@ interface TodoDB extends DBSchema {
   }
 }
 
-let dbPromise: Promise<IDBPDatabase<TodoDB>> | null = null
+let dbInstance: Promise<IDBPDatabase<TodoDB>> | null = null
 
-const getDb = (): Promise<IDBPDatabase<TodoDB>> => {
-  dbPromise ||= openDB<TodoDB>('todosDB', 1, {
+const initializeDB = (): Promise<IDBPDatabase<TodoDB>> => {
+  dbInstance ||= openDB<TodoDB>('todosDB', 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains('todos')) {
         db.createObjectStore('todos', { keyPath: 'id', autoIncrement: true })
       }
     }
   })
-  return dbPromise
+  return dbInstance
 }
 
 export const getTodos = async (): Promise<Todo[]> => {
-  const db = await getDb()
-  return await db.getAll('todos')
+  const db = await initializeDB()
+  return db.getAll('todos')
 }
 
 export const addTodo = async (todo: Todo): Promise<void> => {
-  if (!todo) {
-    throw new Error('Todo cannot be null or undefined.')
-  }
+  if (!todo) throw new Error('Todo cannot be null or undefined.')
 
-  const db = await getDb()
+  const db = await initializeDB()
   await db.put('todos', todo)
 }
 
 export const updateTodo = async (updatedTodo: Todo): Promise<void> => {
-  if (!updatedTodo) {
-    throw new Error('Updated todo cannot be null or undefined.')
-  }
+  if (!updatedTodo) throw new Error('Updated todo cannot be null or undefined.')
 
-  const db = await getDb()
+  const db = await initializeDB()
   await db.put('todos', updatedTodo)
 }
 
 export const deleteTodo = async (todoId: number): Promise<void> => {
-  if (todoId == null) {
-    throw new Error('Todo ID cannot be null or undefined.')
-  }
+  if (todoId == null) throw new Error('Todo ID cannot be null or undefined.')
 
-  const db = await getDb()
+  const db = await initializeDB()
   await db.delete('todos', todoId)
 }
 
 export const getCompletedTodos = async (): Promise<number[]> => {
-  const db = await getDb()
+  const db = await initializeDB()
   const todos = await db.getAll('todos')
   return todos.filter(todo => todo.completed).map(todo => todo.id)
 }
@@ -63,18 +57,16 @@ export const getCompletedTodos = async (): Promise<number[]> => {
 export const saveCompletedTodos = async (
   completedTodos: number[]
 ): Promise<void> => {
-  const db = await getDb()
+  const db = await initializeDB()
   const tx = db.transaction('todos', 'readwrite')
   const store = tx.objectStore('todos')
   const allTodos = await store.getAll()
 
-  for (const todo of allTodos) {
-    if (completedTodos.includes(todo.id)) {
-      await store.put({ ...todo, completed: true })
-    } else {
-      await store.put({ ...todo, completed: false })
-    }
-  }
+  await Promise.all(
+    allTodos.map(todo =>
+      store.put({ ...todo, completed: completedTodos.includes(todo.id) })
+    )
+  )
 
   await tx.done
 }

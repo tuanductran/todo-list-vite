@@ -1,57 +1,81 @@
 import { Button, Description, Field, Input, Label } from '@headlessui/react'
-import type { ChangeEvent, FC, FormEvent } from 'react'
-import { useCallback, useState } from 'react'
+import DOMPurify from 'dompurify'
+import type { FC } from 'react'
+import { useForm } from 'react-hook-form'
 import type { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
-  const [text, setText] = useState('')
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    trigger
+  } = useForm<{ name: string }>()
 
-  const handleSubmit = useCallback(
-    (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-      const trimmedText = text.trim()
-      if (trimmedText) {
-        onAddTodo(trimmedText)
-        setText('')
-      }
-    },
-    [text, onAddTodo]
-  )
+  const sanitizeInput = (input: string) => {
+    return DOMPurify.sanitize(input)
+  }
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value)
-  }, [])
+  const onSubmit = async (data: { name: string }) => {
+    const isValid = await trigger('name')
+    if (!isValid) return // Prevent the form if there is an error
+
+    const sanitizedData = sanitizeInput(data.name)
+    onAddTodo(sanitizedData)
+    reset()
+  }
 
   return (
-    <Field as="form" onSubmit={handleSubmit} className="flex mt-4">
+    <Field as="form" onSubmit={handleSubmit(onSubmit)} className="mt-4">
       <Label htmlFor="add-todo" className="sr-only">
         Add new todo
       </Label>
-      <Input
-        type="text"
-        name="name"
-        id="add-todo"
-        className="appearance-none border rounded-lg w-full py-2 px-3 mr-4 text-gray-900 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-        placeholder="Add new todo..."
-        maxLength={29}
-        value={text}
-        onChange={handleChange}
-        aria-describedby="todo-length-limit"
-        autoComplete="off"
-        required
-      />
-      <Description
-        id="todo-length-limit"
-        className="hidden text-xs text-red-500"
-      >
-        Maximum 29 characters
-      </Description>
-      <Button
-        type="submit"
-        className="shrink-0 p-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        Create
-      </Button>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg
+            className="size-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <Input
+          type="text"
+          id="add-todo"
+          className="block w-full p-4 pl-10 pr-20 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder:text-gray-400 dark:text-white dark:focus:border-blue-500 transition-colors duration-300"
+          placeholder="Enter a new todo..."
+          {...register('name', {
+            required: 'This field is required',
+            minLength: { value: 3, message: 'Minimum 3 characters' },
+            maxLength: { value: 20, message: 'Maximum 20 characters' }
+          })}
+          aria-invalid={errors.name ? 'true' : 'false'}
+          autoComplete="off"
+        />
+        <Button
+          type="submit"
+          className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300"
+        >
+          Create
+        </Button>
+      </div>
+      <div className="mt-2">
+        {errors.name && (
+          <Description className="text-sm text-red-600 dark:text-red-500 transition-colors duration-300">
+            {errors.name.message}
+          </Description>
+        )}
+      </div>
     </Field>
   )
 }
