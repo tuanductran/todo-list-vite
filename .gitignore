@@ -27,3 +27,4 @@ dist-ssr
 .turbo
 css/build.css
 .eslintcache
+.env*.local
