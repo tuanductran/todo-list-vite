@@ -17,12 +17,7 @@ const useTodoActions = () => {
     data: todos,
     error,
     mutate
-  } = useSWR<Todo[]>('/api/todos', getTodos, {
-    refreshInterval: 1000,
-    revalidateOnFocus: true,
-    dedupingInterval: 2000,
-    shouldRetryOnError: true
-  })
+  } = useSWR<Todo[]>('/api/todos', getTodos, { refreshInterval: 1000 })
 
   const [state, dispatch] = useReducer(todoReducer, {
     todos: [],
