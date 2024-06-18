@@ -11,7 +11,6 @@ const TAILWIND_CONFIG = {
 
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
-  root: true,
   reportUnusedDisableDirectives: true,
   ignorePatterns: ['vite-env.d.ts'],
   overrides: [
