@@ -1,4 +1,4 @@
-name: autofix.ci (Lint & Prettier)
+name: autofix.ci
 
 on:
   pull_request:
