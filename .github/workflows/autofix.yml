@@ -23,8 +23,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: CI
-        run: npm ci
+      - name: Install Packages
+        run: npm install
 
       - name: Run Prettier
         run: npm run prettier
