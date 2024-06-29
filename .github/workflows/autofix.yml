@@ -13,39 +13,27 @@ permissions:
 jobs:
   autofix:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Configure Node.js ${{ matrix.node-version }}
+      - name: Configure Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          node-version: 20
 
-      - name: Install Dependencies
-        run: pnpm install
+      - name: CI
+        run: npm ci
 
       - name: Run Prettier
-        run: pnpm prettier
+        run: npm run prettier
 
       - name: Run Prettier Linter
-        run: pnpm lint:prettier
+        run: npm run lint:prettier
 
       - name: Run ESLint
-        run: pnpm lint
+        run: npm run lint
 
       - name: Run AutoFix
         uses: autofix-ci/action@dd55f44df8f7cdb7a6bf74c78677eb8acd40cd0a
