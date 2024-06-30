@@ -29,14 +29,8 @@ jobs:
       - name: Install Packages
         run: pnpm install
 
-      - name: Run Prettier
-        run: pnpm prettier
-
-      - name: Run Prettier Linter
-        run: pnpm lint:prettier
-
-      - name: Run ESLint
-        run: pnpm lint
+      - name: TypeScript Check
+        run: pnpm types:check
 
       - name: Run AutoFix
         uses: autofix-ci/action@dd55f44df8f7cdb7a6bf74c78677eb8acd40cd0a
