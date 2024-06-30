@@ -23,17 +23,20 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
       - name: Install Packages
-        run: npm install
+        run: pnpm install
 
       - name: Run Prettier
-        run: npm run prettier
+        run: pnpm prettier
 
       - name: Run Prettier Linter
-        run: npm run lint:prettier
+        run: pnpm lint:prettier
 
       - name: Run ESLint
-        run: npm run lint
+        run: pnpm lint
 
       - name: Run AutoFix
         uses: autofix-ci/action@dd55f44df8f7cdb7a6bf74c78677eb8acd40cd0a
