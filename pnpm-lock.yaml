@@ -118,8 +118,8 @@ importers:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.41)
       postcss-lightningcss:
-        specifier: ^1.0.0
-        version: 1.0.0(postcss@8.4.41)
+        specifier: ^1.0.1
+        version: 1.0.1(postcss@8.4.41)
       prettier:
         specifier: 3.3.3
         version: 3.3.3
@@ -1010,11 +1010,6 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-  browserslist@4.23.0:
-    resolution: {integrity: sha512-QW8HiM1shhT2GuzkvklfjcKDiWFXHOeFCIA/huJPwHsslwcydgk7X+z2zXpEijP98UCY7HbubZt5J2Zgvf0CaQ==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.23.3:
     resolution: {integrity: sha512-btwCFJVjI4YWDNfau8RhZ+B1Q/VLoUITrm3RlP6y1tYGWIOa+InuYiRGXUBXo8nA1qKmHMyLB/iVQg5TT4eFoA==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1189,9 +1184,6 @@ packages:
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
-
-  electron-to-chromium@1.4.788:
-    resolution: {integrity: sha512-ubp5+Ev/VV8KuRoWnfP2QF2Bg+O2ZFdb49DiiNbz2VmgkIqrnyYaqIOqj8A6K/3p1xV0QcU5hBQ1+BmB6ot1OA==}
 
   electron-to-chromium@1.5.4:
     resolution: {integrity: sha512-orzA81VqLyIGUEA77YkVA1D+N+nNfl2isJVjjmOyrlxuooZ19ynb+dOlaDTqd/idKRS9lDCSBmtzM+kyCsMnkA==}
@@ -1928,9 +1920,6 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  node-releases@2.0.14:
-    resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
-
   node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
@@ -2093,9 +2082,9 @@ packages:
     peerDependencies:
       postcss: ^8.4.21
 
-  postcss-lightningcss@1.0.0:
-    resolution: {integrity: sha512-sLNRVh+DINZHf5b31KUZnv3w4sf/CEdmvYP5JWzyyB8++E6WdaE7yxsrhfXiUFqISNBXcSrKfAF/MtTZrYAlbg==}
-    engines: {node: ^16.0.0 || ^18.0.0 || >= 20, npm: '>=7.0.0'}
+  postcss-lightningcss@1.0.1:
+    resolution: {integrity: sha512-9IrtZVt2HQ92iZJTkO43Qipx7E3PM+lLzZM8aGwMmMjNQHcir5jNC42U33p3Gh2lj1nES/ireYWEbMrJNiRBoQ==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >= 21}
     peerDependencies:
       postcss: ^8.0.0
 
@@ -2637,12 +2626,6 @@ packages:
   unplugin@1.10.1:
     resolution: {integrity: sha512-d6Mhq8RJeGA8UfKCu54Um4lFA0eSaRa3XxdAJg8tIdxbu1ubW0hBCZUL7yI2uGyYCRndvbK8FLHzqy2XKfeMsg==}
     engines: {node: '>=14.0.0'}
-
-  update-browserslist-db@1.0.16:
-    resolution: {integrity: sha512-KVbTxlBYlckhF5wgfyZXTWnMn7MMZjMu9XG8bPlliUOP9ThaF4QnhP8qrjrH7DRzHfSk0oQv1wToW+iA5GajEQ==}
-    hasBin: true
-    peerDependencies:
-      browserslist: '>= 4.21.0'
 
   update-browserslist-db@1.1.0:
     resolution: {integrity: sha512-EdRAaAyk2cUE1wOf2DkEhzxqOQvFOoRJFNS6NeyJ01Gp2beMRpBAINjM2iDXE3KCuKhwnvHIQCJm6ThL2Z+HzQ==}
@@ -3699,13 +3682,6 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  browserslist@4.23.0:
-    dependencies:
-      caniuse-lite: 1.0.30001646
-      electron-to-chromium: 1.4.788
-      node-releases: 2.0.14
-      update-browserslist-db: 1.0.16(browserslist@4.23.0)
-
   browserslist@4.23.3:
     dependencies:
       caniuse-lite: 1.0.30001646
@@ -3879,8 +3855,6 @@ snapshots:
   dompurify@3.1.6: {}
 
   eastasianwidth@0.2.0: {}
-
-  electron-to-chromium@1.4.788: {}
 
   electron-to-chromium@1.5.4: {}
 
@@ -4725,8 +4699,6 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  node-releases@2.0.14: {}
-
   node-releases@2.0.18: {}
 
   normalize-package-data@2.5.0:
@@ -4891,9 +4863,9 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.41
 
-  postcss-lightningcss@1.0.0(postcss@8.4.41):
+  postcss-lightningcss@1.0.1(postcss@8.4.41):
     dependencies:
-      browserslist: 4.23.0
+      browserslist: 4.23.3
       lightningcss: 1.25.1
       postcss: 8.4.41
 
@@ -5428,12 +5400,6 @@ snapshots:
       chokidar: 3.6.0
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.6.1
-
-  update-browserslist-db@1.0.16(browserslist@4.23.0):
-    dependencies:
-      browserslist: 4.23.0
-      escalade: 3.1.2
-      picocolors: 1.0.1
 
   update-browserslist-db@1.1.0(browserslist@4.23.3):
     dependencies:

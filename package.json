@@ -73,7 +73,7 @@
     "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0",
     "postcss-import": "^16.1.0",
-    "postcss-lightningcss": "^1.0.0",
+    "postcss-lightningcss": "^1.0.1",
     "prettier": "3.3.3",
     "prettier-plugin-pkg": "0.18.1",
     "prettier-plugin-tailwindcss": "0.6.6",
