@@ -74,7 +74,7 @@ importers:
         version: 7.18.0(eslint@8.57.0)(typescript@5.5.4)
       '@vitejs/plugin-react':
         specifier: ^4.3.1
-        version: 4.3.1(vite@5.4.2(@types/node@22.5.2)(lightningcss@1.25.1))
+        version: 4.3.1(vite@5.4.3(@types/node@22.5.2)(lightningcss@1.25.1))
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.20(postcss@8.4.44)
@@ -136,8 +136,8 @@ importers:
         specifier: ^5.4.5
         version: 5.5.4
       vite:
-        specifier: 5.4.2
-        version: 5.4.2(@types/node@22.5.2)(lightningcss@1.25.1)
+        specifier: 5.4.3
+        version: 5.4.3(@types/node@22.5.2)(lightningcss@1.25.1)
 
 packages:
 
@@ -3462,8 +3462,8 @@ packages:
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
-  vite@5.4.2:
-    resolution: {integrity: sha512-dDrQTRHp5C1fTFzcSaMxjk6vdpKvT+2/mIdE07Gw2ykehT49O0z/VHS3zZ8iV/Gh8BJJKHWOe5RjaNrW5xf/GA==}
+  vite@5.4.3:
+    resolution: {integrity: sha512-IH+nl64eq9lJjFqU+/yrRnrHPVTlgy42/+IzbOdaFDVlyLgI/wDlf+FCobXLX1cT0X5+7LMyH1mIy2xJdLfo8Q==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -5222,14 +5222,14 @@ snapshots:
     optionalDependencies:
       react: 18.3.1
 
-  '@vitejs/plugin-react@4.3.1(vite@5.4.2(@types/node@22.5.2)(lightningcss@1.25.1))':
+  '@vitejs/plugin-react@4.3.1(vite@5.4.3(@types/node@22.5.2)(lightningcss@1.25.1))':
     dependencies:
       '@babel/core': 7.24.7
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.24.7)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.7)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.2(@types/node@22.5.2)(lightningcss@1.25.1)
+      vite: 5.4.3(@types/node@22.5.2)(lightningcss@1.25.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -7344,7 +7344,7 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vite@5.4.2(@types/node@22.5.2)(lightningcss@1.25.1):
+  vite@5.4.3(@types/node@22.5.2)(lightningcss@1.25.1):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.44
