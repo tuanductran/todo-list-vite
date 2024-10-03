@@ -1,4 +1,5 @@
 import useTodoActions from '../hooks/useTodoActions'
+
 import DarkMode from './DarkMode'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
@@ -11,7 +12,7 @@ export default function TodoPage() {
     handleAddTodo,
     handleEditClick,
     handleDeleteClick,
-    handleToggleClick
+    handleToggleClick,
   } = useTodoActions()
 
   return (

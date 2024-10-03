@@ -29,14 +29,14 @@ export interface TodoListProps {
 /**
  * State type representing todo items and completed todos
  */
-export type State = {
+export interface State {
   todos: Todo[]
   completedTodos: number[]
 }
 
 export type Action =
-  | { type: 'SET_COMPLETED_TODOS'; payload: number[] }
-  | { type: 'ADD_TODO'; payload: Todo }
-  | { type: 'UPDATE_TODO'; payload: Todo }
-  | { type: 'DELETE_TODO'; payload: number }
-  | { type: 'TOGGLE_TODO'; payload: number }
+  | { type: 'SET_COMPLETED_TODOS', payload: number[] }
+  | { type: 'ADD_TODO', payload: Todo }
+  | { type: 'UPDATE_TODO', payload: Todo }
+  | { type: 'DELETE_TODO', payload: number }
+  | { type: 'TOGGLE_TODO', payload: number }

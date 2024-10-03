@@ -2,6 +2,7 @@ import { Button, Description, Field, Input, Label } from '@headlessui/react'
 import DOMPurify from 'dompurify'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
+
 import type { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
@@ -10,7 +11,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
     handleSubmit,
     reset,
     formState: { errors },
-    trigger
+    trigger,
   } = useForm<{ name: string }>()
 
   const sanitizeInput = (input: string) => {
@@ -19,7 +20,8 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
 
   const onSubmit = async (data: { name: string }) => {
     const isValid = await trigger('name')
-    if (!isValid) return // Prevent the form if there is an error
+    if (!isValid)
+      return // Prevent the form if there is an error
 
     const sanitizedData = sanitizeInput(data.name)
     onAddTodo(sanitizedData)
@@ -57,7 +59,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
           {...register('name', {
             required: 'This field is required',
             minLength: { value: 3, message: 'Minimum 3 characters' },
-            maxLength: { value: 20, message: 'Maximum 20 characters' }
+            maxLength: { value: 20, message: 'Maximum 20 characters' },
           })}
           aria-invalid={errors.name ? 'true' : 'false'}
           autoComplete="off"

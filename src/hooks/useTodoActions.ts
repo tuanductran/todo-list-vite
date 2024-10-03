@@ -1,27 +1,29 @@
+/* eslint-disable no-alert */
 import { useCallback, useEffect, useMemo, useReducer } from 'react'
 import useSWR from 'swr'
+
 import {
   addTodo,
   deleteTodo,
   getCompletedTodos,
   getTodos,
   saveCompletedTodos,
-  updateTodo
+  updateTodo,
 } from '../api'
 import { showErrorToast, showSuccessToast } from '../components/Toast'
 import { todoReducer } from '../reducer'
 import type { Todo } from '../type'
 
-const useTodoActions = () => {
+function useTodoActions() {
   const {
     data: todos,
     error,
-    mutate
+    mutate,
   } = useSWR<Todo[]>('/api/todos', getTodos, { refreshInterval: 1000 })
 
   const [state, dispatch] = useReducer(todoReducer, {
     todos: [],
-    completedTodos: []
+    completedTodos: [],
   })
 
   useEffect(() => {
@@ -35,7 +37,8 @@ const useTodoActions = () => {
       try {
         const completedTodos = await getCompletedTodos()
         dispatch({ type: 'SET_COMPLETED_TODOS', payload: completedTodos })
-      } catch {
+      }
+      catch {
         showErrorToast('Unable to load completed todos.')
       }
     }
@@ -58,7 +61,7 @@ const useTodoActions = () => {
       const newTodo: Todo = {
         id: Date.now(),
         text: trimmedText,
-        completed: false
+        completed: false,
       }
 
       try {
@@ -70,23 +73,25 @@ const useTodoActions = () => {
           {
             optimisticData: [...(todos || []), newTodo],
             rollbackOnError: true,
-            revalidate: false
-          }
+            revalidate: false,
+          },
         )
 
         dispatch({ type: 'ADD_TODO', payload: newTodo })
         showSuccessToast('Todo added successfully.')
-      } catch {
+      }
+      catch {
         showErrorToast('Failed to add the todo.')
       }
     },
-    [todos, mutate]
+    [todos, mutate],
   )
 
   const handleToggleTodo = useCallback(
     async (todoId: number) => {
       const todo = todos?.find(todo => todo.id === todoId)
-      if (!todo) return
+      if (!todo)
+        return
 
       const isCompleted = state.completedTodos.includes(todoId)
       const updatedCompletedTodos = isCompleted
@@ -97,38 +102,39 @@ const useTodoActions = () => {
         dispatch({ type: 'TOGGLE_TODO', payload: todoId })
         dispatch({
           type: 'SET_COMPLETED_TODOS',
-          payload: updatedCompletedTodos
+          payload: updatedCompletedTodos,
         })
 
         await mutate(
           async (prevTodos = []) => {
             await updateTodo({ ...todo, completed: !isCompleted })
             return prevTodos.map(item =>
-              item.id === todoId ? { ...item, completed: !isCompleted } : item
+              item.id === todoId ? { ...item, completed: !isCompleted } : item,
             )
           },
           {
             optimisticData: todos?.map(item =>
-              item.id === todoId ? { ...item, completed: !isCompleted } : item
+              item.id === todoId ? { ...item, completed: !isCompleted } : item,
             ),
             rollbackOnError: true,
-            revalidate: false
-          }
+            revalidate: false,
+          },
         )
 
         showSuccessToast(
           isCompleted
             ? 'Todo marked as incomplete.'
-            : 'Todo marked as complete.'
+            : 'Todo marked as complete.',
         )
         await saveCompletedTodos(updatedCompletedTodos)
-      } catch {
+      }
+      catch {
         showErrorToast('Failed to change todo completion status.')
         dispatch({ type: 'TOGGLE_TODO', payload: todoId })
         dispatch({ type: 'SET_COMPLETED_TODOS', payload: state.completedTodos })
       }
     },
-    [todos, state.completedTodos, mutate]
+    [todos, state.completedTodos, mutate],
   )
 
   const handleUpdateTodo = useCallback(
@@ -153,26 +159,27 @@ const useTodoActions = () => {
             async (prevTodos = []) => {
               await updateTodo(updatedTodo)
               return prevTodos.map(item =>
-                item.id === todoId ? updatedTodo : item
+                item.id === todoId ? updatedTodo : item,
               )
             },
             {
               optimisticData: todos?.map(item =>
-                item.id === todoId ? updatedTodo : item
+                item.id === todoId ? updatedTodo : item,
               ),
               rollbackOnError: true,
-              revalidate: false
-            }
+              revalidate: false,
+            },
           )
 
           dispatch({ type: 'UPDATE_TODO', payload: updatedTodo })
           showSuccessToast('Todo updated successfully.')
-        } catch {
+        }
+        catch {
           showErrorToast('Failed to update the todo.')
         }
       }
     },
-    [todos, mutate]
+    [todos, mutate],
   )
 
   const handleDeleteTodo = useCallback(
@@ -186,17 +193,18 @@ const useTodoActions = () => {
           {
             optimisticData: todos?.filter(todo => todo.id !== todoId),
             rollbackOnError: true,
-            revalidate: false
-          }
+            revalidate: false,
+          },
         )
 
         dispatch({ type: 'DELETE_TODO', payload: todoId })
         showSuccessToast('Todo deleted successfully.')
-      } catch {
+      }
+      catch {
         showErrorToast('Failed to delete the todo.')
       }
     },
-    [todos, mutate]
+    [todos, mutate],
   )
 
   const handleEditClick = useCallback(
@@ -206,7 +214,7 @@ const useTodoActions = () => {
         handleUpdateTodo(id, newText.trim())
       }
     },
-    [handleUpdateTodo]
+    [handleUpdateTodo],
   )
 
   const handleDeleteClick = useCallback(
@@ -215,14 +223,14 @@ const useTodoActions = () => {
         handleDeleteTodo(id)
       }
     },
-    [handleDeleteTodo]
+    [handleDeleteTodo],
   )
 
   const handleToggleClick = useCallback(
     (id: number) => {
       handleToggleTodo(id)
     },
-    [handleToggleTodo]
+    [handleToggleTodo],
   )
 
   return useMemo(
@@ -233,7 +241,7 @@ const useTodoActions = () => {
       handleAddTodo,
       handleEditClick,
       handleDeleteClick,
-      handleToggleClick
+      handleToggleClick,
     }),
     [
       todos,
@@ -242,8 +250,8 @@ const useTodoActions = () => {
       handleAddTodo,
       handleEditClick,
       handleDeleteClick,
-      handleToggleClick
-    ]
+      handleToggleClick,
+    ],
   )
 }
 

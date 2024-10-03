@@ -9,8 +9,8 @@ export default function DarkMode() {
     const isSystemDarkMode = darkModeMediaQuery.matches
     const savedDarkMode = window.localStorage.getItem('isDarkMode')
 
-    const isDarkMode =
-      savedDarkMode === 'true' || (savedDarkMode === null && isSystemDarkMode)
+    const isDarkMode
+      = savedDarkMode === 'true' || (savedDarkMode === null && isSystemDarkMode)
 
     setEnabled(isDarkMode)
     document.documentElement.classList.toggle('dark', isDarkMode)
@@ -36,7 +36,8 @@ export default function DarkMode() {
       isDarkMode === window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       window.localStorage.removeItem('isDarkMode')
-    } else {
+    }
+    else {
       window.localStorage.setItem('isDarkMode', isDarkMode.toString())
     }
   }

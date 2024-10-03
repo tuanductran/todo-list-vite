@@ -1,25 +1,27 @@
 import cn from 'clsx'
 import type { FC } from 'react'
 import { useMemo } from 'react'
+
 import type { TodoListProps } from '../type'
+
 import TodoItem from './TodoItem'
 
 const TodoList: FC<TodoListProps> = ({
-  todos = [],
+  todos,
   error,
   completedTodos,
   handleEditClick,
   handleDeleteClick,
-  handleToggleClick
+  handleToggleClick,
 }) => {
   const sortedTodos = useMemo(
-    () => [...todos].sort((a, b) => a.id - b.id),
-    [todos]
+    () => [...(todos || [])].sort((a, b) => a.id - b.id),
+    [todos],
   )
 
   const todoList = useMemo(
     () =>
-      sortedTodos.map(todo => {
+      sortedTodos.map((todo) => {
         const isTodoCompleted = completedTodos.includes(todo.id)
 
         return (
@@ -38,29 +40,32 @@ const TodoList: FC<TodoListProps> = ({
       completedTodos,
       handleEditClick,
       handleDeleteClick,
-      handleToggleClick
-    ]
+      handleToggleClick,
+    ],
   )
 
   return (
     <div
       className={cn('overflow-auto h-full', {
-        'max-h-[300px]': todos.length > 4
+        'max-h-[300px]': todos && todos.length > 4,
       })}
     >
-      {error ? (
-        <div className="text-center text-gray-500 py-4">
-          No todos available. Please try again later!
-        </div>
-      ) : todoList.length > 0 ? (
-        todoList
-      ) : (
-        <div className="text-center text-gray-500 py-4">
-          No todos available. Add a new task!
-        </div>
-      )}
+      {error
+        ? (
+            <div className="text-center text-gray-500 py-4">
+              No todos available. Please try again later!
+            </div>
+          )
+        : todoList.length > 0
+          ? (
+              todoList
+            )
+          : (
+              <div className="text-center text-gray-500 py-4">
+                No todos available. Add a new task!
+              </div>
+            )}
     </div>
   )
 }
-
 export default TodoList

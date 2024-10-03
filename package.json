@@ -1,7 +1,11 @@
 {
   "name": "todo-list",
   "version": "1.0.1",
+  "private": true,
+  "packageManager": "pnpm@9.12.0",
   "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
+  "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/tuanductran/todo-list-vite.git"
@@ -9,10 +13,6 @@
   "bugs": {
     "url": "https://github.com/tuanductran/todo-list-vite/issues"
   },
-  "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
-  "license": "MIT",
-  "private": true,
-  "packageManager": "pnpm@9.12.0",
   "keywords": [
     "todo",
     "react",
@@ -27,15 +27,14 @@
     "dev": "concurrently \"pnpm dev:layout\" \"pnpm dev:tailwind\"",
     "dev:layout": "vite",
     "dev:tailwind": "pnpm postcss css/app.css -o css/build.css --watch",
-    "lint": "eslint --cache --ignore-path .gitignore --max-warnings 0 .",
-    "lint:prettier": "prettier --cache --check --ignore-path .gitignore --ignore-path .prettierignore .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preinstall": "npx only-allow pnpm",
-    "prettier": "pnpm lint:prettier --write",
     "preview": "vite preview",
     "type:check": "tsc"
   },
   "dependencies": {
-    "@headlessui/react": "^2.1.7",
+    "@headlessui/react": "^2.1.9",
     "@vercel/analytics": "^1.3.1",
     "@vercel/speed-insights": "^1.0.11",
     "clsx": "^2.1.1",
@@ -50,35 +49,26 @@
     "tailwindcss": "^3.4.10"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "@antfu/eslint-config": "^3.7.3",
+    "@eslint-react/eslint-plugin": "^1.14.3",
     "@tailwindcss/forms": "^0.5.7",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^22.3.0",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "7.18.0",
-    "@typescript-eslint/parser": "7.18.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "concurrently": "^9.0.0",
-    "eslint": "8.57.1",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-import": "2.30.0",
-    "eslint-plugin-react": "7.37.1",
-    "eslint-plugin-react-hooks": "4.6.2",
-    "eslint-plugin-sonarjs": "^2.0.1",
-    "eslint-plugin-tailwindcss": "3.17.4",
-    "eslint-plugin-typescript-sort-keys": "3.2.0",
-    "eslint-plugin-unicorn": "55.0.0",
-    "postcss": "^8.4.38",
+    "eslint": "9.11.1",
+    "eslint-plugin-command": "^0.2.6",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "postcss-import": "^16.1.0",
     "postcss-lightningcss": "^1.0.1",
-    "prettier": "3.3.3",
-    "prettier-plugin-pkg": "0.18.1",
-    "prettier-plugin-tailwindcss": "0.6.8",
     "turbo": "^2.0.9",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.3",
     "vite": "5.4.8"
   }
 }

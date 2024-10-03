@@ -3,9 +3,9 @@ module.exports = {
   plugins: {
     'postcss-import': {},
     'tailwindcss/nesting': {},
-    tailwindcss: {},
+    'tailwindcss': {},
     'postcss-lightningcss': {
-      browsers: '>= .25%'
-    }
-  }
+      browsers: '>= .25%',
+    },
+  },
 }

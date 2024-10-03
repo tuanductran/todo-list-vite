@@ -2,6 +2,7 @@ import { Button } from '@headlessui/react'
 import cn from 'clsx'
 import type { FC } from 'react'
 import { memo } from 'react'
+
 import type { Todo } from '../type'
 
 const TodoItem: FC<{
@@ -17,8 +18,8 @@ const TodoItem: FC<{
         'mr-auto text-ellipsis overflow-hidden transition-colors duration-300',
         {
           'line-through text-gray-800 dark:text-gray-400': isCompleted,
-          'text-gray-900 dark:text-gray-100': !isCompleted
-        }
+          'text-gray-900 dark:text-gray-100': !isCompleted,
+        },
       )}
     >
       {todo.text}
@@ -31,8 +32,8 @@ const TodoItem: FC<{
           'bg-gray-800 hover:bg-gray-700 text-white dark:bg-gray-600 dark:hover:bg-gray-500':
             isCompleted,
           'bg-green-800 hover:bg-green-700 text-white dark:bg-green-600 dark:hover:bg-green-500':
-            !isCompleted
-        }
+            !isCompleted,
+        },
       )}
       onClick={onToggle}
     >

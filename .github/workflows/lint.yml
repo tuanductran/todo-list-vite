@@ -31,11 +31,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Prettier
-        run: pnpm prettier
-
-      - name: Lint Prettier
-        run: pnpm lint:prettier
-
-      - name: Lint ESLint
+      - name: Lint
         run: pnpm lint
+
+      - name: Lint Fix
+        run: pnpm lint:fix
