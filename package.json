@@ -31,7 +31,7 @@
     "lint:fix": "eslint . --fix",
     "preinstall": "npx only-allow pnpm",
     "preview": "vite preview",
-    "type:check": "tsc"
+    "type:check": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.9",
