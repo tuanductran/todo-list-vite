@@ -6,40 +6,42 @@ export default function DarkMode() {
 
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const isSystemDarkMode = darkModeMediaQuery.matches
     const savedDarkMode = window.localStorage.getItem('isDarkMode')
+    const isSystemDarkMode = darkModeMediaQuery.matches
 
-    const isDarkMode
-      = savedDarkMode === 'true' || (savedDarkMode === null && isSystemDarkMode)
-
+    const isDarkMode = savedDarkMode === 'true' || (savedDarkMode === null && isSystemDarkMode)
     setEnabled(isDarkMode)
-    document.documentElement.classList.toggle('dark', isDarkMode)
+    updateDarkModeClass(isDarkMode)
 
     const handleSystemChange = (e: MediaQueryListEvent) => {
       if (savedDarkMode === null) {
-        document.documentElement.classList.toggle('dark', e.matches)
         setEnabled(e.matches)
+        updateDarkModeClass(e.matches)
       }
     }
 
     darkModeMediaQuery.addEventListener('change', handleSystemChange)
-    return () =>
-      darkModeMediaQuery.removeEventListener('change', handleSystemChange)
+    return () => darkModeMediaQuery.removeEventListener('change', handleSystemChange)
   }, [])
 
-  function toggleMode() {
-    const isDarkMode = !enabled
-    setEnabled(isDarkMode)
+  const updateDarkModeClass = (isDarkMode: boolean) => {
     document.documentElement.classList.toggle('dark', isDarkMode)
+  }
 
-    if (
-      isDarkMode === window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
+  const handleLocalStorage = (isDarkMode: boolean) => {
+    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (isDarkMode === systemDarkMode) {
       window.localStorage.removeItem('isDarkMode')
-    }
-    else {
+    } else {
       window.localStorage.setItem('isDarkMode', isDarkMode.toString())
     }
+  }
+
+  const toggleMode = () => {
+    const newDarkMode = !enabled
+    setEnabled(newDarkMode)
+    updateDarkModeClass(newDarkMode)
+    handleLocalStorage(newDarkMode)
   }
 
   return (
