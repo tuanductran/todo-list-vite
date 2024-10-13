@@ -14,18 +14,13 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
     trigger,
   } = useForm<{ name: string }>()
 
-  const sanitizeInput = (input: string) => {
-    return DOMPurify.sanitize(input)
-  }
-
   const onSubmit = async (data: { name: string }) => {
     const isValid = await trigger('name')
-    if (!isValid)
-      return // Prevent the form if there is an error
+    if (!isValid) return // Prevent submission if validation fails
 
-    const sanitizedData = sanitizeInput(data.name)
+    const sanitizedData = DOMPurify.sanitize(data.name)
     onAddTodo(sanitizedData)
-    reset()
+    reset() // Reset the form after successful submission
   }
 
   return (
@@ -71,13 +66,11 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
           Create
         </Button>
       </div>
-      <div className="mt-2">
-        {errors.name && (
-          <Description className="text-sm text-red-600 dark:text-red-500 transition-colors duration-300">
-            {errors.name.message}
-          </Description>
-        )}
-      </div>
+      {errors.name && (
+        <Description className="mt-2 text-sm text-red-600 dark:text-red-500 transition-colors duration-300">
+          {errors.name.message}
+        </Description>
+      )}
     </Field>
   )
 }
