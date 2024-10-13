@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,20 +9,33 @@
     />
     <meta name="keywords" content="Todo List, React, Tailwind CSS, JavaScript, TypeScript" />
     <meta name="author" content="Tran Tuan Duc" />
-    <title>Todo List</title>
-    <link rel="shortcut icon" href="./vite.svg" type="image/x-icon" />
-    <script>
-      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      const updateMode = () => {
-        const systemDark = darkModeQuery.matches
-        const userDark = localStorage.isDarkMode === 'true' || (!('isDarkMode' in localStorage) && systemDark)
-        document.documentElement.classList.toggle('dark', userDark)
-        if (userDark === systemDark) delete localStorage.isDarkMode
-      }
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="Todo List" />
+    <meta property="og:description" content="A simple and efficient Todo List application built with React and Tailwind CSS." />
+    <meta property="og:image" content="https://todo-list-vite-eight.vercel.app/IMG_0765.png" />
+    <meta property="og:url" content="https://todo-list-vite-eight.vercel.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
 
-      darkModeQuery.addEventListener('change', updateMode)
-      window.addEventListener('storage', updateMode)
-      updateMode()
+    <title>Todo List</title>
+
+    <!-- Use common icon paths -->
+    <link rel="icon" href="/vite.svg" type="image/x-icon" />
+
+    <script>
+      (() => {
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+        const updateMode = () => {
+          const systemDark = darkModeQuery.matches
+          const userDark = localStorage.getItem('isDarkMode') === 'true' || (!localStorage.getItem('isDarkMode') && systemDark)
+          document.documentElement.classList.toggle('dark', userDark)
+          if (userDark === systemDark) localStorage.removeItem('isDarkMode');
+        }
+
+        darkModeQuery.addEventListener('change', updateMode)
+        window.addEventListener('storage', updateMode)
+        updateMode() // Initialize mode on load
+      })()
     </script>
   </head>
   <body>
