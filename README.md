@@ -2,7 +2,7 @@
 
 ![React Vite Todo List](https://todo-list-vite-eight.vercel.app/IMG_0765.png)
 
-Welcome to the React Vite Todo List, a user-friendly and responsive web application for managing your tasks. This project is developed using React and Vite, incorporating modern technologies such as Tailwind CSS for styling, SWR for efficient data fetching, and React Hot Toast for notifications.
+Welcome to the React Vite Todo List, a user-friendly and responsive web application for managing your tasks. This project is developed using React and Vite, incorporating modern technologies such as Tailwind CSS for styling, SWR for efficient data fetching, and sonner for notifications.
 
 ## Branch Structure
 
@@ -16,7 +16,7 @@ This repository follows a branch model with two main branches:
 - **Easy Task Addition:** Effortlessly add new tasks to your list, optimizing your workflow.
 - **Real-time Data Fetching:** Utilize SWR for efficient data fetching and caching, ensuring a smooth user experience.
 - **Responsive Design:** Enjoy a responsive design crafted with Tailwind CSS, making the app accessible across multiple devices.
-- **Convenient Notifications:** Stay updated with convenient notifications powered by React Hot Toast.
+- **Convenient Notifications:** Stay updated with convenient notifications powered by sonner.
 
 ## Getting Started
 
