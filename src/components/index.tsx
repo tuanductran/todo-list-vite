@@ -1,4 +1,5 @@
 import useTodoActions from '../hooks/useTodoActions'
+
 import DarkMode from './DarkMode'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
@@ -25,11 +26,13 @@ export default function TodoPage() {
             </h1>
             <DarkMode />
           </div>
-          {error ? (
-            <div className="text-center text-red-500">Error loading todos.</div>
-          ) : (
-            <TodoForm onAddTodo={handleAddTodo} />
-          )}
+          {error
+            ? (
+                <div className="text-center text-red-500">Error loading todos.</div>
+              )
+            : (
+                <TodoForm onAddTodo={handleAddTodo} />
+              )}
         </div>
 
         {/* Todo List */}

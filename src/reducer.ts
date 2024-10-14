@@ -17,8 +17,8 @@ export function todoReducer(state: State, action: Action): State {
     case UPDATE_TODO:
       return {
         ...state,
-        todos: state.todos.map(todo => 
-          todo.id === action.payload.id ? { ...todo, ...action.payload } : todo
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id ? { ...todo, ...action.payload } : todo,
         ),
       }
 
@@ -28,15 +28,16 @@ export function todoReducer(state: State, action: Action): State {
         todos: state.todos.filter(({ id }) => id !== action.payload),
       }
 
-    case TOGGLE_TODO:
-      const { completedTodos } = state;
-      const isCompleted = completedTodos.includes(action.payload);
+    case TOGGLE_TODO: {
+      const { completedTodos } = state
+      const isCompleted = completedTodos.includes(action.payload)
       return {
         ...state,
         completedTodos: isCompleted
           ? completedTodos.filter(id => id !== action.payload)
           : [...completedTodos, action.payload],
       }
+    }
 
     default:
       return state

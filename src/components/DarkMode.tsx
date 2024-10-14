@@ -4,6 +4,27 @@ import { useEffect, useState } from 'react'
 export default function DarkMode() {
   const [enabled, setEnabled] = useState(false)
 
+  const updateDarkModeClass = (isDarkMode: boolean) => {
+    document.documentElement.classList.toggle('dark', isDarkMode)
+  }
+
+  const handleLocalStorage = (isDarkMode: boolean) => {
+    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (isDarkMode === systemDarkMode) {
+      window.localStorage.removeItem('isDarkMode')
+    }
+    else {
+      window.localStorage.setItem('isDarkMode', isDarkMode.toString())
+    }
+  }
+
+  const toggleMode = () => {
+    const newDarkMode = !enabled
+    setEnabled(newDarkMode)
+    updateDarkModeClass(newDarkMode)
+    handleLocalStorage(newDarkMode)
+  }
+
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const savedDarkMode = window.localStorage.getItem('isDarkMode')
@@ -23,26 +44,6 @@ export default function DarkMode() {
     darkModeMediaQuery.addEventListener('change', handleSystemChange)
     return () => darkModeMediaQuery.removeEventListener('change', handleSystemChange)
   }, [])
-
-  const updateDarkModeClass = (isDarkMode: boolean) => {
-    document.documentElement.classList.toggle('dark', isDarkMode)
-  }
-
-  const handleLocalStorage = (isDarkMode: boolean) => {
-    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-    if (isDarkMode === systemDarkMode) {
-      window.localStorage.removeItem('isDarkMode')
-    } else {
-      window.localStorage.setItem('isDarkMode', isDarkMode.toString())
-    }
-  }
-
-  const toggleMode = () => {
-    const newDarkMode = !enabled
-    setEnabled(newDarkMode)
-    updateDarkModeClass(newDarkMode)
-    handleLocalStorage(newDarkMode)
-  }
 
   return (
     <Switch

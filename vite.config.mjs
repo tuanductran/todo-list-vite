@@ -12,7 +12,7 @@ export default defineConfig({
   ],
   build: {
     target: 'esnext', // Build targeting modern browsers for better performance
-    sourcemap: true,   // Enable source maps for easier debugging
+    sourcemap: true, // Enable source maps for easier debugging
   },
   server: {
     port: 5173, // Default port for local development

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,10 +9,13 @@
     />
     <meta name="keywords" content="Todo List, React, Tailwind CSS, JavaScript, TypeScript" />
     <meta name="author" content="Tran Tuan Duc" />
-    
+
     <!-- Open Graph Meta Tags for Social Sharing -->
     <meta property="og:title" content="Todo List" />
-    <meta property="og:description" content="A simple and efficient Todo List application built with React and Tailwind CSS." />
+    <meta
+      property="og:description"
+      content="A simple and efficient Todo List application built with React and Tailwind CSS."
+    />
     <meta property="og:image" content="https://todo-list-vite-eight.vercel.app/IMG_0765.png" />
     <meta property="og:url" content="https://todo-list-vite-eight.vercel.app/" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -23,13 +26,14 @@
     <link rel="icon" href="/vite.svg" type="image/x-icon" />
 
     <script>
-      (() => {
+      ;(() => {
         const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
         const updateMode = () => {
           const systemDark = darkModeQuery.matches
-          const userDark = localStorage.getItem('isDarkMode') === 'true' || (!localStorage.getItem('isDarkMode') && systemDark)
+          const userDark =
+            localStorage.getItem('isDarkMode') === 'true' || (!localStorage.getItem('isDarkMode') && systemDark)
           document.documentElement.classList.toggle('dark', userDark)
-          if (userDark === systemDark) localStorage.removeItem('isDarkMode');
+          if (userDark === systemDark) localStorage.removeItem('isDarkMode')
         }
 
         darkModeQuery.addEventListener('change', updateMode)

@@ -16,7 +16,8 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
 
   const onSubmit = async (data: { name: string }) => {
     const isValid = await trigger('name')
-    if (!isValid) return // Prevent submission if validation fails
+    if (!isValid)
+      return // Prevent submission if validation fails
 
     const sanitizedData = DOMPurify.sanitize(data.name)
     onAddTodo(sanitizedData)
