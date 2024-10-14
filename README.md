@@ -1,5 +1,9 @@
 # React Vite Todo List
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftuanductran%2Ftodo-list-vite)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftuanductran%2Ftodo-list-vite&count_bg=%23FC2350&title_bg=%23555555&icon=react.svg&icon_color=%23E7E7E7&title=HITS&edge_flat=false)](https://hits.seeyoufarm.com)
+
 ![React Vite Todo List](https://todo-list-vite-eight.vercel.app/IMG_0765.png)
 
 Welcome to the React Vite Todo List, a user-friendly and responsive web application for managing your tasks. This project is developed using React and Vite, incorporating modern technologies such as Tailwind CSS for styling, SWR for efficient data fetching, and sonner for notifications.
