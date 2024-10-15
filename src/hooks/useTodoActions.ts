@@ -1,6 +1,6 @@
-/* eslint-disable no-alert */
 import { useCallback, useEffect, useMemo, useReducer } from 'react'
 import useSWR from 'swr'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   addTodo,
@@ -12,31 +12,46 @@ import {
 } from '../api'
 import { showErrorToast, showSuccessToast } from '../components/Toast'
 import { todoReducer } from '../reducer'
-import type { Todo } from '../type'
+import type { Todo } from '../schema'
 
 function useTodoActions() {
+<<<<<<< Updated upstream
   const {
     data: todos,
     error,
     mutate,
   } = useSWR<Todo[]>('/api/todos', getTodos, { refreshInterval: 1000 })
 
+=======
+  const { data: todos, error, mutate } = useSWR<Todo[]>('/api/todos', getTodos, { refreshInterval: 1000 })
+>>>>>>> Stashed changes
   const [state, dispatch] = useReducer(todoReducer, {
-    todos: [],
     completedTodos: [],
+    todos: [],
   })
 
+<<<<<<< Updated upstream
+=======
+  // Handle loading errors
+>>>>>>> Stashed changes
   useEffect(() => {
     if (error) {
       showErrorToast(error.message)
     }
   }, [error])
 
+<<<<<<< Updated upstream
+=======
+  // Fetch completed todos on load
+>>>>>>> Stashed changes
   useEffect(() => {
     const fetchCompletedTodos = async () => {
       try {
         const completedTodos = await getCompletedTodos()
-        dispatch({ type: 'SET_COMPLETED_TODOS', payload: completedTodos })
+        dispatch({
+          payload: completedTodos,
+          type: 'SET_COMPLETED_TODOS',
+        })
       }
       catch {
         showErrorToast('Unable to load completed todos.')
@@ -45,6 +60,15 @@ function useTodoActions() {
     fetchCompletedTodos()
   }, [])
 
+<<<<<<< Updated upstream
+=======
+  // Centralized error handler
+  const handleError = useCallback((message: string) => {
+    toast.error(message)
+  }, [])
+
+  // Optimistic UI update for adding a todo
+>>>>>>> Stashed changes
   const handleAddTodo = useCallback(
     async (text: string) => {
       const trimmedText = text.trim()
@@ -58,11 +82,7 @@ function useTodoActions() {
         return
       }
 
-      const newTodo: Todo = {
-        id: Date.now(),
-        text: trimmedText,
-        completed: false,
-      }
+      const newTodo: Todo = { completed: false, id: uuidv4(), text: trimmedText }
 
       try {
         await mutate(
@@ -72,6 +92,7 @@ function useTodoActions() {
           },
           {
             optimisticData: [...(todos || []), newTodo],
+<<<<<<< Updated upstream
             rollbackOnError: true,
             revalidate: false,
           },
@@ -79,16 +100,29 @@ function useTodoActions() {
 
         dispatch({ type: 'ADD_TODO', payload: newTodo })
         showSuccessToast('Todo added successfully.')
+=======
+            revalidate: false,
+            rollbackOnError: true,
+          },
+        )
+
+        dispatch({ payload: newTodo, type: 'ADD_TODO' })
+        toast.success('Todo added successfully.')
+>>>>>>> Stashed changes
       }
       catch {
         showErrorToast('Failed to add the todo.')
       }
     },
-    [todos, mutate],
+    [todos, mutate, handleError],
   )
 
+<<<<<<< Updated upstream
+=======
+  // Toggle the completed state of a todo
+>>>>>>> Stashed changes
   const handleToggleTodo = useCallback(
-    async (todoId: number) => {
+    async (todoId: string) => {
       const todo = todos?.find(todo => todo.id === todoId)
       if (!todo)
         return
@@ -99,11 +133,32 @@ function useTodoActions() {
         : [...state.completedTodos, todoId]
 
       try {
+<<<<<<< Updated upstream
         dispatch({ type: 'TOGGLE_TODO', payload: todoId })
         dispatch({
           type: 'SET_COMPLETED_TODOS',
           payload: updatedCompletedTodos,
         })
+=======
+        dispatch({ payload: todoId, type: 'TOGGLE_TODO' })
+        dispatch({ payload: updatedCompletedTodos, type: 'SET_COMPLETED_TODOS' })
+
+        await mutate(
+          async (prevTodos = []) => {
+            await updateTodo({ ...todo, completed: !isCompleted })
+            return prevTodos.map(item =>
+              item.id === todoId ? { ...item, completed: !isCompleted } : item,
+            )
+          },
+          {
+            optimisticData: todos?.map(item =>
+              item.id === todoId ? { ...item, completed: !isCompleted } : item,
+            ),
+            revalidate: false,
+            rollbackOnError: true,
+          },
+        )
+>>>>>>> Stashed changes
 
         await mutate(
           async (prevTodos = []) => {
@@ -129,16 +184,26 @@ function useTodoActions() {
         await saveCompletedTodos(updatedCompletedTodos)
       }
       catch {
+<<<<<<< Updated upstream
         showErrorToast('Failed to change todo completion status.')
         dispatch({ type: 'TOGGLE_TODO', payload: todoId })
         dispatch({ type: 'SET_COMPLETED_TODOS', payload: state.completedTodos })
+=======
+        handleError('Failed to change todo completion status.')
+        dispatch({ payload: todoId, type: 'TOGGLE_TODO' })
+        dispatch({ payload: state.completedTodos, type: 'SET_COMPLETED_TODOS' })
+>>>>>>> Stashed changes
       }
     },
-    [todos, state.completedTodos, mutate],
+    [todos, state.completedTodos, mutate, handleError],
   )
 
+<<<<<<< Updated upstream
+=======
+  // Update the text of a todo
+>>>>>>> Stashed changes
   const handleUpdateTodo = useCallback(
-    async (todoId: number, newText: string) => {
+    async (todoId: string, newText: string) => {
       const trimmedText = newText.trim()
       if (!trimmedText) {
         showErrorToast('Todo text cannot be empty.')
@@ -158,6 +223,7 @@ function useTodoActions() {
           await mutate(
             async (prevTodos = []) => {
               await updateTodo(updatedTodo)
+<<<<<<< Updated upstream
               return prevTodos.map(item =>
                 item.id === todoId ? updatedTodo : item,
               )
@@ -173,17 +239,34 @@ function useTodoActions() {
 
           dispatch({ type: 'UPDATE_TODO', payload: updatedTodo })
           showSuccessToast('Todo updated successfully.')
+=======
+              return prevTodos.map(item => (item.id === todoId ? updatedTodo : item))
+            },
+            {
+              optimisticData: todos?.map(item => (item.id === todoId ? updatedTodo : item)),
+              revalidate: false,
+              rollbackOnError: true,
+            },
+          )
+
+          dispatch({ payload: updatedTodo, type: 'UPDATE_TODO' })
+          toast.success('Todo updated successfully.')
+>>>>>>> Stashed changes
         }
         catch {
           showErrorToast('Failed to update the todo.')
         }
       }
     },
-    [todos, mutate],
+    [todos, mutate, handleError],
   )
 
+<<<<<<< Updated upstream
+=======
+  // Delete a todo by its ID
+>>>>>>> Stashed changes
   const handleDeleteTodo = useCallback(
-    async (todoId: number) => {
+    async (todoId: string) => {
       try {
         await mutate(
           async (prevTodos = []) => {
@@ -192,6 +275,7 @@ function useTodoActions() {
           },
           {
             optimisticData: todos?.filter(todo => todo.id !== todoId),
+<<<<<<< Updated upstream
             rollbackOnError: true,
             revalidate: false,
           },
@@ -199,16 +283,31 @@ function useTodoActions() {
 
         dispatch({ type: 'DELETE_TODO', payload: todoId })
         showSuccessToast('Todo deleted successfully.')
+=======
+            revalidate: false,
+            rollbackOnError: true,
+          },
+        )
+
+        dispatch({ payload: todoId, type: 'DELETE_TODO' })
+        toast.success('Todo deleted successfully.')
+>>>>>>> Stashed changes
       }
       catch {
         showErrorToast('Failed to delete the todo.')
       }
     },
-    [todos, mutate],
+    [todos, mutate, handleError],
   )
 
+<<<<<<< Updated upstream
   const handleEditClick = useCallback(
     (id: number) => {
+=======
+  // Handlers for UI actions (edit, delete, toggle)
+  const handleEditClick = useCallback(
+    (id: string) => {
+>>>>>>> Stashed changes
       const newText = prompt('Enter the new text:')
       if (newText?.trim()) {
         handleUpdateTodo(id, newText.trim())
@@ -218,7 +317,11 @@ function useTodoActions() {
   )
 
   const handleDeleteClick = useCallback(
+<<<<<<< Updated upstream
     (id: number) => {
+=======
+    (id: string) => {
+>>>>>>> Stashed changes
       if (window.confirm('Are you sure you want to delete this todo?')) {
         handleDeleteTodo(id)
       }
@@ -227,22 +330,31 @@ function useTodoActions() {
   )
 
   const handleToggleClick = useCallback(
+<<<<<<< Updated upstream
     (id: number) => {
+=======
+    (id: string) => {
+>>>>>>> Stashed changes
       handleToggleTodo(id)
     },
     [handleToggleTodo],
   )
 
+<<<<<<< Updated upstream
+=======
+  // Memoized result for performance optimization
+>>>>>>> Stashed changes
   return useMemo(
     () => ({
-      todos,
-      error,
       completedTodos: state.completedTodos,
+      error,
       handleAddTodo,
-      handleEditClick,
       handleDeleteClick,
+      handleEditClick,
       handleToggleClick,
+      todos,
     }),
+<<<<<<< Updated upstream
     [
       todos,
       error,
@@ -252,6 +364,9 @@ function useTodoActions() {
       handleDeleteClick,
       handleToggleClick,
     ],
+=======
+    [error, todos, state.completedTodos, handleAddTodo, handleDeleteClick, handleEditClick, handleToggleClick],
+>>>>>>> Stashed changes
   )
 }
 

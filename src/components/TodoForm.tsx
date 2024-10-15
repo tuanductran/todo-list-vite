@@ -3,14 +3,14 @@ import DOMPurify from 'dompurify'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
 
-import type { TodoFormProps } from '../type'
+import type { TodoFormProps } from '../schema'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   const {
-    register,
-    handleSubmit,
-    reset,
     formState: { errors },
+    handleSubmit,
+    register,
+    reset,
     trigger,
   } = useForm<{ name: string }>()
 
@@ -57,9 +57,9 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
           className="block w-full p-4 pl-10 pr-20 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder:text-gray-400 dark:text-white dark:focus:border-blue-500 transition-colors duration-300"
           placeholder="Enter a new todo..."
           {...register('name', {
+            maxLength: { message: 'Maximum 20 characters', value: 20 },
+            minLength: { message: 'Minimum 3 characters', value: 3 },
             required: 'This field is required',
-            minLength: { value: 3, message: 'Minimum 3 characters' },
-            maxLength: { value: 20, message: 'Maximum 20 characters' },
           })}
           aria-invalid={errors.name ? 'true' : 'false'}
           autoComplete="off"

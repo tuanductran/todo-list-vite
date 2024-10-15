@@ -28,3 +28,4 @@ dist-ssr
 css/build.css
 .eslintcache
 .env*.local
+.husky

@@ -3,6 +3,24 @@ import million from 'million/compiler'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
+<<<<<<< Updated upstream
 export default defineConfig({
   plugins: [million.vite({ auto: true }), react()],
+=======
+export default defineConfig(() => {
+  return {
+    define: {
+      'process.env': {
+        VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY,
+        VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL,
+      },
+    },
+    plugins: [
+      // Million.js for optimizing React rendering
+      million.vite({ auto: true }),
+      // React plugin for Vite
+      react(),
+    ],
+  }
+>>>>>>> Stashed changes
 })

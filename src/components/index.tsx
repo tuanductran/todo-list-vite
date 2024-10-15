@@ -6,13 +6,13 @@ import TodoList from './TodoList'
 
 export default function TodoPage() {
   const {
-    todos,
-    error,
     completedTodos,
+    error,
     handleAddTodo,
-    handleEditClick,
     handleDeleteClick,
+    handleEditClick,
     handleToggleClick,
+    todos,
   } = useTodoActions()
 
   return (

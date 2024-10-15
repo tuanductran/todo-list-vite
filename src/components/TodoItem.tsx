@@ -3,7 +3,7 @@ import cn from 'clsx'
 import type { FC } from 'react'
 import { memo } from 'react'
 
-import type { Todo } from '../type'
+import type { Todo } from '../schema'
 
 const TodoItem: FC<{
   todo: Todo
