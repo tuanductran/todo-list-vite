@@ -9,13 +9,6 @@ Welcome to the React Vite Todo List, a user-friendly and responsive web applicat
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftuanductran%2Ftodo-list-vite)
 
-## Branch Structure
-
-This repository follows a branch model with two main branches:
-
-- **master:** The stable branch containing production-ready code.
-- **develop:** The branch dedicated to developing new features and improvements.
-
 ## Key Features
 
 - **Easy Task Addition:** Effortlessly add new tasks to your list, optimizing your workflow.
