@@ -1,5 +1,8 @@
+import { createClient } from '@supabase/supabase-js'
+
 import type { Todo } from './schema'
-import supabase from './supabaseClient'
+
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 // Add a new todo to Supabase
 export async function addTodo(todo: Todo): Promise<void> {
