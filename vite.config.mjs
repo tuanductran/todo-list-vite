@@ -3,10 +3,6 @@ import million from 'million/compiler'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
-<<<<<<< Updated upstream
-export default defineConfig({
-  plugins: [million.vite({ auto: true }), react()],
-=======
 export default defineConfig(() => {
   return {
     define: {
@@ -22,5 +18,4 @@ export default defineConfig(() => {
       react(),
     ],
   }
->>>>>>> Stashed changes
 })

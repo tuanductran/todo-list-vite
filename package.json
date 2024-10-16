@@ -41,26 +41,16 @@
     "@vercel/analytics": "^1.3.1",
     "@vercel/speed-insights": "^1.0.11",
     "clsx": "^2.1.1",
-<<<<<<< Updated upstream
-    "dompurify": "^3.1.6",
-    "idb": "^8.0.0",
-    "million": "^3.1.6",
-=======
     "dompurify": "^3.1.7",
     "million": "^3.1.11",
->>>>>>> Stashed changes
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.0",
-    "react-hot-toast": "^2.4.1",
+    "sonner": "^1.5.0",
     "swr": "^2.2.5",
-<<<<<<< Updated upstream
-    "tailwindcss": "^3.4.10"
-=======
     "tailwindcss": "^3.4.13",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.7.3",
@@ -70,15 +60,9 @@
     "@types/node": "^22.3.0",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
-<<<<<<< Updated upstream
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.19",
-    "concurrently": "^9.0.0",
-=======
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.3.2",
     "concurrently": "^9.0.1",
->>>>>>> Stashed changes
     "eslint": "9.12.0",
     "eslint-plugin-command": "^0.2.6",
     "eslint-plugin-format": "^0.1.2",
@@ -91,17 +75,11 @@
     "postcss-cli": "^11.0.0",
     "postcss-import": "^16.1.0",
     "postcss-lightningcss": "^1.0.1",
-<<<<<<< Updated upstream
-    "turbo": "^2.0.9",
-    "typescript": "^5.5.4",
-    "vite": "5.4.8"
-=======
     "turbo": "^2.1.3",
     "typescript": "5.5.4",
     "vite": "^5.4.9"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"
->>>>>>> Stashed changes
   }
 }
