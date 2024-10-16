@@ -1,89 +1,76 @@
 import type { Todo } from './schema'
 import supabase from './supabaseClient'
 
-// Function to add a new todo to Supabase
+// Add a new todo to Supabase
 export async function addTodo(todo: Todo): Promise<void> {
-  if (!todo || !todo.id) {
-    throw new Error('Invalid todo: The todo or its ID is missing.')
+  if (!todo?.id) {
+    throw new Error('Invalid todo: Missing ID.')
   }
-  const { error } = await supabase
-    .from('todos')
-    .insert(todo)
+  const { error } = await supabase.from('todos').insert(todo)
   if (error) {
-    throw error
+    throw new Error(`Failed to add todo: ${error.message}`)
   }
 }
 
-// Function to delete a todo by ID from Supabase
+// Delete a todo by ID from Supabase
 export async function deleteTodo(todoId: string): Promise<void> {
-  if (!todoId) {
-    throw new Error('Invalid todo ID: Todo ID is required.')
-  }
-  const { error } = await supabase
-    .from('todos')
-    .delete()
-    .eq('id', todoId)
+  const { error } = await supabase.from('todos').delete().eq('id', todoId)
   if (error) {
-    throw error
+    throw new Error(`Failed to delete todo: ${error.message}`)
   }
 }
 
-// Function to retrieve all completed todos' IDs
+// Get all completed todos' IDs from Supabase
 export async function getCompletedTodos(): Promise<string[]> {
   const { data, error } = await supabase
     .from('todos')
     .select('id')
     .eq('completed', true)
+
   if (error) {
-    throw error
+    throw new Error(`Failed to retrieve completed todos: ${error.message}`)
   }
-  return data.map((todo: { id: string }) => todo.id)
+
+  return data?.map((todo: { id: string }) => todo.id) || []
 }
 
-// Function to fetch all todos from Supabase
+// Fetch all todos from Supabase
 export async function getTodos(): Promise<Todo[]> {
-  const { data, error } = await supabase
-    .from('todos')
-    .select('*')
+  const { data, error } = await supabase.from('todos').select('*')
   if (error) {
-    throw error
+    throw new Error(`Failed to fetch todos: ${error.message}`)
   }
-  return data
+  return data || []
 }
 
-// Function to save completed statuses of todos
+// Update completion status of multiple todos
 export async function saveCompletedTodos(completedTodos: string[]): Promise<void> {
-  const { data: allTodos, error: fetchError } = await supabase
-    .from('todos')
-    .select('*')
-  if (fetchError) {
-    throw fetchError
-  }
-  const updatePromises = allTodos.map(async (todo) => {
-    const isCompleted = completedTodos.includes(todo.id)
-    if (todo.completed !== isCompleted) {
-      const { error } = await supabase
-        .from('todos')
-        .update({ completed: isCompleted })
-        .eq('id', todo.id)
-      if (error) {
-        throw error
-      }
+  const updates = completedTodos.map(async (todoId) => {
+    const { error } = await supabase
+      .from('todos')
+      .update({ completed: true })
+      .eq('id', todoId)
+
+    if (error) {
+      throw new Error(`Failed to update todo: ${error.message}`)
     }
   })
-  await Promise.all(updatePromises)
+
+  await Promise.all(updates)
 }
 
-// Function to update an existing todo in Supabase
+// Update an existing todo in Supabase
 export async function updateTodo(updatedTodo: Todo): Promise<void> {
-  if (!updatedTodo || !updatedTodo.id) {
-    throw new Error('Invalid updated todo: The todo or its ID is missing.')
+  if (!updatedTodo?.id) {
+    throw new Error('Invalid updated todo: Missing ID.')
   }
+
   const { error } = await supabase
     .from('todos')
     .update(updatedTodo)
     .eq('id', updatedTodo.id)
+
   if (error) {
-    throw error
+    throw new Error(`Failed to update todo: ${error.message}`)
   }
 }

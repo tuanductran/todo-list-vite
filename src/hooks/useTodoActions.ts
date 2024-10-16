@@ -33,10 +33,7 @@ function useTodoActions() {
     const fetchCompletedTodos = async () => {
       try {
         const completedTodos = await getCompletedTodos()
-        dispatch({
-          payload: completedTodos,
-          type: 'SET_COMPLETED_TODOS',
-        })
+        dispatch({ payload: completedTodos, type: 'SET_COMPLETED_TODOS' })
       }
       catch {
         toast.error('Unable to load completed todos.')
@@ -45,17 +42,12 @@ function useTodoActions() {
     fetchCompletedTodos()
   }, [])
 
-  // Optimistic UI update for adding a todo
+  // Add a new todo with optimistic update
   const handleAddTodo = useCallback(
     async (text: string) => {
       const trimmedText = text.trim()
       if (!trimmedText) {
         toast.error('Todo text cannot be empty.')
-        return
-      }
-
-      if (todos?.some(todo => todo.text === trimmedText)) {
-        toast.error('Todo text already exists.')
         return
       }
 
@@ -116,27 +108,7 @@ function useTodoActions() {
           },
         )
 
-        await mutate(
-          async (prevTodos = []) => {
-            await updateTodo({ ...todo, completed: !isCompleted })
-            return prevTodos.map(item =>
-              item.id === todoId ? { ...item, completed: !isCompleted } : item,
-            )
-          },
-          {
-            optimisticData: todos?.map(item =>
-              item.id === todoId ? { ...item, completed: !isCompleted } : item,
-            ),
-            revalidate: false,
-            rollbackOnError: true,
-          },
-        )
-
-        toast.success(
-          isCompleted
-            ? 'Todo marked as incomplete.'
-            : 'Todo marked as complete.',
-        )
+        toast.success(isCompleted ? 'Todo marked as incomplete.' : 'Todo marked as complete.')
         await saveCompletedTodos(updatedCompletedTodos)
       }
       catch {
@@ -157,34 +129,30 @@ function useTodoActions() {
         return
       }
 
-      if (todos?.some(todo => todo.text === trimmedText)) {
-        toast.error('Todo text already exists.')
-        return
-      }
-
       const todoItem = todos?.find(item => item.id === todoId)
-      if (todoItem) {
-        const updatedTodo = { ...todoItem, text: trimmedText }
+      if (!todoItem)
+        return
 
-        try {
-          await mutate(
-            async (prevTodos = []) => {
-              await updateTodo(updatedTodo)
-              return prevTodos.map(item => (item.id === todoId ? updatedTodo : item))
-            },
-            {
-              optimisticData: todos?.map(item => (item.id === todoId ? updatedTodo : item)),
-              revalidate: false,
-              rollbackOnError: true,
-            },
-          )
+      const updatedTodo = { ...todoItem, text: trimmedText }
 
-          dispatch({ payload: updatedTodo, type: 'UPDATE_TODO' })
-          toast.success('Todo updated successfully.')
-        }
-        catch {
-          toast.error('Failed to update the todo.')
-        }
+      try {
+        await mutate(
+          async (prevTodos = []) => {
+            await updateTodo(updatedTodo)
+            return prevTodos.map(item => (item.id === todoId ? updatedTodo : item))
+          },
+          {
+            optimisticData: todos?.map(item => (item.id === todoId ? updatedTodo : item)),
+            revalidate: false,
+            rollbackOnError: true,
+          },
+        )
+
+        dispatch({ payload: updatedTodo, type: 'UPDATE_TODO' })
+        toast.success('Todo updated successfully.')
+      }
+      catch {
+        toast.error('Failed to update the todo.')
       }
     },
     [todos, mutate],
