@@ -1,4 +1,4 @@
-name: Lint & Prettier
+name: Lint
 
 on:
   pull_request:
@@ -12,12 +12,12 @@ jobs:
         node-version: [20]
 
     steps:
-      - name: Cancel Previous Runs
+      - name: Cancel workflow action
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
 
-      - name: Checkout Master
+      - name: Checkout
         uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4.0.0
