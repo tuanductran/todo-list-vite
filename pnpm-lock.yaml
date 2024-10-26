@@ -50,7 +50,7 @@ importers:
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^3.7.3
-        version: 3.8.0(@eslint-react/eslint-plugin@1.15.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@typescript-eslint/utils@8.10.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@vue/compiler-sfc@3.5.10)(eslint-plugin-format@0.1.2(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-refresh@0.4.13(eslint@9.13.0(jiti@1.21.6)))(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4)(vitest@2.1.2(@types/node@22.8.1)(lightningcss@1.27.0))
+        version: 3.8.0(@eslint-react/eslint-plugin@1.15.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@typescript-eslint/utils@8.10.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@vue/compiler-sfc@3.5.10)(eslint-plugin-format@0.1.2(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-refresh@0.4.14(eslint@9.13.0(jiti@1.21.6)))(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4)(vitest@2.1.2(@types/node@22.8.1)(lightningcss@1.27.0))
       '@eslint-react/eslint-plugin':
         specifier: ^1.14.3
         version: 1.15.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4)
@@ -92,7 +92,7 @@ importers:
         version: 5.0.0(eslint@9.13.0(jiti@1.21.6))
       eslint-plugin-react-refresh:
         specifier: ^0.4.12
-        version: 0.4.13(eslint@9.13.0(jiti@1.21.6))
+        version: 0.4.14(eslint@9.13.0(jiti@1.21.6))
       postcss:
         specifier: ^8.4.47
         version: 8.4.47
@@ -1474,8 +1474,8 @@ packages:
       typescript:
         optional: true
 
-  eslint-plugin-react-refresh@0.4.13:
-    resolution: {integrity: sha512-f1EppwrpJRWmqDTyvAyomFVDYRtrS7iTEqv3nokETnMiMzs2SSTmKRTACce4O2p4jYyowiSMvpdwC/RLcMFhuQ==}
+  eslint-plugin-react-refresh@0.4.14:
+    resolution: {integrity: sha512-aXvzCTK7ZBv1e7fahFuR3Z/fyQQSIQ711yPgYRj+Oj64tyTgO4iQIDmYXDBqvSWQ/FA4OSCsXOStlF+noU0/NA==}
     peerDependencies:
       eslint: '>=7'
 
@@ -2943,7 +2943,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@antfu/eslint-config@3.8.0(@eslint-react/eslint-plugin@1.15.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@typescript-eslint/utils@8.10.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@vue/compiler-sfc@3.5.10)(eslint-plugin-format@0.1.2(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-refresh@0.4.13(eslint@9.13.0(jiti@1.21.6)))(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4)(vitest@2.1.2(@types/node@22.8.1)(lightningcss@1.27.0))':
+  '@antfu/eslint-config@3.8.0(@eslint-react/eslint-plugin@1.15.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@typescript-eslint/utils@8.10.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4))(@vue/compiler-sfc@3.5.10)(eslint-plugin-format@0.1.2(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.6)))(eslint-plugin-react-refresh@0.4.14(eslint@9.13.0(jiti@1.21.6)))(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4)(vitest@2.1.2(@types/node@22.8.1)(lightningcss@1.27.0))':
     dependencies:
       '@antfu/install-pkg': 0.4.1
       '@clack/prompts': 0.7.0
@@ -2985,7 +2985,7 @@ snapshots:
       '@eslint-react/eslint-plugin': 1.15.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.5.4)
       eslint-plugin-format: 0.1.2(eslint@9.13.0(jiti@1.21.6))
       eslint-plugin-react-hooks: 5.0.0(eslint@9.13.0(jiti@1.21.6))
-      eslint-plugin-react-refresh: 0.4.13(eslint@9.13.0(jiti@1.21.6))
+      eslint-plugin-react-refresh: 0.4.14(eslint@9.13.0(jiti@1.21.6))
     transitivePeerDependencies:
       - '@typescript-eslint/utils'
       - '@vue/compiler-sfc'
@@ -4464,7 +4464,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-react-refresh@0.4.13(eslint@9.13.0(jiti@1.21.6)):
+  eslint-plugin-react-refresh@0.4.14(eslint@9.13.0(jiti@1.21.6)):
     dependencies:
       eslint: 9.13.0(jiti@1.21.6)
 
