@@ -10,7 +10,7 @@ import {
   saveCompletedTodos,
   updateTodo,
 } from '../api'
-import { todoReducer, todoActions } from '../reducer' // Combined import for todoReducer and todoActions
+import { todoReducer, todoActions } from '../reducer'
 import type { Todo } from '../type'
 
 const initialState = {
