@@ -88,7 +88,7 @@ export default function DarkMode() {
     >
       <span
         aria-hidden="true"
-        className={`pointer-events-none inline-block size-5 rounded-full ${enabled ? 'bg-gray-800 translate-x-7' : 'bg-gray-200 translate-x-0'} ring-0 shadow-lg transition duration-200 ease-in-out`}
+        className="pointer-events-none inline-block size-5 rounded-full bg-gray-800 dark:bg-gray-200 ring-0 shadow-lg transition duration-200 ease-in-out translate-x-0 dark:translate-x-7"
       />
     </Switch>
   )
