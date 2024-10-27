@@ -1,49 +1,84 @@
 import { Switch } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { openDB } from 'idb'
 
 export default function DarkMode() {
   const [enabled, setEnabled] = useState(false)
 
-  const updateDarkModeClass = (isDarkMode: boolean) => {
+  // Initialize or get IndexedDB
+  const initDB = async () => {
+    const db = await openDB('settings-db', 1, {
+      upgrade(db) {
+        db.createObjectStore('settings')
+      },
+    })
+    return db
+  }
+
+  // Save value to IndexedDB
+  const setIDBValue = async (key: string, value: boolean | null) => {
+    const db = await initDB()
+    if (value === null) {
+      await db.delete('settings', key)
+    } else {
+      await db.put('settings', value, key)
+    }
+  }
+
+  // Retrieve value from IndexedDB
+  const getIDBValue = async (key: string): Promise<boolean | null> => {
+    const db = await initDB()
+    const result = await db.get('settings', key)
+    return result ?? null
+  }
+
+  // Update the dark mode class on <html>
+  const updateDarkModeClass = useCallback((isDarkMode: boolean) => {
     document.documentElement.classList.toggle('dark', isDarkMode)
-  }
+  }, [])
 
-  const handleLocalStorage = (isDarkMode: boolean) => {
+  // Save setting to IndexedDB
+  const handleIDB = useCallback(async (isDarkMode: boolean) => {
     const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-    if (isDarkMode === systemDarkMode) {
-      window.localStorage.removeItem('isDarkMode')
-    }
-    else {
-      window.localStorage.setItem('isDarkMode', isDarkMode.toString())
-    }
-  }
+    await setIDBValue('isDarkMode', isDarkMode === systemDarkMode ? null : isDarkMode)
+  }, [])
 
+  // Toggle dark mode
   const toggleMode = () => {
-    const newDarkMode = !enabled
-    setEnabled(newDarkMode)
-    updateDarkModeClass(newDarkMode)
-    handleLocalStorage(newDarkMode)
+    setEnabled((prevEnabled) => {
+      const newDarkMode = !prevEnabled
+      updateDarkModeClass(newDarkMode)
+      handleIDB(newDarkMode)
+      return newDarkMode
+    })
   }
 
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const savedDarkMode = window.localStorage.getItem('isDarkMode')
-    const isSystemDarkMode = darkModeMediaQuery.matches
 
-    const isDarkMode = savedDarkMode === 'true' || (savedDarkMode === null && isSystemDarkMode)
-    setEnabled(isDarkMode)
-    updateDarkModeClass(isDarkMode)
+    // Load dark mode setting from IndexedDB or use system setting
+    const loadInitialMode = async () => {
+      const savedDarkMode = await getIDBValue('isDarkMode')
+      const isSystemDarkMode = darkModeMediaQuery.matches
+      const isDarkMode = savedDarkMode ?? isSystemDarkMode
+      setEnabled(isDarkMode)
+      updateDarkModeClass(isDarkMode)
+    }
+
+    loadInitialMode()
 
     const handleSystemChange = (e: MediaQueryListEvent) => {
-      if (savedDarkMode === null) {
-        setEnabled(e.matches)
-        updateDarkModeClass(e.matches)
-      }
+      getIDBValue('isDarkMode').then((savedDarkMode) => {
+        if (savedDarkMode === null) {
+          setEnabled(e.matches)
+          updateDarkModeClass(e.matches)
+        }
+      })
     }
 
     darkModeMediaQuery.addEventListener('change', handleSystemChange)
     return () => darkModeMediaQuery.removeEventListener('change', handleSystemChange)
-  }, [])
+  }, [updateDarkModeClass])
 
   return (
     <Switch
