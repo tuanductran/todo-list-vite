@@ -9,7 +9,7 @@ export default function App() {
     <>
       <Analytics />
       <SpeedInsights />
-      <Toaster position="top-center" richColors />
+      <Toaster position="top-center" richColors expand />
       <TodoPage />
     </>
   )
