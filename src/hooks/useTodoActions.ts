@@ -1,8 +1,7 @@
 /* eslint-disable no-alert */
-import { useCallback, useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useReducer, useCallback, useMemo } from 'react'
 import { toast } from 'sonner'
 import useSWR from 'swr'
-
 import {
   addTodo,
   deleteTodo,
@@ -11,16 +10,17 @@ import {
   saveCompletedTodos,
   updateTodo,
 } from '../api'
-import { todoReducer } from '../reducer'
+import { todoReducer, todoActions } from '../reducer' // Combined import for todoReducer and todoActions
 import type { Todo } from '../type'
+
+const initialState = {
+  todos: [] as Todo[],
+  completedTodos: [] as number[],
+}
 
 function useTodoActions() {
   const { data: todos, error, mutate } = useSWR<Todo[]>('/api/todos', getTodos, { refreshInterval: 1000 })
-
-  const [state, dispatch] = useReducer(todoReducer, {
-    todos: [],
-    completedTodos: [],
-  })
+  const [state, dispatch] = useReducer(todoReducer, initialState)
 
   // Handle error on data fetching
   useEffect(() => {
@@ -34,9 +34,8 @@ function useTodoActions() {
     const fetchCompletedTodos = async () => {
       try {
         const completedTodos = await getCompletedTodos()
-        dispatch({ type: 'SET_COMPLETED_TODOS', payload: completedTodos })
-      }
-      catch {
+        dispatch(todoActions.setCompletedTodos(completedTodos))
+      } catch {
         toast.error('Unable to load completed todos.')
       }
     }
@@ -58,7 +57,7 @@ function useTodoActions() {
       }
 
       if (todos?.some(todo => todo.text === trimmedText)) {
-        handleError('Todo text already exists.')
+        handleError('Todo already exists.')
         return
       }
 
@@ -69,6 +68,7 @@ function useTodoActions() {
       }
 
       try {
+        // Optimistically update local state
         await mutate(async (prevTodos = []) => {
           await addTodo(newTodo)
           return [...prevTodos, newTodo]
@@ -78,10 +78,9 @@ function useTodoActions() {
           revalidate: false,
         })
 
-        dispatch({ type: 'ADD_TODO', payload: newTodo })
+        dispatch(todoActions.addTodo(newTodo))
         toast.success('Todo added successfully.')
-      }
-      catch {
+      } catch {
         handleError('Failed to add the todo.')
       }
     },
@@ -92,8 +91,7 @@ function useTodoActions() {
   const handleToggleTodo = useCallback(
     async (todoId: number) => {
       const todo = todos?.find(todo => todo.id === todoId)
-      if (!todo)
-        return
+      if (!todo) return
 
       const isCompleted = state.completedTodos.includes(todoId)
       const updatedCompletedTodos = isCompleted
@@ -101,9 +99,7 @@ function useTodoActions() {
         : [...state.completedTodos, todoId]
 
       try {
-        dispatch({ type: 'TOGGLE_TODO', payload: todoId })
-        dispatch({ type: 'SET_COMPLETED_TODOS', payload: updatedCompletedTodos })
-
+        // Update the state and save completed todos
         await mutate(async (prevTodos = []) => {
           await updateTodo({ ...todo, completed: !isCompleted })
           return prevTodos.map(item => item.id === todoId ? { ...item, completed: !isCompleted } : item)
@@ -113,13 +109,12 @@ function useTodoActions() {
           revalidate: false,
         })
 
+        dispatch(todoActions.toggleTodo(todoId))
+        dispatch(todoActions.setCompletedTodos(updatedCompletedTodos))
         toast.success(isCompleted ? 'Todo marked as incomplete.' : 'Todo marked as complete.')
         await saveCompletedTodos(updatedCompletedTodos)
-      }
-      catch {
+      } catch {
         handleError('Failed to change todo completion status.')
-        dispatch({ type: 'TOGGLE_TODO', payload: todoId })
-        dispatch({ type: 'SET_COMPLETED_TODOS', payload: state.completedTodos })
       }
     },
     [todos, state.completedTodos, mutate],
@@ -135,7 +130,7 @@ function useTodoActions() {
       }
 
       if (todos?.some(todo => todo.text === trimmedText)) {
-        handleError('Todo text already exists.')
+        handleError('Todo already exists.')
         return
       }
 
@@ -153,10 +148,9 @@ function useTodoActions() {
             revalidate: false,
           })
 
-          dispatch({ type: 'UPDATE_TODO', payload: updatedTodo })
+          dispatch(todoActions.updateTodo(updatedTodo))
           toast.success('Todo updated successfully.')
-        }
-        catch {
+        } catch {
           handleError('Failed to update the todo.')
         }
       }
@@ -177,10 +171,9 @@ function useTodoActions() {
           revalidate: false,
         })
 
-        dispatch({ type: 'DELETE_TODO', payload: todoId })
+        dispatch(todoActions.deleteTodo(todoId))
         toast.success('Todo deleted successfully.')
-      }
-      catch {
+      } catch {
         handleError('Failed to delete the todo.')
       }
     },
