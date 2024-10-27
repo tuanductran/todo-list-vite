@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftuanductran%2Ftodo-list-vite&count_bg=%23FC2350&title_bg=%23555555&icon=react.svg&icon_color=%23E7E7E7&title=HITS&edge_flat=false)](https://hits.seeyoufarm.com)
+[![Lint](https://github.com/tuanductran/todo-list-vite/actions/workflows/lint.yml/badge.svg)](https://github.com/tuanductran/todo-list-vite/actions/workflows/lint.yml)
 
 ![React Vite Todo List](https://todo-list-vite-eight.vercel.app/IMG_0765.png)
 
