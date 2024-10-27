@@ -9,7 +9,7 @@ export default function DarkMode() {
   const initDB = async () => {
     const db = await openDB('settings-db', 1, {
       upgrade(db) {
-        db.createObjectStore('settings')
+        db.createObjectStore('settings', { keyPath: 'key' })
       },
     })
     return db
@@ -21,7 +21,7 @@ export default function DarkMode() {
     if (value === null) {
       await db.delete('settings', key)
     } else {
-      await db.put('settings', value, key)
+      await db.put('settings', { key, value })
     }
   }
 
@@ -29,7 +29,7 @@ export default function DarkMode() {
   const getIDBValue = async (key: string): Promise<boolean | null> => {
     const db = await initDB()
     const result = await db.get('settings', key)
-    return result ?? null
+    return result ? result.value : null
   }
 
   // Update the dark mode class on <html>
@@ -88,7 +88,7 @@ export default function DarkMode() {
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none inline-block size-5 rounded-full bg-gray-800 dark:bg-gray-200 ring-0 shadow-lg transition duration-200 ease-in-out translate-x-0 dark:translate-x-7"
+        className={`pointer-events-none inline-block size-5 rounded-full ${enabled ? 'bg-gray-800 translate-x-7' : 'bg-gray-200 translate-x-0'} ring-0 shadow-lg transition duration-200 ease-in-out`}
       />
     </Switch>
   )
