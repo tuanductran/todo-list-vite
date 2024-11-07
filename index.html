@@ -10,7 +10,6 @@
     <meta name="keywords" content="Todo List, React, Tailwind CSS, JavaScript, TypeScript" />
     <meta name="author" content="Tran Tuan Duc" />
 
-    <!-- Open Graph Meta Tags for Social Sharing -->
     <meta property="og:title" content="Todo List" />
     <meta
       property="og:description"
@@ -22,7 +21,7 @@
 
     <title>Todo List</title>
 
-    <!-- Use common icon paths -->
+    <link rel="preload" href="https://todo-list-vite-eight.vercel.app/IMG_0765.png" as="image" />
     <link rel="icon" href="/vite.svg" type="image/x-icon" />
 
     <script>
@@ -37,13 +36,12 @@
         }
 
         darkModeQuery.addEventListener('change', updateMode)
-        window.addEventListener('storage', updateMode)
         updateMode() // Initialize mode on load
       })()
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./src/main.tsx"></script>
+    <script type="module" src="./src/main.tsx" defer></script>
   </body>
 </html>
