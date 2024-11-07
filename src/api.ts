@@ -16,13 +16,15 @@ let dbInstance: Promise<IDBPDatabase<TodoDB>> | null = null
 
 // Initialize the database if it hasn't been opened yet
 function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
-  dbInstance ||= openDB<TodoDB>('todosDB', 1, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains('todos')) {
-        db.createObjectStore('todos', { keyPath: 'id', autoIncrement: true })
-      }
-    },
-  })
+  if (!dbInstance) {
+    dbInstance = openDB<TodoDB>('todosDB', 1, {
+      upgrade(db) {
+        if (!db.objectStoreNames.contains('todos')) {
+          db.createObjectStore('todos', { keyPath: 'id', autoIncrement: true })
+        }
+      },
+    })
+  }
   return dbInstance
 }
 
@@ -34,8 +36,7 @@ export async function getTodos(): Promise<Todo[]> {
 
 // Add a new todo to the database
 export async function addTodo(todo: Todo): Promise<void> {
-  if (!todo)
-    throw new Error('Todo cannot be null or undefined.')
+  if (!todo) throw new Error('Todo cannot be null or undefined.')
 
   const db = await initializeDB()
   await db.put('todos', todo)
@@ -43,8 +44,7 @@ export async function addTodo(todo: Todo): Promise<void> {
 
 // Update an existing todo in the database
 export async function updateTodo(updatedTodo: Todo): Promise<void> {
-  if (!updatedTodo)
-    throw new Error('Updated todo cannot be null or undefined.')
+  if (!updatedTodo) throw new Error('Updated todo cannot be null or undefined.')
 
   const db = await initializeDB()
   await db.put('todos', updatedTodo)
@@ -52,8 +52,7 @@ export async function updateTodo(updatedTodo: Todo): Promise<void> {
 
 // Delete a todo by ID from the database
 export async function deleteTodo(todoId: number): Promise<void> {
-  if (todoId == null)
-    throw new Error('Todo ID cannot be null or undefined.')
+  if (todoId == null) throw new Error('Todo ID cannot be null or undefined.')
 
   const db = await initializeDB()
   await db.delete('todos', todoId)
@@ -71,14 +70,13 @@ export async function saveCompletedTodos(completedTodos: number[]): Promise<void
   const tx = db.transaction('todos', 'readwrite')
   const store = tx.objectStore('todos')
 
-  // Get all todos, and update the 'completed' status based on completedTodos
-  const allTodos = await store.getAll()
-  const updatePromises = allTodos.map((todo) => {
-    const isCompleted = completedTodos.includes(todo.id)
-    if (todo.completed !== isCompleted) {
-      return store.put({ ...todo, completed: isCompleted })
+  // Update only the todos that need to be updated
+  const updatePromises = completedTodos.map(async (id) => {
+    const todo = await store.get(id)
+    if (todo && todo.completed !== true) {
+      todo.completed = true
+      await store.put(todo)
     }
-    return Promise.resolve()
   })
 
   // Await the updates
