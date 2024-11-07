@@ -2,7 +2,6 @@ import { Button, Description, Field, Input, Label } from '@headlessui/react'
 import DOMPurify from 'dompurify'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
-
 import type { TodoFormProps } from '../type'
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
@@ -11,17 +10,13 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
     handleSubmit,
     reset,
     formState: { errors },
-    trigger,
   } = useForm<{ name: string }>()
 
-  const onSubmit = async (data: { name: string }) => {
-    const isValid = await trigger('name')
-    if (!isValid)
-      return // Prevent submission if validation fails
-
+  // Submit form with data sanitization
+  const onSubmit = (data: { name: string }) => {
     const sanitizedData = DOMPurify.sanitize(data.name)
     onAddTodo(sanitizedData)
-    reset() // Reset the form after successful submission
+    reset() // Reset form after submission
   }
 
   return (
@@ -32,7 +27,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
-            className="size-4 text-gray-500 dark:text-gray-400"
+            className="size-5 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
