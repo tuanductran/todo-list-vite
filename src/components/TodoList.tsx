@@ -3,7 +3,6 @@ import type { FC } from 'react'
 import { useMemo } from 'react'
 
 import type { TodoListProps } from '../type'
-
 import TodoItem from './TodoItem'
 
 const TodoList: FC<TodoListProps> = ({
@@ -14,15 +13,22 @@ const TodoList: FC<TodoListProps> = ({
   handleDeleteClick,
   handleToggleClick,
 }) => {
-  const sortedTodos = useMemo(
-    () => (todos ? [...todos].sort((a, b) => a.id - b.id) : []),
-    [todos],
-  )
+  // Use Set for faster lookup of completed todos
+  const completedTodosSet = useMemo(() => new Set(completedTodos), [completedTodos])
 
+  // Memoize sorted todos
+  const sortedTodos = useMemo(() => {
+    if (todos) {
+      return [...todos].sort((a, b) => a.id - b.id)  // Sorting only when todos change
+    }
+    return []
+  }, [todos])
+
+  // Memoize the todoList render to avoid unnecessary re-renders
   const todoList = useMemo(
     () =>
       sortedTodos.map((todo) => {
-        const isTodoCompleted = completedTodos.includes(todo.id)
+        const isTodoCompleted = completedTodosSet.has(todo.id)
 
         return (
           <TodoItem
@@ -35,7 +41,7 @@ const TodoList: FC<TodoListProps> = ({
           />
         )
       }),
-    [sortedTodos, completedTodos, handleEditClick, handleDeleteClick, handleToggleClick],
+    [sortedTodos, completedTodosSet, handleEditClick, handleDeleteClick, handleToggleClick],
   )
 
   if (error) {
@@ -48,15 +54,13 @@ const TodoList: FC<TodoListProps> = ({
 
   return (
     <div className={cn('overflow-auto h-full', { 'max-h-[300px]': sortedTodos.length > 4 })}>
-      {todoList.length > 0
-        ? (
-            todoList
-          )
-        : (
-            <div className="text-center text-gray-500 py-4">
-              No todos available. Add a new task!
-            </div>
-          )}
+      {todoList.length > 0 ? (
+        todoList
+      ) : (
+        <div className="text-center text-gray-500 py-4">
+          No todos available. Add a new task!
+        </div>
+      )}
     </div>
   )
 }
