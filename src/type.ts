@@ -1,3 +1,11 @@
+import {
+  SET_COMPLETED_TODOS,
+  ADD_TODO,
+  UPDATE_TODO,
+  DELETE_TODO,
+  TOGGLE_TODO
+} from './constants'
+
 /**
  * Interface representing a single Todo item.
  */
@@ -35,11 +43,16 @@ export interface State {
 }
 
 /**
+ * A helper type for action payloads to reduce repetition.
+ */
+type TodoActionPayload<T> = { type: T, payload: any }
+
+/**
  * Action type representing all possible actions for manipulating the Todo state.
  */
 export type Action =
-  | { type: 'SET_COMPLETED_TODOS', payload: number[] } // Set completed todos by IDs
-  | { type: 'ADD_TODO', payload: Todo } // Add a new todo
-  | { type: 'UPDATE_TODO', payload: Todo } // Update an existing todo
-  | { type: 'DELETE_TODO', payload: number } // Delete a todo by ID
-  | { type: 'TOGGLE_TODO', payload: number } // Toggle a todo's completed status by ID
+  | TodoActionPayload<typeof SET_COMPLETED_TODOS> & { payload: number[] } // Set completed todos by IDs
+  | TodoActionPayload<typeof ADD_TODO> & { payload: Todo } // Add a new todo
+  | TodoActionPayload<typeof UPDATE_TODO> & { payload: Todo } // Update an existing todo
+  | TodoActionPayload<typeof DELETE_TODO> & { payload: number } // Delete a todo by ID
+  | TodoActionPayload<typeof TOGGLE_TODO> & { payload: number } // Toggle a todo's completed status by ID
