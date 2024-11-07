@@ -1,22 +1,25 @@
 import { Switch } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 export default function DarkMode() {
-  const [enabled, setEnabled] = useState(false)
+  const [enabled, setEnabled] = useState<boolean>(() => {
+    const savedDarkMode = window.localStorage.getItem('isDarkMode')
+    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    return savedDarkMode === 'true' || (savedDarkMode === null && systemDarkMode)
+  })
 
-  const updateDarkModeClass = (isDarkMode: boolean) => {
+  const updateDarkModeClass = useCallback((isDarkMode: boolean) => {
     document.documentElement.classList.toggle('dark', isDarkMode)
-  }
+  }, [])
 
-  const handleLocalStorage = (isDarkMode: boolean) => {
+  const handleLocalStorage = useCallback((isDarkMode: boolean) => {
     const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (isDarkMode === systemDarkMode) {
       window.localStorage.removeItem('isDarkMode')
-    }
-    else {
+    } else {
       window.localStorage.setItem('isDarkMode', isDarkMode.toString())
     }
-  }
+  }, [])
 
   const toggleMode = () => {
     const newDarkMode = !enabled
@@ -27,23 +30,26 @@ export default function DarkMode() {
 
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const savedDarkMode = window.localStorage.getItem('isDarkMode')
-    const isSystemDarkMode = darkModeMediaQuery.matches
-
-    const isDarkMode = savedDarkMode === 'true' || (savedDarkMode === null && isSystemDarkMode)
-    setEnabled(isDarkMode)
-    updateDarkModeClass(isDarkMode)
-
+    
     const handleSystemChange = (e: MediaQueryListEvent) => {
+      const savedDarkMode = window.localStorage.getItem('isDarkMode')
       if (savedDarkMode === null) {
-        setEnabled(e.matches)
-        updateDarkModeClass(e.matches)
+        const systemDarkMode = e.matches
+        setEnabled(systemDarkMode)
+        updateDarkModeClass(systemDarkMode)
       }
     }
 
     darkModeMediaQuery.addEventListener('change', handleSystemChange)
-    return () => darkModeMediaQuery.removeEventListener('change', handleSystemChange)
-  }, [])
+
+    return () => {
+      darkModeMediaQuery.removeEventListener('change', handleSystemChange)
+    }
+  }, [updateDarkModeClass])
+
+  useEffect(() => {
+    updateDarkModeClass(enabled)
+  }, [enabled, updateDarkModeClass])
 
   return (
     <Switch
