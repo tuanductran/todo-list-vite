@@ -64,7 +64,7 @@
     "eslint-plugin-format": "^0.1.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.12",
-    "postcss": "^8.4.47",
+    "postcss": "^8.4.48",
     "postcss-cli": "^11.0.0",
     "postcss-import": "^16.1.0",
     "postcss-lightningcss": "^1.0.1",
