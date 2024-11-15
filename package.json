@@ -1,6 +1,6 @@
 {
   "name": "todo-list",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "packageManager": "pnpm@9.13.2",
   "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
