@@ -1,8 +1,8 @@
-import useTodoActions from '../hooks/useTodoActions'
+import useTodoActions from "../hooks/useTodoActions";
 
-import DarkMode from './DarkMode'
-import TodoForm from './TodoForm'
-import TodoList from './TodoList'
+import DarkMode from "./DarkMode";
+import TodoForm from "./TodoForm";
+import TodoList from "./TodoList";
 
 export default function TodoPage() {
   const {
@@ -13,12 +13,11 @@ export default function TodoPage() {
     handleEditClick,
     handleDeleteClick,
     handleToggleClick,
-  } = useTodoActions()
+  } = useTodoActions();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 m-4 w-full lg:w-3/4 lg:max-w-xl transition-colors duration-300">
-        {/* Header */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
@@ -34,8 +33,6 @@ export default function TodoPage() {
                 <TodoForm onAddTodo={handleAddTodo} />
               )}
         </div>
-
-        {/* Todo List */}
         <TodoList
           todos={todos || []}
           error={error}
@@ -46,5 +43,5 @@ export default function TodoPage() {
         />
       </div>
     </div>
-  )
+  );
 }

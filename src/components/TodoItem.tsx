@@ -1,9 +1,9 @@
-import { Button } from '@headlessui/react'
-import cn from 'clsx'
-import type { FC } from 'react'
-import { memo } from 'react'
+import { Button } from "@headlessui/react";
+import cn from "clsx";
+import type { FC } from "react";
+import { memo } from "react";
 
-import type { Todo } from '../type'
+import type { Todo } from "../schema";
 
 const TodoItem: FC<{
   todo: Todo
@@ -14,17 +14,17 @@ const TodoItem: FC<{
 }> = memo(
   ({ todo, isCompleted, onToggle, onEdit, onDelete }) => {
     const textClass = isCompleted
-      ? 'line-through text-gray-800 dark:text-gray-400'
-      : 'text-gray-900 dark:text-gray-100'
+      ? "line-through text-gray-600 dark:text-gray-500"
+      : "text-gray-900 dark:text-white";
     const toggleButtonClass = isCompleted
-      ? 'bg-gray-800 hover:bg-gray-700 text-white dark:bg-gray-600 dark:hover:bg-gray-500'
-      : 'bg-green-800 hover:bg-green-700 text-white dark:bg-green-600 dark:hover:bg-green-500'
+      ? "bg-gray-700 hover:bg-gray-600 text-white dark:bg-gray-500 dark:hover:bg-gray-400"
+      : "bg-green-700 hover:bg-green-600 text-white dark:bg-green-500 dark:hover:bg-green-400";
 
     return (
-      <div className="flex py-2 items-center">
+      <div className="flex items-center py-3 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm transition-colors duration-300">
         <p
           className={cn(
-            'mr-auto text-ellipsis overflow-hidden transition-colors duration-300',
+            "flex-1 text-sm truncate transition-colors duration-300",
             textClass,
           )}
         >
@@ -33,17 +33,17 @@ const TodoItem: FC<{
         <Button
           type="button"
           className={cn(
-            'shrink-0 p-2 ml-4 text-sm font-medium rounded-lg transition-colors duration-300',
+            "ml-4 px-3 py-1 text-xs font-semibold rounded-md transition-colors duration-300",
             toggleButtonClass,
           )}
           onClick={onToggle}
         >
-          {isCompleted ? 'Unmark' : 'Complete'}
+          {isCompleted ? "Unmark" : "Complete"}
         </Button>
         {!isCompleted && (
           <Button
             type="button"
-            className="shrink-0 p-2 ml-4 text-sm font-medium rounded-lg bg-yellow-700 hover:bg-yellow-600 text-white dark:bg-yellow-600 dark:hover:bg-yellow-500 transition-colors duration-300"
+            className="ml-3 px-3 py-1 text-xs font-semibold rounded-md bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-500 dark:hover:bg-yellow-400 transition-colors duration-300"
             onClick={onEdit}
           >
             Edit
@@ -51,19 +51,19 @@ const TodoItem: FC<{
         )}
         <Button
           type="button"
-          className="shrink-0 p-2 ml-4 text-sm font-medium rounded-lg bg-red-800 hover:bg-red-700 text-white dark:bg-red-600 dark:hover:bg-red-500 transition-colors duration-300"
+          className="ml-3 px-3 py-1 text-xs font-semibold rounded-md bg-red-700 hover:bg-red-600 text-white dark:bg-red-600 dark:hover:bg-red-500 transition-colors duration-300"
           onClick={onDelete}
         >
           Delete
         </Button>
       </div>
-    )
+    );
   },
   (prevProps, nextProps) =>
-    prevProps.isCompleted === nextProps.isCompleted &&
-    prevProps.todo === nextProps.todo,
-)
+    prevProps.isCompleted === nextProps.isCompleted
+    && prevProps.todo === nextProps.todo,
+);
 
-TodoItem.displayName = 'TodoItem'
+TodoItem.displayName = "TodoItem";
 
-export default TodoItem
+export default TodoItem;

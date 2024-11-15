@@ -1,87 +1,88 @@
-import { openDB } from 'idb'
-import type { DBSchema, IDBPDatabase } from 'idb'
+import { openDB } from "idb";
+import type { DBSchema, IDBPDatabase } from "idb";
 
-import type { Todo } from './type'
+import type { Todo } from "./schema";
 
 // Define the TodoDB schema interface
 interface TodoDB extends DBSchema {
   todos: {
-    key: number
+    key: string
     value: Todo
   }
 }
 
 // Hold the DB instance for reuse
-let dbInstance: Promise<IDBPDatabase<TodoDB>> | null = null
+let dbInstance: Promise<IDBPDatabase<TodoDB>> | null = null;
 
 // Initialize the database if it hasn't been opened yet
 function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
-  if (!dbInstance) {
-    dbInstance = openDB<TodoDB>('todosDB', 1, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains('todos')) {
-          db.createObjectStore('todos', { keyPath: 'id', autoIncrement: true })
-        }
-      },
-    })
-  }
-  return dbInstance
+  dbInstance ||= openDB<TodoDB>("todosDB", 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains("todos")) {
+        db.createObjectStore("todos", { keyPath: "id" });
+      }
+    },
+  });
+  return dbInstance;
 }
 
 // Fetch all todos from the database
 export async function getTodos(): Promise<Todo[]> {
-  const db = await initializeDB()
-  return db.getAll('todos')
+  const db = await initializeDB();
+  return db.getAll("todos");
 }
 
 // Add a new todo to the database
 export async function addTodo(todo: Todo): Promise<void> {
-  if (!todo) throw new Error('Todo cannot be null or undefined.')
+  if (!todo) throw new Error("Todo cannot be null or undefined.");
 
-  const db = await initializeDB()
-  await db.put('todos', todo)
+  const db = await initializeDB();
+  await db.put("todos", todo);
 }
 
 // Update an existing todo in the database
 export async function updateTodo(updatedTodo: Todo): Promise<void> {
-  if (!updatedTodo) throw new Error('Updated todo cannot be null or undefined.')
+  if (!updatedTodo)
+    throw new Error("Updated todo cannot be null or undefined.");
 
-  const db = await initializeDB()
-  await db.put('todos', updatedTodo)
+  const db = await initializeDB();
+  await db.put("todos", updatedTodo);
 }
 
 // Delete a todo by ID from the database
-export async function deleteTodo(todoId: number): Promise<void> {
-  if (todoId == null) throw new Error('Todo ID cannot be null or undefined.')
+export async function deleteTodo(todoId: string): Promise<void> {
+  if (todoId == null) throw new Error("Todo ID cannot be null or undefined.");
 
-  const db = await initializeDB()
-  await db.delete('todos', todoId)
+  const db = await initializeDB();
+  await db.delete("todos", todoId);
 }
 
 // Get a list of completed todo IDs
-export async function getCompletedTodos(): Promise<number[]> {
-  const todos = await getTodos()
-  return todos.filter(todo => todo.completed).map(todo => todo.id)
+export async function getCompletedTodos(): Promise<string[]> {
+  const todos = await getTodos();
+  return todos.filter((todo) => todo.completed).map((todo) => todo.id);
 }
 
 // Save completed todo statuses by updating their 'completed' field
-export async function saveCompletedTodos(completedTodos: number[]): Promise<void> {
-  const db = await initializeDB()
-  const tx = db.transaction('todos', 'readwrite')
-  const store = tx.objectStore('todos')
+export async function saveCompletedTodos(
+  completedTodos: string[],
+): Promise<void> {
+  const db = await initializeDB();
+  const tx = db.transaction("todos", "readwrite");
+  const store = tx.objectStore("todos");
 
   // Update only the todos that need to be updated
   const updatePromises = completedTodos.map(async (id) => {
-    const todo = await store.get(id)
+    const todo = await store.get(id);
     if (todo && todo.completed !== true) {
-      todo.completed = true
-      await store.put(todo)
+      todo.completed = true;
+      await store.put(todo);
     }
-  })
+  });
 
   // Await the updates
-  await Promise.all(updatePromises)
-  await tx.done
+  await Promise.all(updatePromises);
+  await tx.done;
 }
 
 // Export all functions
@@ -92,4 +93,4 @@ export default {
   deleteTodo,
   getCompletedTodos,
   saveCompletedTodos,
-}
+};

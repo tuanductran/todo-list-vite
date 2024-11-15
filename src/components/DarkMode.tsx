@@ -1,55 +1,56 @@
-import { Switch } from '@headlessui/react'
-import { useEffect, useState, useCallback } from 'react'
+import { Switch } from "@headlessui/react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function DarkMode() {
   const [enabled, setEnabled] = useState<boolean>(() => {
-    const savedDarkMode = window.localStorage.getItem('isDarkMode')
-    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-    return savedDarkMode === 'true' || (savedDarkMode === null && systemDarkMode)
-  })
+    const savedDarkMode = window.localStorage.getItem("isDarkMode");
+    const systemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return savedDarkMode === "true" || (savedDarkMode === null && systemDarkMode);
+  });
 
   const updateDarkModeClass = useCallback((isDarkMode: boolean) => {
-    document.documentElement.classList.toggle('dark', isDarkMode)
-  }, [])
+    document.documentElement.classList.toggle("dark", isDarkMode);
+  }, []);
 
   const handleLocalStorage = useCallback((isDarkMode: boolean) => {
-    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const systemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (isDarkMode === systemDarkMode) {
-      window.localStorage.removeItem('isDarkMode')
-    } else {
-      window.localStorage.setItem('isDarkMode', isDarkMode.toString())
+      window.localStorage.removeItem("isDarkMode");
     }
-  }, [])
+    else {
+      window.localStorage.setItem("isDarkMode", isDarkMode.toString());
+    }
+  }, []);
 
   const toggleMode = () => {
-    const newDarkMode = !enabled
-    setEnabled(newDarkMode)
-    updateDarkModeClass(newDarkMode)
-    handleLocalStorage(newDarkMode)
-  }
+    const newDarkMode = !enabled;
+    setEnabled(newDarkMode);
+    updateDarkModeClass(newDarkMode);
+    handleLocalStorage(newDarkMode);
+  };
 
   useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    
-    const handleSystemChange = (e: MediaQueryListEvent) => {
-      const savedDarkMode = window.localStorage.getItem('isDarkMode')
-      if (savedDarkMode === null) {
-        const systemDarkMode = e.matches
-        setEnabled(systemDarkMode)
-        updateDarkModeClass(systemDarkMode)
-      }
-    }
+    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    darkModeMediaQuery.addEventListener('change', handleSystemChange)
+    const handleSystemChange = (e: MediaQueryListEvent) => {
+      const savedDarkMode = window.localStorage.getItem("isDarkMode");
+      if (savedDarkMode === null) {
+        const systemDarkMode = e.matches;
+        setEnabled(systemDarkMode);
+        updateDarkModeClass(systemDarkMode);
+      }
+    };
+
+    darkModeMediaQuery.addEventListener("change", handleSystemChange);
 
     return () => {
-      darkModeMediaQuery.removeEventListener('change', handleSystemChange)
-    }
-  }, [updateDarkModeClass])
+      darkModeMediaQuery.removeEventListener("change", handleSystemChange);
+    };
+  }, [updateDarkModeClass]);
 
   useEffect(() => {
-    updateDarkModeClass(enabled)
-  }, [enabled, updateDarkModeClass])
+    updateDarkModeClass(enabled);
+  }, [enabled, updateDarkModeClass]);
 
   return (
     <Switch
@@ -62,5 +63,5 @@ export default function DarkMode() {
         className="pointer-events-none inline-block size-5 rounded-full bg-gray-800 dark:bg-gray-200 ring-0 shadow-lg transition duration-200 ease-in-out translate-x-0 dark:translate-x-7"
       />
     </Switch>
-  )
+  );
 }
