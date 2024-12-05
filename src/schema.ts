@@ -34,17 +34,17 @@ export type TodoFormInputProps = z.infer<typeof TodoFormInputPropsSchema>;
 export const TodoListPropsSchema = z.object({
   todos: z.array(TodoSchema),
   error: z.boolean(),
-  completedTodos: z.array(z.string().uuid()),
-  handleEditClick: z.function().args(z.string().uuid()).returns(z.void()),
-  handleDeleteClick: z.function().args(z.string().uuid()).returns(z.void()),
-  handleToggleClick: z.function().args(z.string().uuid()).returns(z.void()),
+  completedTodos: z.array(z.string()),
+  handleEditClick: z.function().args(z.string()).returns(z.void()),
+  handleDeleteClick: z.function().args(z.string()).returns(z.void()),
+  handleToggleClick: z.function().args(z.string()).returns(z.void()),
 });
 
 export type TodoListProps = z.infer<typeof TodoListPropsSchema>;
 
 export const StateSchema = z.object({
   todos: z.array(TodoSchema),
-  completedTodos: z.array(z.string().uuid()),
+  completedTodos: z.array(z.string()),
 });
 
 export type State = z.infer<typeof StateSchema>;
@@ -52,7 +52,7 @@ export type State = z.infer<typeof StateSchema>;
 export const ActionSchema = z.union([
   z.object({
     type: z.literal(SET_COMPLETED_TODOS),
-    payload: z.array(z.string().uuid()),
+    payload: z.array(z.string()),
   }),
   z.object({
     type: z.literal(ADD_TODO),
@@ -64,11 +64,11 @@ export const ActionSchema = z.union([
   }),
   z.object({
     type: z.literal(DELETE_TODO),
-    payload: z.string().uuid(),
+    payload: z.string(),
   }),
   z.object({
     type: z.literal(TOGGLE_TODO),
-    payload: z.string().uuid(),
+    payload: z.string(),
   }),
 ]);
 
