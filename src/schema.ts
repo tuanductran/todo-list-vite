@@ -9,7 +9,7 @@ import {
 } from "./constants";
 
 export const TodoSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   text: z.string(),
   completed: z.boolean().optional(),
 });
