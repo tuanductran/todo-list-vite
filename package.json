@@ -43,7 +43,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
-    "sonner": "^1.7.0",
+    "sonner": "^1.7.1",
     "swr": "^2.2.5",
     "tailwindcss": "^3.4.15",
     "uuid": "^11.0.3",
