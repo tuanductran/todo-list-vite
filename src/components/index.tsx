@@ -1,6 +1,5 @@
 import useTodoActions from "../hooks/useTodoActions";
 
-import DarkMode from "./DarkMode";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 
@@ -16,14 +15,13 @@ export default function TodoPage() {
   } = useTodoActions();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 m-4 w-full lg:w-3/4 lg:max-w-xl transition-colors duration-300">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 transition-colors duration-300 dark:bg-gray-900">
+      <div className="m-4 w-full rounded-lg bg-white p-8 shadow-lg transition-colors duration-300 lg:max-w-xl lg:w-3/4 dark:bg-gray-800">
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-3xl text-gray-900 font-bold dark:text-gray-100">
               Todo List
             </h1>
-            <DarkMode />
           </div>
           {error
             ? (

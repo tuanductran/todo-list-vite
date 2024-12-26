@@ -1,4 +1,3 @@
-import { Button, Description, Field, Input, Label } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DOMPurify from "dompurify";
 import type { FC } from "react";
@@ -25,12 +24,12 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   };
 
   return (
-    <Field as="form" onSubmit={handleSubmit(onSubmit)} className="mt-4">
-      <Label htmlFor="todo-input" className="sr-only">
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+      <label htmlFor="todo-input" className="sr-only">
         New Todo
-      </Label>
+      </label>
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <svg
             className="size-5 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
@@ -47,28 +46,28 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
             />
           </svg>
         </div>
-        <Input
+        <input
           type="text"
           id="todo-input"
-          className="block w-full px-4 pl-10 pr-20 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 transition-colors duration-300"
+          className="block w-full border border-gray-300 rounded-lg bg-gray-50 px-4 py-2 pl-10 pr-20 text-sm text-gray-900 transition-colors duration-300 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:outline-none dark:focus:border-blue-500 dark:placeholder-gray-400"
           placeholder="Add a new todo item..."
           {...register("name")}
           aria-invalid={errors.name ? "true" : "false"}
           autoComplete="off"
         />
-        <Button
+        <button
           type="submit"
-          className="text-white absolute right-2.5 bottom-2.5 bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 transition-colors duration-300"
+          className="absolute bottom-2.5 right-2.5 rounded-lg bg-blue-600 px-4 py-2 text-sm text-white font-medium transition-colors duration-300 hover:bg-blue-700"
         >
           Add
-        </Button>
+        </button>
       </div>
       {errors.name && (
-        <Description className="mt-2 text-sm text-red-600 dark:text-red-500 transition-colors duration-300">
+        <p className="mt-2 text-sm text-red-600 transition-colors duration-300 dark:text-red-500">
           {errors.name.message}
-        </Description>
+        </p>
       )}
-    </Field>
+    </form>
   );
 };
 

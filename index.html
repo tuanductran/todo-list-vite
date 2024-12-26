@@ -7,9 +7,6 @@
       name="description"
       content="A simple and efficient Todo List application built with React and Tailwind CSS."
     />
-    <meta name="keywords" content="Todo List, React, Tailwind CSS, JavaScript, TypeScript" />
-    <meta name="author" content="Tran Tuan Duc" />
-
     <meta property="og:title" content="Todo List" />
     <meta
       property="og:description"
@@ -20,28 +17,10 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <title>Todo List</title>
-
-    <link rel="preload" href="https://todo-list-vite-eight.vercel.app/IMG_0765.png" as="image" />
     <link rel="icon" href="/vite.svg" type="image/x-icon" />
-
-    <script>
-      ;(() => {
-        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
-        const updateMode = () => {
-          const systemDark = darkModeQuery.matches
-          const userDark =
-            localStorage.getItem('isDarkMode') === 'true' || (!localStorage.getItem('isDarkMode') && systemDark)
-          document.documentElement.classList.toggle('dark', userDark)
-          if (userDark === systemDark) localStorage.removeItem('isDarkMode')
-        }
-
-        darkModeQuery.addEventListener('change', updateMode)
-        updateMode() // Initialize mode on load
-      })()
-    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="app"></div>
     <script type="module" src="./src/main.tsx" defer></script>
   </body>
 </html>

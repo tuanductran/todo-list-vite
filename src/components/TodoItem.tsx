@@ -1,4 +1,3 @@
-import { Button } from "@headlessui/react";
 import cn from "clsx";
 import type { FC } from "react";
 import { memo } from "react";
@@ -16,12 +15,12 @@ const TodoItem: FC<{
     const textClass = isCompleted
       ? "line-through text-gray-600 dark:text-gray-500"
       : "text-gray-900 dark:text-white";
-    const toggleButtonClass = isCompleted
+    const togglebuttonClass = isCompleted
       ? "bg-gray-700 hover:bg-gray-600 text-white dark:bg-gray-500 dark:hover:bg-gray-400"
       : "bg-green-700 hover:bg-green-600 text-white dark:bg-green-500 dark:hover:bg-green-400";
 
     return (
-      <div className="flex items-center py-3 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm transition-colors duration-300">
+      <div className="flex items-center rounded-lg bg-gray-100 px-4 py-3 shadow-sm transition-colors duration-300 dark:bg-gray-800">
         <p
           className={cn(
             "flex-1 text-sm truncate transition-colors duration-300",
@@ -30,32 +29,32 @@ const TodoItem: FC<{
         >
           {todo.text}
         </p>
-        <Button
+        <button
           type="button"
           className={cn(
             "ml-4 px-3 py-1 text-xs font-semibold rounded-md transition-colors duration-300",
-            toggleButtonClass,
+            togglebuttonClass,
           )}
           onClick={onToggle}
         >
           {isCompleted ? "Unmark" : "Complete"}
-        </Button>
+        </button>
         {!isCompleted && (
-          <Button
+          <button
             type="button"
-            className="ml-3 px-3 py-1 text-xs font-semibold rounded-md bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-500 dark:hover:bg-yellow-400 transition-colors duration-300"
+            className="ml-3 rounded-md bg-yellow-600 px-3 py-1 text-xs text-white font-semibold transition-colors duration-300 dark:bg-yellow-500 hover:bg-yellow-500 dark:hover:bg-yellow-400"
             onClick={onEdit}
           >
             Edit
-          </Button>
+          </button>
         )}
-        <Button
+        <button
           type="button"
-          className="ml-3 px-3 py-1 text-xs font-semibold rounded-md bg-red-700 hover:bg-red-600 text-white dark:bg-red-600 dark:hover:bg-red-500 transition-colors duration-300"
+          className="ml-3 rounded-md bg-red-700 px-3 py-1 text-xs text-white font-semibold transition-colors duration-300 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-500"
           onClick={onDelete}
         >
           Delete
-        </Button>
+        </button>
       </div>
     );
   },

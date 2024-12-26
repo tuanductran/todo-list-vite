@@ -4,8 +4,7 @@ import command from "eslint-plugin-command/config";
 export default antfu(
   {
     react: true,
-    typescript: true,
-    stylistic: true,
+    unocss: true,
   },
   {
     files: ["**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}"],

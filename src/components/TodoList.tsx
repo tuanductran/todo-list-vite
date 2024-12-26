@@ -20,15 +20,10 @@ const TodoList: FC<TodoListProps> = ({
     [completedTodos],
   );
 
-  // Sort todos by ID and cache the result
-  const sortedTodos = useMemo(() => {
-    return todos ? [...todos].sort((a, b) => a.id.localeCompare(b.id)) : [];
-  }, [todos]);
-
   // Render the list of TodoItems
   const renderTodoItems = useMemo(
     () =>
-      sortedTodos.map((todo) => {
+      todos.map((todo) => {
         const isTodoCompleted = completedTodosSet.has(todo.id);
         return (
           <TodoItem
@@ -42,7 +37,7 @@ const TodoList: FC<TodoListProps> = ({
         );
       }),
     [
-      sortedTodos,
+      todos,
       completedTodosSet,
       handleEditClick,
       handleDeleteClick,
@@ -52,7 +47,7 @@ const TodoList: FC<TodoListProps> = ({
 
   if (error) {
     return (
-      <div className="text-center text-red-500 py-4">
+      <div className="py-4 text-center text-red-500">
         An error occurred. Please try again later.
       </div>
     );
@@ -61,7 +56,7 @@ const TodoList: FC<TodoListProps> = ({
   return (
     <div
       className={cn("overflow-auto h-full", {
-        "max-h-[300px]": sortedTodos.length > 4,
+        "max-h-[300px]": todos.length > 4,
       })}
     >
       {renderTodoItems.length > 0
@@ -69,7 +64,7 @@ const TodoList: FC<TodoListProps> = ({
             renderTodoItems
           )
         : (
-            <div className="text-center text-gray-500 py-4">
+            <div className="py-4 text-center text-gray-500">
               No todos available. Start by adding a new one!
             </div>
           )}

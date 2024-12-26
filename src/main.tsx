@@ -2,9 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
+import "@unocss/reset/tailwind.css";
 import "../css/app.css";
+import "uno.css";
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("app")!).render(
   <StrictMode>
     <App />
   </StrictMode>,

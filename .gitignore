@@ -24,7 +24,5 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
-.turbo
-css/build.css
 .eslintcache
 .env*.local
