@@ -2,7 +2,7 @@
   "name": "todo-list-vite",
   "version": "1.0.3",
   "private": true,
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.3",
   "description": "A user-friendly and responsive Todo List web application developed using React and Vite",
   "author": "Tuan Duc Tran <tuanductran.dev@gmail.com>",
   "license": "MIT",
