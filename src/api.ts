@@ -6,24 +6,21 @@ import type { Todo } from "./schema";
 // Define the TodoDB schema interface
 interface TodoDB extends DBSchema {
   todos: {
-    key: string; 
+    key: string;
     value: Todo;
-    indexes: {
-      "by-completed": boolean;
-    };
   };
 }
 
-let dbInstance: Promise<IDBDatabase> | null = null;
+// Hold the DB instance for reuse
+let dbInstance: Promise<IDBPDatabase<TodoDB>> | null = null;
 
-async function initializeDB(): Promise<IDBDatabase> {
+// Initialize the database if it hasn't been opened yet
+async function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
   if (!dbInstance) {
-    dbInstance = openDB("todosDB", {
-      version: 1,
-      upgrade(db: IDBDatabase) {
+    dbInstance = openDB<TodoDB>("todosDB", 1, {
+      upgrade(db) {
         if (!db.objectStoreNames.contains("todos")) {
-          const store = db.createObjectStore("todos", { keyPath: "id" });
-          store.createIndex("by-completed", "completed");
+          db.createObjectStore("todos", { keyPath: "id" });
         }
       },
     });
@@ -31,62 +28,55 @@ async function initializeDB(): Promise<IDBDatabase> {
   return dbInstance;
 }
 
+// Fetch all todos from the database
 export async function getTodos(): Promise<Todo[]> {
   const db = await initializeDB();
-  const tx = db.transaction("todos", "readonly");
-  const store = tx.objectStore("todos");
-  return store.getAll();
+  return db.getAll("todos");
 }
 
+// Add a new todo to the database
 export async function addTodo(todo: Todo): Promise<void> {
   const db = await initializeDB();
-  const tx = db.transaction("todos", "readwrite");
-  await tx.objectStore("todos").add(todo);
-  await tx.done;
+  await db.put("todos", todo);
 }
 
-export async function updateTodo(todo: Todo): Promise<void> {
+// Update an existing todo in the database
+export async function updateTodo(updatedTodo: Todo): Promise<void> {
   const db = await initializeDB();
-  const tx = db.transaction("todos", "readwrite");
-  await tx.objectStore("todos").put(todo);
-  await tx.done;
+  await db.put("todos", updatedTodo);
 }
 
-export async function deleteTodo(id: string): Promise<void> {
+// Delete a todo by ID from the database
+export async function deleteTodo(todoId: string): Promise<void> {
   const db = await initializeDB();
-  const tx = db.transaction("todos", "readwrite");
-  await tx.objectStore("todos").delete(id);
-  await tx.done;
+  await db.delete("todos", todoId);
 }
 
+// Get a list of completed todo IDs
 export async function getCompletedTodos(): Promise<string[]> {
-  const db = await initializeDB();
-  const tx = db.transaction("todos", "readonly");
-  const store = tx.objectStore("todos");
-  const index = store.index("by-completed");
-  const completedTodos = await index.getAll(IDBKeyRange.only(true));
-  return completedTodos.map((todo) => todo.id);
+  const todos = await getTodos();
+  return todos.filter((todo) => todo.completed).map((todo) => todo.id);
 }
 
-export async function saveCompletedTodos(completedIds: string[]): Promise<void> {
-  const db = await initializeDB();
-  const tx = db.transaction("todos", "readwrite");
-  const store = tx.objectStore("todos");
-
+// Save completed todo statuses by updating their 'completed' field
+export async function saveCompletedTodos(completedTodos: string[]): Promise<void> {
   try {
-    await Promise.all(
-      completedIds.map(async (id) => {
-        const todo = await store.get(id);
-        if (todo && !todo.completed) {
-          todo.completed = true;
-          await store.put(todo);
-        }
-      })
-    );
+    const db = await initializeDB();
+    const tx = db.transaction("todos", "readwrite");
+    const store = tx.objectStore("todos");
+
+    const updatePromises = completedTodos.map(async (id) => {
+      const todo = await store.get(id);
+      if (todo && !todo.completed) {
+        todo.completed = true;
+        await store.put(todo);
+      }
+    });
+
+    await Promise.all(updatePromises);
     await tx.done;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to save completed todos:", error);
-    throw error;
   }
 }
 
