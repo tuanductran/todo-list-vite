@@ -28,6 +28,9 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
       - name: Install step
         run: "pnpm install"
 
@@ -40,5 +43,3 @@ jobs:
           project: "todo-list-vite"
           entrypoint: "jsr:@std/http/file-server"
           root: "dist"
-          
-          
