@@ -28,11 +28,14 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
       - name: Install step
-        run: "npm install --force"
+        run: "pnpm install"
 
       - name: Build step
-        run: "npm run build"
+        run: "pnpm build"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
