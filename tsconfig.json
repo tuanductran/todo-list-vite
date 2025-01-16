@@ -18,7 +18,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "skipLibCheck": false
+    "skipLibCheck": true
   },
   "include": ["**/*.ts", "**/*.tsx", "vite.config.mjs"],
   "exclude": ["node_modules"]
