@@ -23,13 +23,7 @@ export default function TodoPage() {
               Todo List
             </h1>
           </div>
-          {error
-            ? (
-                <div className="text-center text-red-500">Error loading todos.</div>
-              )
-            : (
-                <TodoForm onAddTodo={handleAddTodo} />
-              )}
+          {!error && <TodoForm onAddTodo={handleAddTodo} />}
         </div>
         <TodoList
           todos={todos || []}
