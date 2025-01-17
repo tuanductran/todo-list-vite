@@ -1,9 +1,7 @@
-import cn from "clsx";
-import type { FC } from "react";
-import { useMemo } from "react";
+import clsx from "clsx";
+import { FC, useMemo } from "react";
 
 import type { TodoListProps } from "../schema";
-
 import TodoItem from "./TodoItem";
 
 const TodoList: FC<TodoListProps> = ({
@@ -14,60 +12,51 @@ const TodoList: FC<TodoListProps> = ({
   handleDeleteClick,
   handleToggleClick,
 }) => {
-  // Use Set to optimize completedTodos lookups
-  const completedTodosSet = useMemo(
-    () => new Set(completedTodos),
-    [completedTodos],
-  );
+  // Memoize the completedTodos set for efficient lookup
+  const completedTodosSet = useMemo(() => new Set(completedTodos), [completedTodos]);
 
-  // Render the list of TodoItems
-  const renderTodoItems = useMemo(
+  // Generate the list of TodoItem components
+  const todoItems = useMemo(
     () =>
       todos.map((todo) => {
-        const isTodoCompleted = completedTodosSet.has(todo.id);
+        const isCompleted = completedTodosSet.has(todo.id);
         return (
           <TodoItem
             key={todo.id}
             todo={todo}
-            isCompleted={isTodoCompleted}
+            isCompleted={isCompleted}
             onToggle={() => handleToggleClick(todo.id)}
             onEdit={() => handleEditClick(todo.id)}
             onDelete={() => handleDeleteClick(todo.id)}
           />
         );
       }),
-    [
-      todos,
-      completedTodosSet,
-      handleEditClick,
-      handleDeleteClick,
-      handleToggleClick,
-    ],
+    [todos, completedTodosSet, handleEditClick, handleDeleteClick, handleToggleClick]
   );
 
+  // Handle error state
   if (error) {
     return (
-      <div className="py-4 text-center text-red-500">
-        An error occurred. Please try again later.
+      <div className="py-4 text-center text-red-500 font-medium">
+        Oops! Something went wrong. Please try again later.
       </div>
     );
   }
 
+  // Render the list or a message if no todos are available
   return (
     <div
-      className={cn("overflow-auto h-full", {
+      className={clsx("overflow-auto h-full", {
         "max-h-[300px]": todos.length > 4,
       })}
     >
-      {renderTodoItems.length > 0
-        ? (
-            renderTodoItems
-          )
-        : (
-            <div className="py-4 text-center text-gray-500">
-              No todos available. Start by adding a new one!
-            </div>
-          )}
+      {todos.length > 0 ? (
+        todoItems
+      ) : (
+        <div className="py-4 text-center text-gray-500 font-medium">
+          No tasks available. Add a new one to get started!
+        </div>
+      )}
     </div>
   );
 };
