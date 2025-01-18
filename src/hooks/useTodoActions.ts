@@ -91,11 +91,9 @@ function useTodoActions() {
         toast.success("Todo toggled successfully!");
       } catch {
         showToastError("Failed to toggle todo completion.");
-      } finally {
-        setIsMutating(false);
       }
     },
-    [todos, isMutating, mutate, showToastError]
+    [todos, mutate, showToastError]
   );
 
   const handleDeleteTodo = useCallback(
@@ -115,11 +113,9 @@ function useTodoActions() {
         toast.success("Todo deleted.");
       } catch {
         showToastError("Failed to delete todo.");
-      } finally {
-        setIsMutating(false);
       }
     },
-    [todos, isMutating, mutate, showToastError]
+    [todos, mutate, showToastError]
   );
 
   const handleDeleteClick = useCallback(
