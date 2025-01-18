@@ -6,12 +6,11 @@ interface TodoItemProps {
   todo: Todo;
   isCompleted: boolean;
   onToggle: () => void;
-  onEdit: () => void;
   onDelete: () => void;
 }
 
 const TodoItem: FC<TodoItemProps> = memo(
-  ({ todo, isCompleted, onToggle, onEdit, onDelete }) => {
+  ({ todo, isCompleted, onToggle, onDelete }) => {
     const textClass = clsx(
       "flex-1 text-sm truncate transition-colors duration-300",
       {
@@ -40,15 +39,6 @@ const TodoItem: FC<TodoItemProps> = memo(
         >
           {isCompleted ? "Unmark" : "Complete"}
         </button>
-        {!isCompleted && (
-          <button
-            type="button"
-            className="ml-3 rounded-md bg-yellow-600 px-3 py-1 text-xs text-white font-semibold transition-colors duration-300 dark:bg-yellow-500 hover:bg-yellow-500 dark:hover:bg-yellow-400"
-            onClick={onEdit}
-          >
-            Edit
-          </button>
-        )}
         <button
           type="button"
           className="ml-3 rounded-md bg-red-700 px-3 py-1 text-xs text-white font-semibold transition-colors duration-300 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-500"
