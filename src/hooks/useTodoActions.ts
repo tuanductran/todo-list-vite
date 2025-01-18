@@ -8,9 +8,14 @@ import {
   addTodo,
   deleteTodo,
   getTodos,
-  saveCompletedTodos,
   updateTodo,
 } from "../api";
+
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
 
 function useTodoActions() {
   const {
@@ -18,9 +23,9 @@ function useTodoActions() {
     error,
     mutate,
     isLoading,
-  } = useSWR("/api/todos", getTodos, {
-    refreshInterval: 5000, // Adjust refresh interval for better performance
-    revalidateOnFocus: false, // Disable revalidation on focus to reduce unnecessary fetches
+  } = useSWR<Todo[]>("/api/todos", getTodos, {
+    refreshInterval: 5000,
+    revalidateOnFocus: false,
     revalidateOnReconnect: true,
   });
 
@@ -33,7 +38,7 @@ function useTodoActions() {
   const startCooldown = useCallback(() => {
     setCooldown(true);
     toast.info("Please wait 5 seconds before performing another action.");
-    setTimeout(() => setCooldown(false), 5000); // Set cooldown for 5 seconds
+    setTimeout(() => setCooldown(false), 5000); // Cooldown of 5 seconds
   }, []);
 
   // Show error toast if there's an error fetching todos
@@ -66,7 +71,7 @@ function useTodoActions() {
         return showToastError("Duplicate todo text.");
       }
 
-      const newTodo = {
+      const newTodo: Todo = {
         id: uuidv4(),
         text: trimmedText,
         completed: false,
@@ -86,7 +91,7 @@ function useTodoActions() {
           }
         );
         toast.success("Todo added!");
-      } catch {
+      } catch (err) {
         showToastError("Failed to add todo.");
       }
     },
@@ -113,10 +118,8 @@ function useTodoActions() {
 
             const updatedTodo = { ...todo, completed: !todo.completed };
 
-            // Send update request to the server
             await updateTodo(updatedTodo);
 
-            // Return updated todos list
             return currentTodos?.map((item) =>
               item.id === todoId ? updatedTodo : item
             );
@@ -132,10 +135,10 @@ function useTodoActions() {
         );
 
         toast.success("Todo toggled successfully!");
-      } catch {
+      } catch (err) {
         showToastError("Failed to toggle todo completion.");
       } finally {
-        setIsMutating(false); // End mutation
+        setIsMutating(false);
       }
     },
     [isMutating, mutate, showToastError, cooldown, startCooldown]
@@ -168,10 +171,10 @@ function useTodoActions() {
         );
 
         toast.success("Todo deleted.");
-      } catch {
+      } catch (err) {
         showToastError("Failed to delete todo.");
       } finally {
-        setIsMutating(false); // End mutation
+        setIsMutating(false);
       }
     },
     [todos, mutate, showToastError, cooldown, startCooldown]
