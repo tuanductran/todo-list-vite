@@ -1,5 +1,5 @@
 /* eslint-disable no-alert */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
@@ -24,15 +24,6 @@ function useTodoActions() {
     revalidateOnReconnect: true,
   });
 
-  const [isMutating, setIsMutating] = useState(false);
-  const [cooldown, setCooldown] = useState(false);
-
-  const startCooldown = useCallback(() => {
-    setCooldown(true);
-    toast.info("Please wait 5 seconds before performing another action.");
-    setTimeout(() => setCooldown(false), 5000);
-  }, []);
-
   useEffect(() => {
     if (error) {
       toast.error(`Error fetching todos: ${error.message}`);
@@ -43,12 +34,6 @@ function useTodoActions() {
 
   const handleAddTodo = useCallback(
     async (text: string) => {
-      if (cooldown) {
-        toast.warning("You need to wait before adding another todo.");
-        return;
-      }
-      startCooldown();
-
       const trimmedText = text.trim();
       if (!trimmedText) return showToastError("Todo cannot be empty.");
       if (todos.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
@@ -76,18 +61,11 @@ function useTodoActions() {
         showToastError("Failed to add todo.");
       }
     },
-    [todos, mutate, showToastError, cooldown, startCooldown]
+    [todos, mutate, showToastError]
   );
 
   const handleToggleTodo = useCallback(
     async (todoId: string) => {
-      if (cooldown || isMutating) {
-        toast.warning("Please wait before toggling another todo.");
-        return;
-      }
-      setIsMutating(true);
-      startCooldown();
-
       try {
         await mutate(
           async (currentTodos = []) => {
@@ -117,18 +95,11 @@ function useTodoActions() {
         setIsMutating(false);
       }
     },
-    [todos, isMutating, mutate, showToastError, cooldown, startCooldown]
+    [todos, isMutating, mutate, showToastError]
   );
 
   const handleDeleteTodo = useCallback(
     async (todoId: string) => {
-      if (cooldown || isMutating) {
-        toast.warning("Please wait before deleting another todo.");
-        return;
-      }
-      setIsMutating(true);
-      startCooldown();
-
       try {
         await mutate(
           async (currentTodos = []) => {
@@ -148,7 +119,7 @@ function useTodoActions() {
         setIsMutating(false);
       }
     },
-    [todos, isMutating, mutate, showToastError, cooldown, startCooldown]
+    [todos, isMutating, mutate, showToastError]
   );
 
   const handleDeleteClick = useCallback(
