@@ -8,7 +8,6 @@ const TodoList: FC<TodoListProps> = ({
   todos,
   error,
   completedTodos,
-  handleEditClick,
   handleDeleteClick,
   handleToggleClick,
 }) => {
@@ -26,12 +25,11 @@ const TodoList: FC<TodoListProps> = ({
             todo={todo}
             isCompleted={isCompleted}
             onToggle={() => handleToggleClick(todo.id)}
-            onEdit={() => handleEditClick(todo.id)}
             onDelete={() => handleDeleteClick(todo.id)}
           />
         );
       }),
-    [todos, completedTodosSet, handleEditClick, handleDeleteClick, handleToggleClick]
+    [todos, completedTodosSet, handleDeleteClick, handleToggleClick]
   );
 
   // Handle error state
