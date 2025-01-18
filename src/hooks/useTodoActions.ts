@@ -25,6 +25,16 @@ function useTodoActions() {
   });
 
   const [isMutating, setIsMutating] = useState(false);
+  const [cooldown, setCooldown] = useState(false);
+
+  /**
+   * Utility function to enforce cooldown
+   */
+  const startCooldown = useCallback(() => {
+    setCooldown(true);
+    toast.info("Please wait 5 seconds before performing another action.");
+    setTimeout(() => setCooldown(false), 5000); // Set cooldown for 5 seconds
+  }, []);
 
   // Show error toast if there's an error fetching todos
   useEffect(() => {
@@ -42,6 +52,12 @@ function useTodoActions() {
    */
   const handleAddTodo = useCallback(
     async (text: string) => {
+      if (cooldown) {
+        toast.warning("You need to wait before adding another todo.");
+        return;
+      }
+      startCooldown();
+
       const trimmedText = text.trim();
       if (!trimmedText) {
         return showToastError("Todo cannot be empty.");
@@ -63,7 +79,8 @@ function useTodoActions() {
             return [...(currentTodos || []), newTodo];
           },
           {
-            optimisticData: [...todos, newTodo],
+            optimisticData: (currentTodos) =>
+              [...(currentTodos || []), newTodo],
             rollbackOnError: true,
             revalidate: false,
           }
@@ -73,7 +90,7 @@ function useTodoActions() {
         showToastError("Failed to add todo.");
       }
     },
-    [todos, mutate, showToastError]
+    [todos, mutate, showToastError, cooldown, startCooldown]
   );
 
   /**
@@ -81,8 +98,12 @@ function useTodoActions() {
    */
   const handleToggleTodo = useCallback(
     async (todoId: string) => {
-      if (isMutating) return; // Prevent overlapping mutations
+      if (cooldown || isMutating) {
+        toast.warning("Please wait before toggling another todo.");
+        return;
+      }
       setIsMutating(true);
+      startCooldown();
 
       try {
         await mutate(
@@ -117,50 +138,7 @@ function useTodoActions() {
         setIsMutating(false); // End mutation
       }
     },
-    [isMutating, mutate, showToastError]
-  );
-
-  /**
-   * Update the text of a todo item
-   */
-  const handleUpdateTodo = useCallback(
-    async (todoId: string, newText: string) => {
-      const trimmedText = newText.trim();
-      if (!trimmedText) {
-        return showToastError("Todo text cannot be empty.");
-      }
-      if (todos.some((todo) => todo.text === trimmedText)) {
-        return showToastError("Duplicate todo text.");
-      }
-
-      const updatedTodo = todos.find((item) => item.id === todoId);
-      if (!updatedTodo) return;
-
-      const todoUpdate = { ...updatedTodo, text: trimmedText };
-
-      try {
-        await mutate(
-          async (currentTodos) => {
-            await updateTodo(todoUpdate);
-            return currentTodos?.map((item) =>
-              item.id === todoId ? todoUpdate : item
-            );
-          },
-          {
-            optimisticData: todos.map((item) =>
-              item.id === todoId ? todoUpdate : item
-            ),
-            rollbackOnError: true,
-            revalidate: false,
-          }
-        );
-
-        toast.success("Todo updated.");
-      } catch {
-        showToastError("Failed to update todo.");
-      }
-    },
-    [todos, mutate, showToastError]
+    [isMutating, mutate, showToastError, cooldown, startCooldown]
   );
 
   /**
@@ -168,6 +146,13 @@ function useTodoActions() {
    */
   const handleDeleteTodo = useCallback(
     async (todoId: string) => {
+      if (cooldown || isMutating) {
+        toast.warning("Please wait before deleting another todo.");
+        return;
+      }
+      setIsMutating(true);
+      startCooldown();
+
       try {
         await mutate(
           async (currentTodos) => {
@@ -175,7 +160,8 @@ function useTodoActions() {
             return currentTodos?.filter((todo) => todo.id !== todoId);
           },
           {
-            optimisticData: todos.filter((todo) => todo.id !== todoId),
+            optimisticData: (currentTodos) =>
+              currentTodos?.filter((todo) => todo.id !== todoId),
             rollbackOnError: true,
             revalidate: false,
           }
@@ -184,20 +170,11 @@ function useTodoActions() {
         toast.success("Todo deleted.");
       } catch {
         showToastError("Failed to delete todo.");
+      } finally {
+        setIsMutating(false); // End mutation
       }
     },
-    [todos, mutate, showToastError]
-  );
-
-  /**
-   * Prompt user to edit a todo item's text
-   */
-  const handleEditClick = useCallback(
-    (id: string) => {
-      const newText = prompt("New todo text:");
-      if (newText?.trim()) handleUpdateTodo(id, newText.trim());
-    },
-    [handleUpdateTodo]
+    [todos, mutate, showToastError, cooldown, startCooldown]
   );
 
   /**
@@ -233,7 +210,6 @@ function useTodoActions() {
       isLoading,
       completedTodos,
       handleAddTodo,
-      handleEditClick,
       handleDeleteClick,
       handleToggleClick,
     }),
@@ -243,7 +219,6 @@ function useTodoActions() {
       isLoading,
       completedTodos,
       handleAddTodo,
-      handleEditClick,
       handleDeleteClick,
       handleToggleClick,
     ]
