@@ -18,12 +18,7 @@ interface Todo {
 }
 
 function useTodoActions() {
-  const {
-    data: todos = [],
-    error,
-    mutate,
-    isLoading,
-  } = useSWR<Todo[]>("/api/todos", getTodos, {
+  const { data: todos = [], error, mutate, isLoading } = useSWR<Todo[]>("/api/todos", getTodos, {
     refreshInterval: 5000,
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
@@ -32,29 +27,20 @@ function useTodoActions() {
   const [isMutating, setIsMutating] = useState(false);
   const [cooldown, setCooldown] = useState(false);
 
-  /**
-   * Utility function to enforce cooldown
-   */
   const startCooldown = useCallback(() => {
     setCooldown(true);
     toast.info("Please wait 5 seconds before performing another action.");
-    setTimeout(() => setCooldown(false), 5000); // Cooldown of 5 seconds
+    setTimeout(() => setCooldown(false), 5000);
   }, []);
 
-  // Show error toast if there's an error fetching todos
   useEffect(() => {
     if (error) {
       toast.error(`Error fetching todos: ${error.message}`);
     }
   }, [error]);
 
-  const showToastError = useCallback((message: string) => {
-    toast.error(message);
-  }, []);
+  const showToastError = useCallback((message: string) => toast.error(message), []);
 
-  /**
-   * Add a new todo item
-   */
   const handleAddTodo = useCallback(
     async (text: string) => {
       if (cooldown) {
@@ -64,12 +50,8 @@ function useTodoActions() {
       startCooldown();
 
       const trimmedText = text.trim();
-      if (!trimmedText) {
-        return showToastError("Todo cannot be empty.");
-      }
-      if (todos.some((todo) => todo.text === trimmedText)) {
-        return showToastError("Duplicate todo text.");
-      }
+      if (!trimmedText) return showToastError("Todo cannot be empty.");
+      if (todos.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
 
       const newTodo: Todo = {
         id: uuidv4(),
@@ -79,28 +61,24 @@ function useTodoActions() {
 
       try {
         await mutate(
-          async (currentTodos) => {
+          async (currentTodos = []) => {
             await addTodo(newTodo);
-            return [...(currentTodos || []), newTodo];
+            return [...currentTodos, newTodo];
           },
           {
-            optimisticData: (currentTodos) =>
-              [...(currentTodos || []), newTodo],
+            optimisticData: [...todos, newTodo],
             rollbackOnError: true,
             revalidate: false,
           }
         );
         toast.success("Todo added!");
-      } catch (err) {
+      } catch {
         showToastError("Failed to add todo.");
       }
     },
     [todos, mutate, showToastError, cooldown, startCooldown]
   );
 
-  /**
-   * Toggle the completion status of a todo item
-   */
   const handleToggleTodo = useCallback(
     async (todoId: string) => {
       if (cooldown || isMutating) {
@@ -112,41 +90,36 @@ function useTodoActions() {
 
       try {
         await mutate(
-          async (currentTodos) => {
-            const todo = currentTodos?.find((item) => item.id === todoId);
+          async (currentTodos = []) => {
+            const todo = currentTodos.find((item) => item.id === todoId);
             if (!todo) return currentTodos;
 
             const updatedTodo = { ...todo, completed: !todo.completed };
-
             await updateTodo(updatedTodo);
 
-            return currentTodos?.map((item) =>
+            return currentTodos.map((item) =>
               item.id === todoId ? updatedTodo : item
             );
           },
           {
-            optimisticData: (currentTodos) =>
-              currentTodos?.map((item) =>
-                item.id === todoId ? { ...item, completed: !item.completed } : item
-              ),
+            optimisticData: todos.map((item) =>
+              item.id === todoId ? { ...item, completed: !item.completed } : item
+            ),
             rollbackOnError: true,
             revalidate: false,
           }
         );
 
         toast.success("Todo toggled successfully!");
-      } catch (err) {
+      } catch {
         showToastError("Failed to toggle todo completion.");
       } finally {
         setIsMutating(false);
       }
     },
-    [isMutating, mutate, showToastError, cooldown, startCooldown]
+    [todos, isMutating, mutate, showToastError, cooldown, startCooldown]
   );
 
-  /**
-   * Delete a todo item
-   */
   const handleDeleteTodo = useCallback(
     async (todoId: string) => {
       if (cooldown || isMutating) {
@@ -158,49 +131,38 @@ function useTodoActions() {
 
       try {
         await mutate(
-          async (currentTodos) => {
+          async (currentTodos = []) => {
             await deleteTodo(todoId);
-            return currentTodos?.filter((todo) => todo.id !== todoId);
+            return currentTodos.filter((todo) => todo.id !== todoId);
           },
           {
-            optimisticData: (currentTodos) =>
-              currentTodos?.filter((todo) => todo.id !== todoId),
+            optimisticData: todos.filter((todo) => todo.id !== todoId),
             rollbackOnError: true,
             revalidate: false,
           }
         );
-
         toast.success("Todo deleted.");
-      } catch (err) {
+      } catch {
         showToastError("Failed to delete todo.");
       } finally {
         setIsMutating(false);
       }
     },
-    [todos, mutate, showToastError, cooldown, startCooldown]
+    [todos, isMutating, mutate, showToastError, cooldown, startCooldown]
   );
 
-  /**
-   * Confirm and delete a todo item
-   */
   const handleDeleteClick = useCallback(
     (id: string) => {
-      if (window.confirm("Delete this todo?")) handleDeleteTodo(id);
+      if (window.confirm("Are you sure you want to delete this todo?")) handleDeleteTodo(id);
     },
     [handleDeleteTodo]
   );
 
-  /**
-   * Toggle the completion status of a specific todo item
-   */
   const handleToggleClick = useCallback(
     (id: string) => handleToggleTodo(id),
     [handleToggleTodo]
   );
 
-  /**
-   * Calculate completed todos based on the list of todos
-   */
   const completedTodos = useMemo(
     () => todos.filter((todo) => todo.completed).map((todo) => todo.id),
     [todos]
