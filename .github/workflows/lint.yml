@@ -2,14 +2,12 @@ name: Lint
 
 on:
   pull_request:
-    branches: [master, develop]
+    branches:
+      - master
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
 
     steps:
       - name: Cancel workflow action
@@ -20,19 +18,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4.0.0
-
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
+          node-version: lts/*
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Install Dependencies
-        run: pnpm i
+        run: bun install
 
       - name: Lint
-        run: pnpm lint
+        run: bun lint
 
       - name: Lint Fix
-        run: pnpm lint:fix
+        run: bun lint:fix
