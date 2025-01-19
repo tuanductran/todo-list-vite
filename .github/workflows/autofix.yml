@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts
+          node-version: lts/*
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
@@ -34,4 +34,4 @@ jobs:
         run: bun type:check
 
       - name: Run AutoFix
-        uses: autofix-ci/action@latest
+        uses: autofix-ci/action@551dded8c6cc8a1054039c8bc0b8b48c51dfc6ef
