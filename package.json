@@ -20,8 +20,8 @@
     "unocss"
   ],
   "scripts": {
-    "build": "bunx --bun vite build",
-    "dev": "bunx --bun vite",
+    "build": "vite build",
+    "dev": "vite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preinstall": "npx only-allow bun",
