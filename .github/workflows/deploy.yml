@@ -38,7 +38,7 @@ jobs:
         run: bun install
 
       - name: Build step
-        run: bun build
+        run: bun run build
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
