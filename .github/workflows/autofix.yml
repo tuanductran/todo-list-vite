@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - master
-      - develop
 
 permissions:
   contents: read
@@ -15,22 +14,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure Node.js 20
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: lts
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
-      - name: Install Packages
-        run: pnpm install
+      - name: Install dependencies
+        run: bun install
 
-      - name: TypeScript Check
-        run: pnpm type:check
+      - name: Run TypeScript checks
+        run: bun type:check
 
       - name: Run AutoFix
-        uses: autofix-ci/action@551dded8c6cc8a1054039c8bc0b8b48c51dfc6ef
+        uses: autofix-ci/action@latest
