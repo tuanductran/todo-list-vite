@@ -1,12 +1,13 @@
 import clsx from "clsx";
-import { FC } from "react";
+import type { FC } from "react";
+
 import type { Todo } from "../schema";
 
 interface TodoItemProps {
-  todo: Todo;
-  isCompleted: boolean;
-  onToggle: () => void;
-  onDelete: () => void;
+  todo: Todo
+  isCompleted: boolean
+  onToggle: () => void
+  onDelete: () => void
 }
 
 const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) => {
@@ -15,7 +16,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) 
     {
       "line-through text-gray-600 dark:text-gray-500": isCompleted,
       "text-gray-900 dark:text-white": !isCompleted,
-    }
+    },
   );
 
   const toggleButtonClass = clsx(
@@ -25,7 +26,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) 
         isCompleted,
       "bg-green-700 hover:bg-green-600 text-white dark:bg-green-500 dark:hover:bg-green-400":
         !isCompleted,
-    }
+    },
   );
 
   return (

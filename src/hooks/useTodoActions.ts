@@ -12,9 +12,9 @@ import {
 } from "../api";
 
 interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
+  id: string
+  text: string
+  completed: boolean
 }
 
 function useTodoActions() {
@@ -54,14 +54,15 @@ function useTodoActions() {
             optimisticData: [...todos, newTodo],
             rollbackOnError: true,
             revalidate: false,
-          }
+          },
         );
         toast.success("Todo added!");
-      } catch {
+      }
+      catch {
         showToastError("Failed to add todo.");
       }
     },
-    [todos, mutate, showToastError]
+    [todos, mutate, showToastError],
   );
 
   const handleToggleTodo = useCallback(
@@ -76,24 +77,25 @@ function useTodoActions() {
             await updateTodo(updatedTodo);
 
             return currentTodos.map((item) =>
-              item.id === todoId ? updatedTodo : item
+              item.id === todoId ? updatedTodo : item,
             );
           },
           {
             optimisticData: todos.map((item) =>
-              item.id === todoId ? { ...item, completed: !item.completed } : item
+              item.id === todoId ? { ...item, completed: !item.completed } : item,
             ),
             rollbackOnError: true,
             revalidate: false,
-          }
+          },
         );
 
         toast.success("Todo toggled successfully!");
-      } catch {
+      }
+      catch {
         showToastError("Failed to toggle todo completion.");
       }
     },
-    [todos, mutate, showToastError]
+    [todos, mutate, showToastError],
   );
 
   const handleDeleteTodo = useCallback(
@@ -108,31 +110,32 @@ function useTodoActions() {
             optimisticData: todos.filter((todo) => todo.id !== todoId),
             rollbackOnError: true,
             revalidate: false,
-          }
+          },
         );
         toast.success("Todo deleted.");
-      } catch {
+      }
+      catch {
         showToastError("Failed to delete todo.");
       }
     },
-    [todos, mutate, showToastError]
+    [todos, mutate, showToastError],
   );
 
   const handleDeleteClick = useCallback(
     (id: string) => {
       if (window.confirm("Are you sure you want to delete this todo?")) handleDeleteTodo(id);
     },
-    [handleDeleteTodo]
+    [handleDeleteTodo],
   );
 
   const handleToggleClick = useCallback(
     (id: string) => handleToggleTodo(id),
-    [handleToggleTodo]
+    [handleToggleTodo],
   );
 
   const completedTodos = useMemo(
     () => todos.filter((todo) => todo.completed).map((todo) => todo.id),
-    [todos]
+    [todos],
   );
 
   return useMemo(
@@ -153,7 +156,7 @@ function useTodoActions() {
       handleAddTodo,
       handleDeleteClick,
       handleToggleClick,
-    ]
+    ],
   );
 }
 

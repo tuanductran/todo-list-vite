@@ -18,9 +18,9 @@ export default antfu(
 
       // Import Rules
       "import/order": ["warn", {
-        groups: ["object", "builtin", "external", "internal", "parent", "sibling", "index"],
+        "groups": ["object", "builtin", "external", "internal", "parent", "sibling", "index"],
         "newlines-between": "always",
-        alphabetize: { order: "asc", caseInsensitive: true }
+        "alphabetize": { order: "asc", caseInsensitive: true },
       }],
       "import/first": "error",
       "import/no-duplicates": "error",
@@ -28,19 +28,19 @@ export default antfu(
       "import/newline-after-import": "error",
 
       // TypeScript Rules
-      "ts/prefer-for-of": "error", 
+      "ts/prefer-for-of": "error",
       "ts/no-unused-vars": "error",
       "ts/no-inferrable-types": ["error", {
         ignoreParameters: true,
-        ignoreProperties: true
+        ignoreProperties: true,
       }],
 
       // Best Practices
       "prefer-object-has-own": "error",
       "object-shorthand": ["error", "always"],
       "no-dupe-keys": "error",
-      "prefer-destructuring": ["error", { 
-        VariableDeclarator: { object: true }
+      "prefer-destructuring": ["error", {
+        VariableDeclarator: { object: true },
       }],
       "no-lonely-if": "error",
       "no-else-return": ["error", { allowElseIf: false }],
@@ -51,8 +51,8 @@ export default antfu(
       "ts/no-non-null-assertion": "off",
       "node/prefer-global/process": "off",
       "node/prefer-global/buffer": "off",
-      "perfectionist/sort-imports": "off"
-    }
+      "perfectionist/sort-imports": "off",
+    },
   },
 
   // React Rules
@@ -64,22 +64,22 @@ export default antfu(
         "error",
         {
           selector: "CallExpression[callee.name=useMemo][arguments.1.type=ArrayExpression][arguments.1.elements.length=0]",
-          message: "`useMemo` with empty deps should use `useRef` instead."
-        }
-      ]
+          message: "`useMemo` with empty deps should use `useRef` instead.",
+        },
+      ],
     },
     settings: {
-      react: { version: "detect" }
-    }
+      react: { version: "detect" },
+    },
   },
 
   // Declaration Files
   {
     files: ["**/*.d.ts"],
     rules: {
-      "no-var": "off"
-    }
+      "no-var": "off",
+    },
   },
 
-  command()
+  command(),
 );

@@ -1,6 +1,8 @@
 import clsx from "clsx";
-import { FC } from "react";
+import type { FC } from "react";
+
 import type { TodoListProps } from "../schema";
+
 import TodoItem from "./TodoItem";
 
 const TodoList: FC<TodoListProps> = ({
@@ -35,11 +37,13 @@ const TodoList: FC<TodoListProps> = ({
 
   return (
     <div className={clsx("overflow-auto h-full", "max-h-screen")}>
-      {todos.length ? todoItems : (
-        <div className="py-4 text-center text-gray-500 font-medium">
-          No tasks available. Add a new one to get started!
-        </div>
-      )}
+      {todos.length
+        ? todoItems
+        : (
+            <div className="py-4 text-center text-gray-500 font-medium">
+              No tasks available. Add a new one to get started!
+            </div>
+          )}
     </div>
   );
 };

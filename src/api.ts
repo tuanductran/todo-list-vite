@@ -6,9 +6,9 @@ import type { Todo } from "./schema";
 // Define the TodoDB schema interface
 interface TodoDB extends DBSchema {
   todos: {
-    key: string;
-    value: Todo;
-  };
+    key: string
+    value: Todo
+  }
 }
 
 // Hold the DB instance for reuse
@@ -75,7 +75,8 @@ export async function saveCompletedTodos(completedTodos: string[]): Promise<void
 
     await Promise.all(updatePromises);
     await tx.done;
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error("Failed to save completed todos:", error);
   }
 }
