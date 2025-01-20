@@ -24,13 +24,13 @@ git clone https://github.com/tuanductran/todo-list-vite.git
 ### 2. Install Dependencies
 
 ```sh
-pnpm install
+bun install
 ```
 
 ### 3. Run the Development Server
 
 ```sh
-pnpm dev
+bun dev
 ```
 
 ### 4. Open your browser and navigate to
