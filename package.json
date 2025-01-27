@@ -54,7 +54,7 @@
     "@unocss/reset": "^65.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "9.19.0",
-    "eslint-plugin-command": "^2.0.0",
+    "eslint-plugin-command": "^3.0.0",
     "eslint-plugin-format": "^1.0.1",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
