@@ -17,8 +17,8 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
   });
 
   const onSubmit = (data: TodoFormInputProps) => {
-    const sanitizedInput = DOMPurify.sanitize(data.name);
-    onAddTodo(sanitizedInput);
+    const sanitizedInput = DOMPurify.sanitize(data.name.trim());
+    onAddTodo?.(sanitizedInput);
     reset();
   };
 
