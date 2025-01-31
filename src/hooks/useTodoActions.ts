@@ -23,13 +23,13 @@ function useTodoActions() {
         setTodos(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
-        toast.error(`Error fetching todos: ${error}`);
+        toast.error(`Error fetching todos: ${err instanceof Error ? err.message : "Unknown error"}`);
       } finally {
         setIsLoading(false);
       }
     };
     fetchTodos();
-  }, [error]);
+  }, []);
 
   const showToastError = useCallback((message: string) => toast.error(message), []);
 
@@ -65,7 +65,9 @@ function useTodoActions() {
         if (toggledTodo) await updateTodo(toggledTodo);
         toast.success("Todo toggled successfully!");
       } catch {
-        setTodos(todos); // Rollback state
+        setTodos((prev) =>
+          prev.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo))
+        ); // Rollback state
         showToastError("Failed to toggle todo completion.");
       }
     },
@@ -81,7 +83,7 @@ function useTodoActions() {
         await deleteTodo(todoId);
         toast.success("Todo deleted.");
       } catch {
-        setTodos(todos); // Rollback state
+        setTodos((prev) => prev); // Rollback state
         showToastError("Failed to delete todo.");
       }
     },
