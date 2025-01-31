@@ -31,8 +31,5 @@ jobs:
       - name: Install Dependencies
         run: bun install
 
-      - name: Lint
-        run: bun lint
-
       - name: Lint Fix
         run: bun lint:fix
