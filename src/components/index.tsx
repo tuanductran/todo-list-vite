@@ -19,7 +19,7 @@ export default function TodoPage() {
         <div className="mb-6">
           <div className="mb-6 flex items-center justify-between">
             <h1 className="text-3xl text-gray-900 font-bold dark:text-gray-100">
-              Todo List
+              Manage Your Tasks
             </h1>
           </div>
           {!error && <TodoForm onAddTodo={handleAddTodo} />}
