@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const TodoSchema = z.object({
-  id: z.string().uuid({ message: "Invalid ID format" }),
   text: z.string().min(1, { message: "Text cannot be empty" }),
   completed: z.boolean().default(false),
 });
@@ -26,7 +25,7 @@ export type TodoFormInputProps = z.infer<typeof TodoFormInputPropsSchema>;
 export const TodoListPropsSchema = z.object({
   todos: z.array(TodoSchema),
   error: z.boolean().default(false),
-  completedTodos: z.array(z.string().uuid({ message: "Invalid ID format in completedTodos" })),
+  completedTodos: z.array(z.string().min(1, { message: "Invalid text format in completedTodos" })),
   handleDeleteClick: z.function().args(z.string()).returns(z.void()),
   handleToggleClick: z.function().args(z.string()).returns(z.void()),
 });
