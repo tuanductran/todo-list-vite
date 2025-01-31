@@ -15,10 +15,10 @@ const TodoList: FC<TodoListProps> = ({
   const completedTodosSet = new Set(completedTodos);
 
   const todoItems = todos.map((todo) => {
-    const isCompleted = completedTodosSet.has(todo.id);
+    const isCompleted = completedTodosSet.has(todo.text);
     return (
       <TodoItem
-        key={todo.id}
+        key={todo.text}
         todo={todo}
         isCompleted={isCompleted}
         onToggle={() => handleToggleClick(todo.id)}
