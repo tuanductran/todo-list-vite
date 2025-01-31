@@ -16,7 +16,7 @@ async function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
     dbInstance = openDB<TodoDB>("todosDB", 1, {
       upgrade(db) {
         if (!db.objectStoreNames.contains("todos")) {
-          db.createObjectStore("todos", { keyPath: "id" });
+          db.createObjectStore("todos", { keyPath: "text" });
         }
       },
     });
@@ -39,14 +39,14 @@ export async function updateTodo(updatedTodo: Todo): Promise<void> {
   await db.put("todos", updatedTodo);
 }
 
-export async function deleteTodo(todoId: string): Promise<void> {
+export async function deleteTodo(todoText: string): Promise<void> {
   const db = await initializeDB();
-  await db.delete("todos", todoId);
+  await db.delete("todos", todoText);
 }
 
 export async function getCompletedTodos(): Promise<string[]> {
   const todos = await getTodos();
-  return todos.filter((todo) => todo.completed).map((todo) => todo.id);
+  return todos.filter((todo) => todo.completed).map((todo) => todo.text);
 }
 
 export async function saveCompletedTodos(completedTodos: string[]): Promise<void> {
@@ -55,8 +55,8 @@ export async function saveCompletedTodos(completedTodos: string[]): Promise<void
     const tx = db.transaction("todos", "readwrite");
     const store = tx.objectStore("todos");
 
-    const updatePromises = completedTodos.map(async (id) => {
-      const todo = await store.get(id);
+    const updatePromises = completedTodos.map(async (text) => {
+      const todo = await store.get(text);
       if (todo && !todo.completed) {
         todo.completed = true;
         await store.put(todo);
