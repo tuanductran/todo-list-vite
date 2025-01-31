@@ -29,7 +29,7 @@ function useTodoActions() {
       }
     };
     fetchTodos();
-  }, []);
+  }, [error]);
 
   const showToastError = useCallback((message: string) => toast.error(message), []);
 
