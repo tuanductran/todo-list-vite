@@ -34,7 +34,7 @@ const TodoList = ({
 
     return todos.map((todo) => (
       <TodoItem
-        key={todo.id}
+        key={todo.text}
         todo={todo}
         isCompleted={completedTodosSet.has(todo.id)}
         onToggle={() => handleToggleClick(todo.id)}
