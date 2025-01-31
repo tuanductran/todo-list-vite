@@ -1,49 +1,51 @@
+import { useMemo } from "react";
 import clsx from "clsx";
-import type { FC } from "react";
-
 import type { TodoListProps } from "../schema";
-
 import TodoItem from "./TodoItem";
 
-const TodoList: FC<TodoListProps> = ({
+const TodoList = ({
   todos,
   error,
   completedTodos,
   handleDeleteClick,
   handleToggleClick,
-}) => {
-  const completedTodosSet = new Set(completedTodos);
+}: TodoListProps) => {
+  const completedTodosSet = useMemo(
+    () => new Set(completedTodos),
+    [completedTodos]
+  );
 
-  const todoItems = todos.map((todo) => {
-    const isCompleted = completedTodosSet.has(todo.id);
-    return (
+  const content = useMemo(() => {
+    if (error) {
+      return (
+        <div className="py-4 text-center text-red-500 font-medium">
+          Oops! Something went wrong. Please try again later.
+        </div>
+      );
+    }
+
+    if (!todos.length) {
+      return (
+        <div className="py-4 text-center text-gray-500 font-medium">
+          No tasks available. Add a new one to get started!
+        </div>
+      );
+    }
+
+    return todos.map((todo) => (
       <TodoItem
         key={todo.id}
         todo={todo}
-        isCompleted={isCompleted}
+        isCompleted={completedTodosSet.has(todo.id)}
         onToggle={() => handleToggleClick(todo.id)}
         onDelete={() => handleDeleteClick(todo.id)}
       />
-    );
-  });
-
-  if (error) {
-    return (
-      <div className="py-4 text-center text-red-500 font-medium">
-        Oops! Something went wrong. Please try again later.
-      </div>
-    );
-  }
+    ));
+  }, [todos, error, completedTodosSet, handleToggleClick, handleDeleteClick]);
 
   return (
     <div className={clsx("overflow-auto h-full", "max-h-screen")}>
-      {todos.length
-        ? todoItems
-        : (
-            <div className="py-4 text-center text-gray-500 font-medium">
-              No tasks available. Add a new one to get started!
-            </div>
-          )}
+      {content}
     </div>
   );
 };
