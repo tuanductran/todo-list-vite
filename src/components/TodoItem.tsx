@@ -30,7 +30,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) 
   );
 
   return (
-    <div className="flex items-center p4 transition-colors duration-300">
+    <div className="flex items-center px3 py4">
       <p className={textClass}>{todo.text}</p>
       <button
         type="button"
