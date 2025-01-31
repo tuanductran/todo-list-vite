@@ -21,8 +21,8 @@ const TodoList: FC<TodoListProps> = ({
         key={todo.text}
         todo={todo}
         isCompleted={isCompleted}
-        onToggle={() => handleToggleClick(todo.id)}
-        onDelete={() => handleDeleteClick(todo.id)}
+        onToggle={() => handleToggleClick(todo.text)}
+        onDelete={() => handleDeleteClick(todo.text)}
       />
     );
   });
