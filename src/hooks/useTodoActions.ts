@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
@@ -116,9 +115,7 @@ function useTodoActions() {
   );
 
   const handleDeleteClick = useCallback(
-    (id: string) => {
-      if (window.confirm("Are you sure you want to delete this todo?")) handleDeleteTodo(id);
-    },
+    (id: string) => handleDeleteTodo(id),
     [handleDeleteTodo]
   );
 
