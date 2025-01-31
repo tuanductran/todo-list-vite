@@ -1,20 +1,16 @@
 import { openDB } from "idb";
 import type { DBSchema, IDBPDatabase } from "idb";
-
 import type { Todo } from "./schema";
 
-// Define the TodoDB schema interface
 interface TodoDB extends DBSchema {
   todos: {
-    key: string
-    value: Todo
-  }
+    key: string;
+    value: Todo;
+  };
 }
 
-// Hold the DB instance for reuse
 let dbInstance: Promise<IDBPDatabase<TodoDB>> | null = null;
 
-// Initialize the database if it hasn't been opened yet
 async function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
   if (!dbInstance) {
     dbInstance = openDB<TodoDB>("todosDB", 1, {
@@ -28,37 +24,31 @@ async function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
   return dbInstance;
 }
 
-// Fetch all todos from the database
 export async function getTodos(): Promise<Todo[]> {
   const db = await initializeDB();
   return db.getAll("todos");
 }
 
-// Add a new todo to the database
 export async function addTodo(todo: Todo): Promise<void> {
   const db = await initializeDB();
   await db.put("todos", todo);
 }
 
-// Update an existing todo in the database
 export async function updateTodo(updatedTodo: Todo): Promise<void> {
   const db = await initializeDB();
   await db.put("todos", updatedTodo);
 }
 
-// Delete a todo by ID from the database
 export async function deleteTodo(todoId: string): Promise<void> {
   const db = await initializeDB();
   await db.delete("todos", todoId);
 }
 
-// Get a list of completed todo IDs
 export async function getCompletedTodos(): Promise<string[]> {
   const todos = await getTodos();
   return todos.filter((todo) => todo.completed).map((todo) => todo.id);
 }
 
-// Save completed todo statuses by updating their 'completed' field
 export async function saveCompletedTodos(completedTodos: string[]): Promise<void> {
   try {
     const db = await initializeDB();
@@ -75,13 +65,11 @@ export async function saveCompletedTodos(completedTodos: string[]): Promise<void
 
     await Promise.all(updatePromises);
     await tx.done;
-  }
-  catch (error: any) {
+  } catch (error) {
     console.error("Failed to save completed todos:", error);
   }
 }
 
-// Export all functions
 export default {
   getTodos,
   addTodo,
