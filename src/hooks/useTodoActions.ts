@@ -2,11 +2,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
-import { v4 as uuidv4 } from "uuid";
 import { addTodo, deleteTodo, getTodos, updateTodo } from "../api";
 
 interface Todo {
-  id: string;
   text: string;
   completed: boolean;
 }
@@ -33,7 +31,6 @@ function useTodoActions() {
       if (todos.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
 
       const newTodo: Todo = {
-        id: uuidv4(),
         text: trimmedText,
         completed: false,
       };
@@ -60,23 +57,23 @@ function useTodoActions() {
   );
 
   const handleToggleTodo = useCallback(
-    async (todoId: string) => {
+    async (todoText: string) => {
       try {
         await mutate(
           async (currentTodos) => {
-            const todo = (currentTodos || []).find((item) => item.id === todoId);
+            const todo = (currentTodos || []).find((item) => item.text === todoText);
             if (!todo) return currentTodos;
 
             const updatedTodo = { ...todo, completed: !todo.completed };
             await updateTodo(updatedTodo);
 
             return (currentTodos || []).map((item) =>
-              item.id === todoId ? updatedTodo : item
+              item.text === todoText ? updatedTodo : item
             );
           },
           {
             optimisticData: todos.map((item) =>
-              item.id === todoId ? { ...item, completed: !item.completed } : item
+              item.text === todoText ? { ...item, completed: !item.completed } : item
             ),
             rollbackOnError: true,
             populateCache: true,
@@ -93,15 +90,15 @@ function useTodoActions() {
   );
 
   const handleDeleteTodo = useCallback(
-    async (todoId: string) => {
+    async (todoText: string) => {
       try {
         await mutate(
           async (currentTodos) => {
-            await deleteTodo(todoId);
-            return (currentTodos || []).filter((todo) => todo.id !== todoId);
+            await deleteTodo(todoText);
+            return (currentTodos || []).filter((todo) => todo.text !== todoText);
           },
           {
-            optimisticData: todos.filter((todo) => todo.id !== todoId),
+            optimisticData: todos.filter((todo) => todo.text !== todoText),
             rollbackOnError: true,
             populateCache: true,
             revalidate: false,
@@ -116,19 +113,19 @@ function useTodoActions() {
   );
 
   const handleDeleteClick = useCallback(
-    (id: string) => {
-      if (window.confirm("Are you sure you want to delete this todo?")) handleDeleteTodo(id);
+    (text: string) => {
+      if (window.confirm("Are you sure you want to delete this todo?")) handleDeleteTodo(text);
     },
     [handleDeleteTodo]
   );
 
   const handleToggleClick = useCallback(
-    (id: string) => handleToggleTodo(id),
+    (text: string) => handleToggleTodo(text),
     [handleToggleTodo]
   );
 
   const completedTodos = useMemo(
-    () => todos.filter((todo) => todo.completed).map((todo) => todo.id),
+    () => todos.filter((todo) => todo.completed).map((todo) => todo.text),
     [todos]
   );
 
