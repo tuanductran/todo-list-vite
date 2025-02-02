@@ -1,4 +1,3 @@
-import MillionLint from "@million/lint";
 import react from "@vitejs/plugin-react";
 import UnoCSS from "unocss/vite";
 import { defineConfig } from "vite";
@@ -10,7 +9,5 @@ export default defineConfig({
     react(),
     // UnoCSS plugin for Vite
     UnoCSS(),
-    // MillionLint plugin for Vite
-    MillionLint.vite(),
   ],
 });
