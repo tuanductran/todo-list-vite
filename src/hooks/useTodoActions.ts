@@ -11,7 +11,12 @@ interface Todo {
 }
 
 function useTodoActions() {
-  const { data: todos = [], error, mutate, isLoading } = useSWR<Todo[]>("/api/todos", getTodos, {
+  const {
+    data: todos = [],
+    error,
+    mutate,
+    isLoading,
+  } = useSWR<Todo[]>("/api/todos", getTodos, {
     refreshInterval: 5000,
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
@@ -19,7 +24,7 @@ function useTodoActions() {
 
   useEffect(() => {
     if (error) {
-      toast.error(`Error fetching todos: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Error fetching todos: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   }, [error]);
 
@@ -31,25 +36,11 @@ function useTodoActions() {
       if (!trimmedText) return showToastError("Todo cannot be empty.");
       if (todos.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
 
-      const newTodo: Todo = {
-        id: uuidv4(),
-        text: trimmedText,
-        completed: false,
-      };
+      const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
 
       try {
-        await mutate(
-          async (currentTodos) => {
-            await addTodo(newTodo);
-            return [...(currentTodos || []), newTodo];
-          },
-          {
-            optimisticData: [...todos, newTodo],
-            rollbackOnError: true,
-            populateCache: true,
-            revalidate: false,
-          }
-        );
+        await addTodo(newTodo);
+        await mutate();
         toast.success("Todo added!");
       } catch (error) {
         showToastError("Failed to add todo.");
@@ -61,31 +52,16 @@ function useTodoActions() {
   const handleToggleTodo = useCallback(
     async (todoId: string) => {
       try {
-        await mutate(
-          async (currentTodos) => {
-            const todo = (currentTodos || []).find((item) => item.id === todoId);
-            if (!todo) return currentTodos;
+        const todo = todos.find((item) => item.id === todoId);
+        if (!todo) return;
 
-            const updatedTodo = { ...todo, completed: !todo.completed };
-            await updateTodo(updatedTodo);
+        const updatedTodo = { ...todo, completed: !todo.completed };
+        await updateTodo(updatedTodo);
+        await mutate();
 
-            return (currentTodos || []).map((item) =>
-              item.id === todoId ? updatedTodo : item
-            );
-          },
-          {
-            optimisticData: todos.map((item) =>
-              item.id === todoId ? { ...item, completed: !item.completed } : item
-            ),
-            rollbackOnError: true,
-            populateCache: true,
-            revalidate: false,
-          }
-        );
-
-        toast.success("Todo toggled successfully!");
+        toast.success("Todo status updated!");
       } catch (error) {
-        showToastError("Failed to toggle todo completion.");
+        showToastError("Failed to toggle todo.");
       }
     },
     [todos, mutate, showToastError]
@@ -94,40 +70,20 @@ function useTodoActions() {
   const handleDeleteTodo = useCallback(
     async (todoId: string) => {
       try {
-        await mutate(
-          async (currentTodos) => {
-            await deleteTodo(todoId);
-            return (currentTodos || []).filter((todo) => todo.id !== todoId);
-          },
-          {
-            optimisticData: todos.filter((todo) => todo.id !== todoId),
-            rollbackOnError: true,
-            populateCache: true,
-            revalidate: false,
-          }
-        );
+        await deleteTodo(todoId);
+        await mutate();
         toast.success("Todo deleted.");
       } catch (error) {
         showToastError("Failed to delete todo.");
       }
     },
-    [todos, mutate, showToastError]
+    [mutate, showToastError]
   );
 
-  const handleDeleteClick = useCallback(
-    (id: string) => handleDeleteTodo(id),
-    [handleDeleteTodo]
-  );
+  const handleDeleteClick = useCallback((id: string) => handleDeleteTodo(id), [handleDeleteTodo]);
+  const handleToggleClick = useCallback((id: string) => handleToggleTodo(id), [handleToggleTodo]);
 
-  const handleToggleClick = useCallback(
-    (id: string) => handleToggleTodo(id),
-    [handleToggleTodo]
-  );
-
-  const completedTodos = useMemo(
-    () => todos.filter((todo) => todo.completed).map((todo) => todo.id),
-    [todos]
-  );
+  const completedTodos = useMemo(() => todos.filter((todo) => todo.completed).map((todo) => todo.id), [todos]);
 
   return useMemo(
     () => ({
