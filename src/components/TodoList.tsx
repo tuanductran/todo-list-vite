@@ -2,7 +2,6 @@ import clsx from "clsx";
 import type { FC } from "react";
 
 import type { TodoListProps } from "../schema";
-
 import TodoItem from "./TodoItem";
 
 const TodoList: FC<TodoListProps> = ({
@@ -14,19 +13,6 @@ const TodoList: FC<TodoListProps> = ({
 }) => {
   const completedTodosSet = new Set(completedTodos);
 
-  const todoItems = todos.map((todo) => {
-    const isCompleted = completedTodosSet.has(todo.id);
-    return (
-      <TodoItem
-        key={todo.id}
-        todo={todo}
-        isCompleted={isCompleted}
-        onToggle={() => handleToggleClick(todo.id)}
-        onDelete={() => handleDeleteClick(todo.id)}
-      />
-    );
-  });
-
   if (error) {
     return (
       <div className="py-4 text-center text-red-500 font-medium">
@@ -36,14 +22,22 @@ const TodoList: FC<TodoListProps> = ({
   }
 
   return (
-    <div className={clsx("overflow-auto h-full", "max-h-screen")}>
-      {todos.length
-        ? todoItems
-        : (
-            <div className="py-4 text-center text-gray-500 font-medium">
-              No tasks available. Add a new one to get started!
-            </div>
-          )}
+    <div className="overflow-auto h-full max-h-screen">
+      {todos.length > 0 ? (
+        todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            isCompleted={completedTodosSet.has(todo.id)}
+            onToggle={() => handleToggleClick(todo.id)}
+            onDelete={() => handleDeleteClick(todo.id)}
+          />
+        ))
+      ) : (
+        <div className="py-4 text-center text-gray-500 font-medium">
+          No tasks available. Add a new one to get started!
+        </div>
+      )}
     </div>
   );
 };
