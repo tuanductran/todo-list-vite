@@ -6,6 +6,7 @@ on:
     branches:
       - master
       - ui
+      - v1
 
 permissions:
   contents: read
