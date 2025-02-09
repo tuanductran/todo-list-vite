@@ -5,7 +5,7 @@ import TodoPage from "./components";
 export default function App() {
   return (
     <>
-      <Toaster position="top-center" richColors />
+      <Toaster position="bottom-left" richColors expand />
       <TodoPage />
     </>
   );
