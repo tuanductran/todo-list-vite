@@ -25,7 +25,7 @@ export default function TodoPage() {
           {!error && <TodoForm onAddTodo={handleAddTodo} />}
         </div>
         <TodoList
-          todos={todos}
+          todos={todos || []}
           error={error}
           completedTodos={completedTodos}
           handleDeleteClick={handleDeleteClick}
