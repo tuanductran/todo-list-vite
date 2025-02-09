@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
@@ -19,7 +19,14 @@ function useTodoActions() {
   } = useSWR<Todo[]>("/api/todos", getTodos, {
     refreshInterval: 5000,
     revalidateOnFocus: false,
+    revalidateOnReconnect: true,
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`Error fetching todos: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+  }, [error]);
 
   const showToastError = useCallback((message: string) => toast.error(message), []);
 
@@ -31,10 +38,15 @@ function useTodoActions() {
 
       const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
 
-      mutate(async () => {
-        await addTodo(newTodo);
-        return [...todos, newTodo];
-      }, { optimisticData: [...todos, newTodo], rollbackOnError: true });
+      await mutate(async (currentTodos = []) => {
+        try {
+          await addTodo(newTodo);
+          return [...currentTodos, newTodo];
+        } catch {
+          showToastError("Failed to add todo.");
+          return currentTodos;
+        }
+      }, { revalidate: false });
 
       toast.success("Todo added!");
     },
@@ -48,29 +60,39 @@ function useTodoActions() {
 
       const updatedTodo = { ...todo, completed: !todo.completed };
 
-      mutate(async () => {
-        await updateTodo(updatedTodo);
-        return todos.map((t) => (t.id === todoId ? updatedTodo : t));
-      }, { optimisticData: todos.map((t) => (t.id === todoId ? updatedTodo : t)), rollbackOnError: true });
+      await mutate(async (currentTodos = []) => {
+        try {
+          await updateTodo(updatedTodo);
+          return currentTodos.map((t) => (t.id === todoId ? updatedTodo : t));
+        } catch {
+          showToastError("Failed to toggle todo.");
+          return currentTodos;
+        }
+      }, { revalidate: false });
 
       toast.success("Todo status updated!");
     },
-    [todos, mutate]
+    [todos, mutate, showToastError]
   );
 
   const handleDeleteTodo = useCallback(
     async (todoId: string) => {
-      mutate(async () => {
-        await deleteTodo(todoId);
-        return todos.filter((t) => t.id !== todoId);
-      }, { optimisticData: todos.filter((t) => t.id !== todoId), rollbackOnError: true });
+      await mutate(async (currentTodos = []) => {
+        try {
+          await deleteTodo(todoId);
+          return currentTodos.filter((t) => t.id !== todoId);
+        } catch {
+          showToastError("Failed to delete todo.");
+          return currentTodos;
+        }
+      }, { revalidate: false });
 
       toast.success("Todo deleted.");
     },
-    [todos, mutate]
+    [mutate, showToastError]
   );
 
-  const completedTodos = useMemo(() => todos.filter((t) => t.completed).map((t) => t.id), [todos]);
+  const completedTodos = useMemo(() => todos.filter((todo) => todo.completed).map((todo) => todo.id), [todos]);
 
   return useMemo(
     () => ({
