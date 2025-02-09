@@ -27,9 +27,9 @@ async function initializeDB(): Promise<IDBPDatabase<TodoDB>> {
 export async function getTodos(): Promise<Todo[]> {
   try {
     const db = await initializeDB();
-    return db.getAll("todos");
+    return await db.getAll("todos");
   } catch (error) {
-    console.error("Error fetching todos from IndexDB:", error);
+    console.error("Error fetching todos from IndexedDB:", error);
     return [];
   }
 }
@@ -61,43 +61,9 @@ export async function deleteTodo(todoId: string): Promise<void> {
   }
 }
 
-export async function getCompletedTodos(): Promise<string[]> {
-  try {
-    const todos = await getTodos();
-    return todos.filter((todo) => todo.completed).map((todo) => todo.id);
-  } catch (error) {
-    console.error("Error fetching completed todos:", error);
-    return [];
-  }
-}
-
-export async function saveCompletedTodos(completedTodos: string[]): Promise<void> {
-  try {
-    const db = await initializeDB();
-    const tx = db.transaction("todos", "readwrite");
-    const store = tx.objectStore("todos");
-
-    await Promise.all(
-      completedTodos.map(async (id) => {
-        const todo = await store.get(id);
-        if (todo && !todo.completed) {
-          todo.completed = true;
-          await store.put(todo);
-        }
-      })
-    );
-
-    await tx.done;
-  } catch (error) {
-    console.error("Failed to save completed todos:", error);
-  }
-}
-
 export default {
   getTodos,
   addTodo,
   updateTodo,
   deleteTodo,
-  getCompletedTodos,
-  saveCompletedTodos,
 };
