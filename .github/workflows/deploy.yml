@@ -28,6 +28,11 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install step
         run: "bun install"
 
