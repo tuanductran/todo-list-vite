@@ -14,7 +14,7 @@ export default function TodoPage() {
   } = useTodoActions();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 transition-colors duration-300 dark:bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="m-4 w-full rounded-lg bg-white p-8 shadow-lg transition-colors duration-300 lg:max-w-xl lg:w-3/4 dark:bg-gray-800">
         <div className="mb-6">
           <div className="mb-6 flex items-center justify-between">
