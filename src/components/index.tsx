@@ -19,13 +19,13 @@ export default function TodoPage() {
         <div className="mb-6">
           <div className="mb-6 flex items-center justify-between">
             <h3 className="text-lg font-semibold leading-6">
-              Todo List
+              Manage your tasks
             </h3>
           </div>
           {!error && <TodoForm onAddTodo={handleAddTodo} />}
         </div>
         <TodoList
-          todos={todos || []}
+          todos={todos}
           error={error}
           completedTodos={completedTodos}
           handleDeleteClick={handleDeleteClick}

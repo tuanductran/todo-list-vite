@@ -1,25 +1,18 @@
-import { useReducer, useEffect, useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
 
-interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-}
+import type { Todo } from "../schema";
 
-// Fetcher function using fetch API
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-// Action Types
 const ADD_TODO = "ADD_TODO";
 const TOGGLE_TODO = "TOGGLE_TODO";
 const DELETE_TODO = "DELETE_TODO";
 const SET_TODOS = "SET_TODOS";
 
-// Reducer Function
-function todoReducer(state: Todo[], action: { type: string; payload?: any }) {
+function todoReducer(state: Todo[], action: { type: string, payload?: any }) {
   switch (action.type) {
     case SET_TODOS:
       return action.payload;
@@ -27,7 +20,7 @@ function todoReducer(state: Todo[], action: { type: string; payload?: any }) {
       return [...state, action.payload];
     case TOGGLE_TODO:
       return state.map((todo) =>
-        todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+        todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo,
       );
     case DELETE_TODO:
       return state.filter((todo) => todo.id !== action.payload);
@@ -40,7 +33,6 @@ function useTodoActions() {
   const { data: todos = [], error, mutate, isLoading } = useSWR<Todo[]>("/api/todos", fetcher);
   const [state, dispatch] = useReducer(todoReducer, todos);
 
-  // Sync state with fetched data
   useEffect(() => {
     if (todos) dispatch({ type: SET_TODOS, payload: todos });
   }, [todos]);
@@ -78,7 +70,7 @@ function useTodoActions() {
         error: "Failed to add todo.",
       });
     },
-    [state, mutate]
+    [state, mutate],
   );
 
   const handleToggleTodo = useCallback(
@@ -89,8 +81,7 @@ function useTodoActions() {
       const promise = async () => {
         dispatch({ type: TOGGLE_TODO, payload: todoId });
         await mutate((prevTodos) =>
-          prevTodos?.map((t) => (t.id === todoId ? { ...t, completed: !t.completed } : t)), false
-        );
+          prevTodos?.map((t) => (t.id === todoId ? { ...t, completed: !t.completed } : t)), false);
         const res = await fetch(`/api/todos/${todoId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -106,7 +97,7 @@ function useTodoActions() {
         error: "Failed to update status.",
       });
     },
-    [state, mutate]
+    [state, mutate],
   );
 
   const handleDeleteTodo = useCallback(
@@ -125,7 +116,7 @@ function useTodoActions() {
         error: "Failed to delete todo.",
       });
     },
-    [mutate]
+    [mutate],
   );
 
   const handleDeleteClick = useCallback(handleDeleteTodo, [handleDeleteTodo]);
@@ -143,7 +134,7 @@ function useTodoActions() {
       handleDeleteClick,
       handleToggleClick,
     }),
-    [state, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick]
+    [state, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick],
   );
 }
 

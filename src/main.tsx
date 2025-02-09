@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App";
 import "@unocss/reset/tailwind.css";
-import "../css/app.css";
 import "uno.css";
 
 createRoot(document.getElementById("app")!).render(
