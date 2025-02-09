@@ -1,12 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import DOMPurify from "dompurify";
-import { FC } from "react";
 import { useForm } from "react-hook-form";
 
 import type { TodoFormInputProps, TodoFormProps } from "../schema";
 import { TodoFormInputPropsSchema } from "../schema";
 
-const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
+function TodoForm({ onAddTodo }: TodoFormProps) {
   const {
     register,
     handleSubmit,
@@ -84,6 +83,6 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo }) => {
       )}
     </form>
   );
-};
+}
 
 export default TodoForm;
