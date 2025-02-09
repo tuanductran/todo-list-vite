@@ -1,16 +1,14 @@
 import clsx from "clsx";
-import type { FC } from "react";
-
 import type { TodoListProps } from "../schema";
 import TodoItem from "./TodoItem";
 
-const TodoList: FC<TodoListProps> = ({
+function TodoList({
   todos,
   error,
   completedTodos,
   handleDeleteClick,
   handleToggleClick,
-}) => {
+}: TodoListProps) {
   const completedTodosSet = new Set(completedTodos);
 
   if (error) {
@@ -40,6 +38,6 @@ const TodoList: FC<TodoListProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default TodoList;
