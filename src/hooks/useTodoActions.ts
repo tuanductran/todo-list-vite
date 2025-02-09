@@ -11,7 +11,12 @@ interface Todo {
 }
 
 function useTodoActions() {
-  const { data: todos = [], error, mutate, isLoading } = useSWR<Todo[]>("/api/todos", getTodos, {
+  const {
+    data: todos = [],
+    error,
+    mutate,
+    isLoading,
+  } = useSWR<Todo[]>("/api/todos", getTodos, {
     refreshInterval: 5000,
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
@@ -23,46 +28,78 @@ function useTodoActions() {
     }
   }, [error]);
 
-  const handleAddTodo = useCallback(async (text: string) => {
-    const trimmedText = text.trim();
-    if (!trimmedText) return toast.error("Todo cannot be empty.");
-    if (todos.some((todo) => todo.text === trimmedText)) return toast.error("Duplicate todo text.");
+  const showToastError = useCallback((message: string) => toast.error(message), []);
 
-    const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
+  const handleAddTodo = useCallback(
+    async (text: string) => {
+      const trimmedText = text.trim();
+      if (!trimmedText) return showToastError("Todo cannot be empty.");
+      if (todos?.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
 
-    try {
-      await addTodo(newTodo);
-      await mutate();
-      toast.success("Todo added!");
-    } catch {
-      toast.error("Failed to add todo.");
-    }
-  }, [todos, mutate]);
+      const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
 
-  const handleToggleTodo = useCallback(async (id: string) => {
-    const todo = todos.find((t) => t.id === id);
-    if (!todo) return;
+      try {
+        await mutate((prevTodos) => [...(prevTodos || []), newTodo], false);
+        await addTodo(newTodo);
+        await mutate();
+        toast.success("Todo added!");
+      } catch (error) {
+        showToastError(`Failed to add todo: ${error instanceof Error ? error.message : "Unknown error"}`);
+      }
+    },
+    [todos, mutate, showToastError]
+  );
 
-    try {
-      await updateTodo({ ...todo, completed: !todo.completed });
-      await mutate();
-      toast.success("Todo status updated!");
-    } catch {
-      toast.error("Failed to toggle todo.");
-    }
-  }, [todos, mutate]);
+  const handleToggleTodo = useCallback(
+    async (todoId: string) => {
+      try {
+        const todo = todos?.find((item) => item.id === todoId);
+        if (!todo) return;
 
-  const handleDeleteTodo = useCallback(async (id: string) => {
-    try {
-      await deleteTodo(id);
-      await mutate();
-      toast.success("Todo deleted.");
-    } catch {
-      toast.error("Failed to delete todo.");
-    }
-  }, [mutate]);
+        const updatedTodo = { ...todo, completed: !todo.completed };
+        await mutate((prevTodos) => prevTodos?.map((t) => (t.id === todoId ? updatedTodo : t)), false);
+        await updateTodo(updatedTodo);
+        await mutate();
 
-  return { todos, isLoading, handleAddTodo, handleToggleTodo, handleDeleteTodo };
+        toast.success("Todo status updated!");
+      } catch (error) {
+        showToastError(`Failed to toggle todo: ${error instanceof Error ? error.message : "Unknown error"}`);
+      }
+    },
+    [todos, mutate, showToastError]
+  );
+
+  const handleDeleteTodo = useCallback(
+    async (todoId: string) => {
+      try {
+        await mutate((prevTodos) => prevTodos?.filter((t) => t.id !== todoId), false);
+        await deleteTodo(todoId);
+        await mutate();
+        toast.success("Todo deleted.");
+      } catch (error) {
+        showToastError(`Failed to delete todo: ${error instanceof Error ? error.message : "Unknown error"}`);
+      }
+    },
+    [mutate, showToastError]
+  );
+
+  const handleDeleteClick = useCallback(handleDeleteTodo, [handleDeleteTodo]);
+  const handleToggleClick = useCallback(handleToggleTodo, [handleToggleTodo]);
+
+  const completedTodos = useMemo(() => todos?.filter((todo) => todo.completed).map((todo) => todo.id) || [], [todos]);
+
+  return useMemo(
+    () => ({
+      todos,
+      error,
+      isLoading,
+      completedTodos,
+      handleAddTodo,
+      handleDeleteClick,
+      handleToggleClick,
+    }),
+    [todos, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick]
+  );
 }
 
 export default useTodoActions;
