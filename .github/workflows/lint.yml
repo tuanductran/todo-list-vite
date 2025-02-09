@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - ui
+      - v1
 
 jobs:
   lint:
