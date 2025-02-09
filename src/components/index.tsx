@@ -9,8 +9,8 @@ export default function TodoPage() {
     error,
     completedTodos,
     handleAddTodo,
-    handleDeleteTodo,
-    handleToggleTodo,
+    handleDeleteClick,
+    handleToggleClick,
   } = useTodoActions();
 
   return (
@@ -28,8 +28,8 @@ export default function TodoPage() {
           todos={todos || []}
           error={error}
           completedTodos={completedTodos}
-          handleDeleteClick={handleDeleteTodo}
-          handleToggleClick={handleToggleTodo}
+          handleDeleteClick={handleDeleteClick}
+          handleToggleClick={handleToggleClick}
         />
       </div>
     </div>
