@@ -2,9 +2,13 @@ name: Deploy
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - ui
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - ui
 
 jobs:
   deploy:
