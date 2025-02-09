@@ -18,7 +18,7 @@ jobs:
           ref: master
       - uses: connor-baer/action-sync-branch@v1.1.0
         with:
-          branch: next
+          branch: v1
           token: ${{ secrets.GITHUB_TOKEN }}
-          # Force push is enabled since next is supposed to be an exact copy of master until breaking changes are made
+          # Force push is enabled since v1 is supposed to be an exact copy of master until breaking changes are made
           force: true
