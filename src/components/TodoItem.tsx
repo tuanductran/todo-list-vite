@@ -1,6 +1,4 @@
 import clsx from "clsx";
-import type { FC } from "react";
-
 import type { Todo } from "../schema";
 
 interface TodoItemProps {
@@ -10,7 +8,7 @@ interface TodoItemProps {
   onDelete: () => void;
 }
 
-const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) => {
+function TodoItem({ todo, isCompleted, onToggle, onDelete }: TodoItemProps) {
   const textClass = clsx(
     "flex-1 text-sm truncate transition-colors duration-300",
     isCompleted
@@ -26,7 +24,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) 
   );
 
   return (
-    <div className="flex items-center py-2">
+    <div className="flex items-center py-3">
       <p className={textClass}>{todo.text}</p>
       <button type="button" className={toggleButtonClass} onClick={onToggle}>
         {isCompleted ? "Unmark" : "Complete"}
@@ -40,6 +38,6 @@ const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) 
       </button>
     </div>
   );
-};
+}
 
 export default TodoItem;
