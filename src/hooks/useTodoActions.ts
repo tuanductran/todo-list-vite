@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useReducer, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
-import { addTodo, deleteTodo, getTodos, updateTodo } from "../api";
 
 interface Todo {
   id: string;
@@ -10,17 +9,41 @@ interface Todo {
   completed: boolean;
 }
 
+// Fetcher function using fetch API
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+// Action Types
+const ADD_TODO = "ADD_TODO";
+const TOGGLE_TODO = "TOGGLE_TODO";
+const DELETE_TODO = "DELETE_TODO";
+const SET_TODOS = "SET_TODOS";
+
+// Reducer Function
+function todoReducer(state: Todo[], action: { type: string; payload?: any }) {
+  switch (action.type) {
+    case SET_TODOS:
+      return action.payload;
+    case ADD_TODO:
+      return [...state, action.payload];
+    case TOGGLE_TODO:
+      return state.map((todo) =>
+        todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+      );
+    case DELETE_TODO:
+      return state.filter((todo) => todo.id !== action.payload);
+    default:
+      return state;
+  }
+}
+
 function useTodoActions() {
-  const {
-    data: todos = [],
-    error,
-    mutate,
-    isLoading,
-  } = useSWR<Todo[]>("/api/todos", getTodos, {
-    refreshInterval: 5000,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: true,
-  });
+  const { data: todos = [], error, mutate, isLoading } = useSWR<Todo[]>("/api/todos", fetcher);
+  const [state, dispatch] = useReducer(todoReducer, todos);
+
+  // Sync state with fetched data
+  useEffect(() => {
+    if (todos) dispatch({ type: SET_TODOS, payload: todos });
+  }, [todos]);
 
   useEffect(() => {
     if (error) {
@@ -28,69 +51,91 @@ function useTodoActions() {
     }
   }, [error]);
 
-  const showToastError = useCallback((message: string) => toast.error(message), []);
-
   const handleAddTodo = useCallback(
     async (text: string) => {
       const trimmedText = text.trim();
-      if (!trimmedText) return showToastError("Todo cannot be empty.");
-      if (todos?.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
+      if (!trimmedText) return toast.error("Todo cannot be empty.");
+      if (state.some((todo) => todo.text === trimmedText)) return toast.error("Duplicate todo text.");
 
       const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
 
-      try {
+      const promise = async () => {
+        dispatch({ type: ADD_TODO, payload: newTodo });
         await mutate((prevTodos) => [...(prevTodos || []), newTodo], false);
-        await addTodo(newTodo);
+        const res = await fetch("/api/todos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newTodo),
+        });
+        if (!res.ok) throw new Error("Failed to add todo");
         await mutate();
-        toast.success("Todo added!");
-      } catch (error) {
-        showToastError(`Failed to add todo: ${error instanceof Error ? error.message : "Unknown error"}`);
-      }
+        return newTodo;
+      };
+
+      toast.promise(promise, {
+        loading: "Adding todo...",
+        success: () => "Todo added!",
+        error: "Failed to add todo.",
+      });
     },
-    [todos, mutate, showToastError]
+    [state, mutate]
   );
 
   const handleToggleTodo = useCallback(
     async (todoId: string) => {
-      try {
-        const todo = todos?.find((item) => item.id === todoId);
-        if (!todo) return;
+      const todo = state.find((item) => item.id === todoId);
+      if (!todo) return;
 
-        const updatedTodo = { ...todo, completed: !todo.completed };
-        await mutate((prevTodos) => prevTodos?.map((t) => (t.id === todoId ? updatedTodo : t)), false);
-        await updateTodo(updatedTodo);
+      const promise = async () => {
+        dispatch({ type: TOGGLE_TODO, payload: todoId });
+        await mutate((prevTodos) =>
+          prevTodos?.map((t) => (t.id === todoId ? { ...t, completed: !t.completed } : t)), false
+        );
+        const res = await fetch(`/api/todos/${todoId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...todo, completed: !todo.completed }),
+        });
+        if (!res.ok) throw new Error("Failed to toggle todo");
         await mutate();
+      };
 
-        toast.success("Todo status updated!");
-      } catch (error) {
-        showToastError(`Failed to toggle todo: ${error instanceof Error ? error.message : "Unknown error"}`);
-      }
+      toast.promise(promise, {
+        loading: "Updating status...",
+        success: () => "Todo status updated!",
+        error: "Failed to update status.",
+      });
     },
-    [todos, mutate, showToastError]
+    [state, mutate]
   );
 
   const handleDeleteTodo = useCallback(
     async (todoId: string) => {
-      try {
+      const promise = async () => {
+        dispatch({ type: DELETE_TODO, payload: todoId });
         await mutate((prevTodos) => prevTodos?.filter((t) => t.id !== todoId), false);
-        await deleteTodo(todoId);
+        const res = await fetch(`/api/todos/${todoId}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Failed to delete todo");
         await mutate();
-        toast.success("Todo deleted.");
-      } catch (error) {
-        showToastError(`Failed to delete todo: ${error instanceof Error ? error.message : "Unknown error"}`);
-      }
+      };
+
+      toast.promise(promise, {
+        loading: "Deleting todo...",
+        success: () => "Todo deleted.",
+        error: "Failed to delete todo.",
+      });
     },
-    [mutate, showToastError]
+    [mutate]
   );
 
   const handleDeleteClick = useCallback(handleDeleteTodo, [handleDeleteTodo]);
   const handleToggleClick = useCallback(handleToggleTodo, [handleToggleTodo]);
 
-  const completedTodos = useMemo(() => todos?.filter((todo) => todo.completed).map((todo) => todo.id) || [], [todos]);
+  const completedTodos = useMemo(() => state.filter((todo) => todo.completed).map((todo) => todo.id), [state]);
 
   return useMemo(
     () => ({
-      todos,
+      todos: state,
       error,
       isLoading,
       completedTodos,
@@ -98,7 +143,7 @@ function useTodoActions() {
       handleDeleteClick,
       handleToggleClick,
     }),
-    [todos, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick]
+    [state, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick]
   );
 }
 
