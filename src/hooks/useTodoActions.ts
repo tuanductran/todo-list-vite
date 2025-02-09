@@ -3,7 +3,11 @@ import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
 
-import type { Todo } from "../schema";
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
