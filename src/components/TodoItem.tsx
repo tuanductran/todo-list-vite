@@ -26,7 +26,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, isCompleted, onToggle, onDelete }) 
   );
 
   return (
-    <div className="flex items-center py-3">
+    <div className="flex items-center py-2">
       <p className={textClass}>{todo.text}</p>
       <button type="button" className={toggleButtonClass} onClick={onToggle}>
         {isCompleted ? "Unmark" : "Complete"}
