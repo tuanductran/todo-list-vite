@@ -15,12 +15,12 @@ export default function TodoPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="m-4 w-full rounded-lg bg-white p-8 shadow-lg transition-colors duration-300 lg:max-w-xl lg:w-3/4 dark:bg-gray-800">
+      <div className="m-4 w-full rounded-lg bg-white p-8 shadow-lg transition-colors duration-300 lg:max-w-xl lg:w-3/4 dark:bg-gray-900">
         <div className="mb-6">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-3xl text-gray-900 font-bold dark:text-gray-100">
+            <h3 className="text-lg font-semibold leading-6">
               Manage Your Tasks
-            </h1>
+            </h3>
           </div>
           {!error && <TodoForm onAddTodo={handleAddTodo} />}
         </div>
