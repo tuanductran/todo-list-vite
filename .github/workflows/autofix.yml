@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - master
-      - ui
       - v1
 
 permissions:
