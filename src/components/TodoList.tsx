@@ -1,6 +1,6 @@
-import TodoItem from "./TodoItem";
-
 import type { TodoListProps } from "../schema";
+
+import TodoItem from "./TodoItem";
 
 function TodoList({
   todos,

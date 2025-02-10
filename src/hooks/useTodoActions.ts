@@ -2,12 +2,13 @@ import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
+
 import { addTodo, deleteTodo, getTodos, updateTodo } from "../api";
 
 interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
+  id: string
+  text: string
+  completed: boolean
 }
 
 function useTodoActions() {
@@ -43,11 +44,12 @@ function useTodoActions() {
         await addTodo(newTodo);
         await mutate();
         toast.success("Todo added!");
-      } catch (error) {
+      }
+      catch (error) {
         showToastError(`Failed to add todo: ${error instanceof Error ? error.message : "Unknown error"}`);
       }
     },
-    [todos, mutate, showToastError]
+    [todos, mutate, showToastError],
   );
 
   const handleToggleTodo = useCallback(
@@ -62,11 +64,12 @@ function useTodoActions() {
         await mutate();
 
         toast.success("Todo status updated!");
-      } catch (error) {
+      }
+      catch (error) {
         showToastError(`Failed to toggle todo: ${error instanceof Error ? error.message : "Unknown error"}`);
       }
     },
-    [todos, mutate, showToastError]
+    [todos, mutate, showToastError],
   );
 
   const handleDeleteTodo = useCallback(
@@ -76,11 +79,12 @@ function useTodoActions() {
         await deleteTodo(todoId);
         await mutate();
         toast.success("Todo deleted.");
-      } catch (error) {
+      }
+      catch (error) {
         showToastError(`Failed to delete todo: ${error instanceof Error ? error.message : "Unknown error"}`);
       }
     },
-    [mutate, showToastError]
+    [mutate, showToastError],
   );
 
   const handleDeleteClick = useCallback(handleDeleteTodo, [handleDeleteTodo]);
@@ -98,7 +102,7 @@ function useTodoActions() {
       handleDeleteClick,
       handleToggleClick,
     }),
-    [todos, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick]
+    [todos, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick],
   );
 }
 

@@ -34,16 +34,14 @@ jobs:
           bun-version: latest
 
       - name: Install step
-        run: "bun install"
+        run: bun install
 
       - name: Build step
-        run: "bun run build"
+        run: bun run build
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "todo-list-vite"
-          entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
-          root: "dist"
-          
-          
+          project: todo-list-vite
+          entrypoint: 'https://deno.land/std@0.217.0/http/file_server.ts'
+          root: dist
