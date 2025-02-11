@@ -10,7 +10,7 @@ export default defineConfig(() => {
   return {
     plugins: [react(), UnoCSS()],
     define: {
-      VITE_API_URL: process.env.VITE_API_URL,
+      'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL),
     },
   };
 });
