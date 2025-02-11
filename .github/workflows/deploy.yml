@@ -28,6 +28,11 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install step
         run: "bun install"
 
@@ -38,7 +43,6 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "todo-list-vite"
-          entrypoint: ""
+          entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
           root: "dist"
-          
           
