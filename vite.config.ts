@@ -9,14 +9,5 @@ dotenv.config();
 export default defineConfig(() => {
   return {
     plugins: [react(), UnoCSS()],
-    server: {
-      proxy: {
-        "/api": {
-          target: import.meta.env.VITE_API_URL,
-          changeOrigin: true,
-          secure: false,
-        },
-      },
-    },
   };
 });
