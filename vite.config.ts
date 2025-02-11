@@ -9,5 +9,8 @@ dotenv.config();
 export default defineConfig(() => {
   return {
     plugins: [react(), UnoCSS()],
+    define: {
+    "process.env.VITE_API_URL": `"${process.env.VITE_API_URL}"`
+  },
   };
 });
