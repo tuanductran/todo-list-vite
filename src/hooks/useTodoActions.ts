@@ -5,6 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import { fetchAPI } from "../fetch";
 import type { Todo } from "../schema";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const API_URL = import.meta.env.VITE_API_URL;
 
