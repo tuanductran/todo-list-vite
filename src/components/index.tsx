@@ -1,4 +1,4 @@
-import useTodoActions from "../hooks/useTodoActions";
+import { useTodoActions } from "../hooks/useTodoActions";
 
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
@@ -7,10 +7,9 @@ export default function TodoPage() {
   const {
     todos,
     error,
-    completedTodos,
-    handleAddTodo,
-    handleDeleteClick,
-    handleToggleClick,
+    addNewTodo,
+    toggleTodo,
+    removeTodo,
   } = useTodoActions();
 
   return (
@@ -22,14 +21,13 @@ export default function TodoPage() {
               Manage your tasks
             </h3>
           </div>
-          {!error && <TodoForm onAddTodo={handleAddTodo} />}
+          {!error && <TodoForm onAddTodo={addNewTodo} />}
         </div>
         <TodoList
-          todos={todos || []}
+          todos={todos}
           error={error}
-          completedTodos={completedTodos}
-          handleDeleteClick={handleDeleteClick}
-          handleToggleClick={handleToggleClick}
+          removeTodo={removeTodo}
+          toggleTodo={toggleTodo}
         />
       </div>
     </div>

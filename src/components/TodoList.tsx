@@ -5,12 +5,9 @@ import TodoItem from "./TodoItem";
 function TodoList({
   todos,
   error,
-  completedTodos,
-  handleDeleteClick,
-  handleToggleClick,
+  toggleTodo,
+  removeTodo,
 }: TodoListProps) {
-  const completedTodosSet = new Set(completedTodos);
-
   if (error) {
     return (
       <div className="py-4 text-center text-red-500 font-medium">
@@ -27,9 +24,8 @@ function TodoList({
               <TodoItem
                 key={todo.id}
                 todo={todo}
-                isCompleted={completedTodosSet.has(todo.id)}
-                onToggle={() => handleToggleClick(todo.id)}
-                onDelete={() => handleDeleteClick(todo.id)}
+                onToggle={() => toggleTodo(todo.id)}
+                onDelete={() => removeTodo(todo.id)}
               />
             ))
           )

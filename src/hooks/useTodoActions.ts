@@ -1,26 +1,19 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { v4 as uuidv4 } from "uuid";
 
-import { addTodo, deleteTodo, getTodos, updateTodo } from "../api";
+import { fetchAPI } from "../fetch";
+import type { Todo } from "../schema";
 
-interface Todo {
-  id: string
-  text: string
-  completed: boolean
-}
+const API_URL = "/api/todos";
 
-function useTodoActions() {
-  const {
-    data: todos = [],
-    error,
-    mutate,
-    isLoading,
-  } = useSWR<Todo[]>("/api/todos", getTodos, {
+export function useTodoActions() {
+  const { data: todos = [], error } = useSWR<Todo[]>(API_URL, () => fetchAPI<Todo[]>(API_URL), {
     refreshInterval: 5000,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: true,
+    dedupingInterval: 3000,
+    keepPreviousData: true,
+    fallbackData: [],
   });
 
   useEffect(() => {
@@ -29,81 +22,66 @@ function useTodoActions() {
     }
   }, [error]);
 
-  const showToastError = useCallback((message: string) => toast.error(message), []);
+  const addNewTodo = async (text: string): Promise<void> => {
+    const trimmedText = text.trim();
+    if (!trimmedText) {
+      toast.error("Todo cannot be empty.");
+      return;
+    }
+    if (todos.some((todo) => todo.text === trimmedText)) {
+      toast.error("Duplicate todo text.");
+      return;
+    }
 
-  const handleAddTodo = useCallback(
-    async (text: string) => {
-      const trimmedText = text.trim();
-      if (!trimmedText) return showToastError("Todo cannot be empty.");
-      if (todos?.some((todo) => todo.text === trimmedText)) return showToastError("Duplicate todo text.");
+    const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
 
-      const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
+    toast.promise(
+      fetchAPI(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTodo),
+      }),
+      {
+        success: "Todo added!",
+        error: (err) => `Failed to add todo: ${err instanceof Error ? err.message : "Unknown error"}`,
+      },
+    );
 
-      try {
-        await mutate((prevTodos) => [...(prevTodos || []), newTodo], false);
-        await addTodo(newTodo);
-        await mutate();
-        toast.success("Todo added!");
-      }
-      catch (error) {
-        showToastError(`Failed to add todo: ${error instanceof Error ? error.message : "Unknown error"}`);
-      }
-    },
-    [todos, mutate, showToastError],
-  );
+    mutate(API_URL, (prevTodos: Todo[] = []) => [...prevTodos, newTodo], false);
+  };
 
-  const handleToggleTodo = useCallback(
-    async (todoId: string) => {
-      try {
-        const todo = todos?.find((item) => item.id === todoId);
-        if (!todo) return;
+  const toggleTodo = async (id: string): Promise<void> => {
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) return;
 
-        const updatedTodo = { ...todo, completed: !todo.completed };
-        await mutate((prevTodos) => prevTodos?.map((t) => (t.id === todoId ? updatedTodo : t)), false);
-        await updateTodo(updatedTodo);
-        await mutate();
+    const updatedTodo = { ...todo, completed: !todo.completed };
 
-        toast.success("Todo status updated!");
-      }
-      catch (error) {
-        showToastError(`Failed to toggle todo: ${error instanceof Error ? error.message : "Unknown error"}`);
-      }
-    },
-    [todos, mutate, showToastError],
-  );
+    toast.promise(
+      fetchAPI(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedTodo),
+      }),
+      {
+        success: "Todo updated!",
+        error: (err) => `Failed to update todo: ${err instanceof Error ? err.message : "Unknown error"}`,
+      },
+    );
 
-  const handleDeleteTodo = useCallback(
-    async (todoId: string) => {
-      try {
-        await mutate((prevTodos) => prevTodos?.filter((t) => t.id !== todoId), false);
-        await deleteTodo(todoId);
-        await mutate();
-        toast.success("Todo deleted.");
-      }
-      catch (error) {
-        showToastError(`Failed to delete todo: ${error instanceof Error ? error.message : "Unknown error"}`);
-      }
-    },
-    [mutate, showToastError],
-  );
+    mutate(API_URL, (prevTodos: Todo[] = []) => prevTodos.map((t) => (t.id === id ? updatedTodo : t)), false);
+  };
 
-  const handleDeleteClick = useCallback(handleDeleteTodo, [handleDeleteTodo]);
-  const handleToggleClick = useCallback(handleToggleTodo, [handleToggleTodo]);
+  const removeTodo = async (id: string): Promise<void> => {
+    toast.promise(
+      fetchAPI(`${API_URL}/${id}`, { method: "DELETE" }),
+      {
+        success: "Todo deleted.",
+        error: (err) => `Failed to delete todo: ${err instanceof Error ? err.message : "Unknown error"}`,
+      },
+    );
 
-  const completedTodos = useMemo(() => todos?.filter((todo) => todo.completed).map((todo) => todo.id) || [], [todos]);
+    mutate(API_URL, (prevTodos: Todo[] = []) => prevTodos.filter((t) => t.id !== id), false);
+  };
 
-  return useMemo(
-    () => ({
-      todos,
-      error,
-      isLoading,
-      completedTodos,
-      handleAddTodo,
-      handleDeleteClick,
-      handleToggleClick,
-    }),
-    [todos, error, isLoading, completedTodos, handleAddTodo, handleDeleteClick, handleToggleClick],
-  );
+  return { todos, error, addNewTodo, toggleTodo, removeTodo };
 }
-
-export default useTodoActions;

@@ -29,7 +29,7 @@ export const TodoFormInputPropsSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(3, { message: "Name must be at least 3 characters" }) // Ensures minimum length of 3
+    .min(1, { message: "Name must be at least 1 characters" }) // Ensures minimum length of 1
     .max(20, { message: "Name must not exceed 20 characters" }), // Ensures maximum length of 20
 });
 
@@ -41,13 +41,12 @@ export type TodoFormInputProps = z.infer<typeof TodoFormInputPropsSchema>;
 export const TodoListPropsSchema = z.object({
   todos: z.array(TodoSchema), // Array of Todo objects
   error: z.boolean().optional().default(false), // Optional error flag, defaulting to false
-  completedTodos: z.array(z.string().uuid({ message: "Invalid ID format in completedTodos" })), // Array of completed Todo IDs
-  handleDeleteClick: z.custom<(id: string) => void>((fn) => typeof fn === "function", {
-    message: "handleDeleteClick must be a function",
-  }), // Ensures handleDeleteClick is a function
-  handleToggleClick: z.custom<(id: string) => void>((fn) => typeof fn === "function", {
-    message: "handleToggleClick must be a function",
-  }), // Ensures handleToggleClick is a function
+  removeTodo: z.custom<(id: string) => void>((fn) => typeof fn === "function", {
+    message: "removeTodo must be a function",
+  }), // Ensures removeTodo is a function
+  toggleTodo: z.custom<(id: string) => void>((fn) => typeof fn === "function", {
+    message: "toggleTodo must be a function",
+  }), // Ensures toggleTodo is a function
 });
 
 export type TodoListProps = z.infer<typeof TodoListPropsSchema>;
