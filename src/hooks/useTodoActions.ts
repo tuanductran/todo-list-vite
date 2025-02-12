@@ -1,89 +1,95 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
-import type { Todo } from "../schema";
-import { fetchAPI } from "../fetch";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/todos`;
+import { addTodo, deleteTodo, getTodos, updateTodo } from "../api";
+import TodoContext from "../context";
 
 export function useTodoActions() {
-  const { data: todos = [], mutate, error } = useSWR<Todo[]>(API_URL, () => fetchAPI<Todo[]>(API_URL), {
-    refreshInterval: 3000,
+  const { state, dispatch } = useContext(TodoContext)!;
+
+  const { data, mutate, error } = useSWR("/api/todos", getTodos, {
+    refreshInterval: 5000,
   });
+
+  function getErrorMessage(error: unknown): string {
+    if (error instanceof Error) return error.message;
+    return String(error);
+  }
+
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: "SET_TODOS", payload: data });
+    }
+  }, [data, dispatch]);
 
   useEffect(() => {
     if (error) {
-      toast.error(`Error fetching todos: ${error instanceof Error ? error.message : "Unknown error"}`);
+      toast.error(Error fetching todos: ${getErrorMessage(error)});
     }
   }, [error]);
 
-  const addNewTodo = async (text: string): Promise<void> => {
+  const addNewTodo = async (text: string): Promise<string | number | undefined> => {
     const trimmedText = text.trim();
-    if (!trimmedText) {
-      toast.error("Todo cannot be empty.");
-      return;
-    }
-    if (todos.some((todo) => todo.text === trimmedText)) {
-      toast.error("Duplicate todo text.");
-      return;
+    if (!trimmedText) return toast.error("Todo cannot be empty.");
+    if (state.todos.some((todo: { text: string }) => todo.text === trimmedText)) {
+      return toast.error("Duplicate todo text.");
     }
 
-    const newTodo: Todo = { id: uuidv4(), text: trimmedText, completed: false };
+    const newTodo = { id: uuidv4(), text: trimmedText, completed: false };
 
-    toast.promise(
-      fetchAPI(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTodo),
-      }),
-      {
-        // loading: "Adding todo...",
-        success: "Todo added!",
-        error: (err) => `Failed to add todo: ${err instanceof Error ? err.message : "Unknown error"}`,
-      }
-    );
+    mutate([...state.todos, newTodo], false);
+    dispatch({ type: "ADD_TODO", payload: newTodo });
 
-    await mutate();
+    try {
+      await addTodo(newTodo);
+      await mutate();
+      toast.success("Todo added!");
+    }
+    catch (err) {
+      toast.error(Failed to add todo: ${getErrorMessage(err)});
+      mutate(state.todos, false);
+    }
   };
 
   const toggleTodo = async (id: string): Promise<void> => {
-    const todo = todos.find((t) => t.id === id);
+    const todo = state.todos.find((t) => t.id === id);
     if (!todo) return;
 
     const updatedTodo = { ...todo, completed: !todo.completed };
 
-    toast.promise(
-      fetchAPI(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedTodo),
-      }),
-      {
-        // loading: "Updating todo...",
-        success: "Todo updated!",
-        error: (err) => `Failed to update todo: ${err instanceof Error ? err.message : "Unknown error"}`,
-      }
+    mutate(
+      state.todos.map((t) => (t.id === id ? updatedTodo : t)),
+      false,
     );
+    dispatch({ type: "UPDATE_TODO", payload: updatedTodo });
 
-    await mutate((prevTodos) =>
-      prevTodos ? prevTodos.map((t) => (t.id === id ? updatedTodo : t)) : prevTodos,
-      false
-    );
+    try {
+      await updateTodo(updatedTodo);
+      await mutate();
+      toast.success("Todo updated!");
+    }
+    catch (err) {
+      toast.error(Failed to update todo: ${getErrorMessage(err)});
+      mutate(state.todos, false);
+    }
   };
 
   const removeTodo = async (id: string): Promise<void> => {
-    toast.promise(
-      fetchAPI(`${API_URL}/${id}`, { method: "DELETE" }),
-      {
-        // loading: "Deleting todo...",
-        success: "Todo deleted.",
-        error: (err) => `Failed to delete todo: ${err instanceof Error ? err.message : "Unknown error"}`,
-      }
-    );
+    mutate(state.todos.filter((t) => t.id !== id), false);
+    dispatch({ type: "DELETE_TODO", payload: id });
 
-    await mutate((prevTodos) => prevTodos ? prevTodos.filter((t) => t.id !== id) : prevTodos, false);
+    try {
+      await deleteTodo(id);
+      await mutate();
+      toast.success("Todo deleted.");
+    }
+    catch (err) {
+      toast.error(Failed to delete todo: ${getErrorMessage(err)});
+      mutate(state.todos, false);
+    }
   };
 
-  return { todos, error, addNewTodo, toggleTodo, removeTodo };
+  return { todos: state.todos, error, addNewTodo, toggleTodo, removeTodo };
 }
