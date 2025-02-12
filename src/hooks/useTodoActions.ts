@@ -6,7 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import { fetchAPI } from "../fetch";
 import type { Todo } from "../schema";
 
-const API_URL = `${process.env.VITE_API_URL}/api/todos`;
+const env = process.env.VITE_API_URL ? process.env.VITE_API_URL : import.meta.env.VITE_API_URL
+
+const API_URL = `${env}/api/todos`;
 
 export function useTodoActions() {
   const { data: todos = [], error } = useSWR<Todo[]>(API_URL, () => fetchAPI<Todo[]>(API_URL), {
