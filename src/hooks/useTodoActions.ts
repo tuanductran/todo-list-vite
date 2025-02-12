@@ -1,16 +1,15 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
-
-import { fetchAPI } from "../fetch";
 import type { Todo } from "../schema";
+import { fetchAPI } from "../fetch";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/todos`;
 
 export function useTodoActions() {
-  const { data: todos = [], error } = useSWR<Todo[]>(API_URL, () => fetchAPI<Todo[]>(API_URL), {
-    refreshInterval: 5000,
+  const { data: todos = [], mutate, error } = useSWR<Todo[]>(API_URL, () => fetchAPI<Todo[]>(API_URL), {
+    refreshInterval: 3000,
   });
 
   useEffect(() => {
@@ -39,12 +38,13 @@ export function useTodoActions() {
         body: JSON.stringify(newTodo),
       }),
       {
+        // loading: "Adding todo...",
         success: "Todo added!",
         error: (err) => `Failed to add todo: ${err instanceof Error ? err.message : "Unknown error"}`,
-      },
+      }
     );
 
-    mutate(API_URL, (prevTodos: Todo[] = []) => [...prevTodos, newTodo], false);
+    await mutate();
   };
 
   const toggleTodo = async (id: string): Promise<void> => {
@@ -60,24 +60,29 @@ export function useTodoActions() {
         body: JSON.stringify(updatedTodo),
       }),
       {
+        // loading: "Updating todo...",
         success: "Todo updated!",
         error: (err) => `Failed to update todo: ${err instanceof Error ? err.message : "Unknown error"}`,
-      },
+      }
     );
 
-    mutate(API_URL, (prevTodos: Todo[] = []) => prevTodos.map((t) => (t.id === id ? updatedTodo : t)), false);
+    await mutate((prevTodos) =>
+      prevTodos ? prevTodos.map((t) => (t.id === id ? updatedTodo : t)) : prevTodos,
+      false
+    );
   };
 
   const removeTodo = async (id: string): Promise<void> => {
     toast.promise(
       fetchAPI(`${API_URL}/${id}`, { method: "DELETE" }),
       {
+        // loading: "Deleting todo...",
         success: "Todo deleted.",
         error: (err) => `Failed to delete todo: ${err instanceof Error ? err.message : "Unknown error"}`,
-      },
+      }
     );
 
-    mutate(API_URL, (prevTodos: Todo[] = []) => prevTodos.filter((t) => t.id !== id), false);
+    await mutate((prevTodos) => prevTodos ? prevTodos.filter((t) => t.id !== id) : prevTodos, false);
   };
 
   return { todos, error, addNewTodo, toggleTodo, removeTodo };
