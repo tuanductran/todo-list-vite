@@ -26,7 +26,7 @@ export function useTodoActions() {
 
   useEffect(() => {
     if (error) {
-      toast.error(Error fetching todos: ${getErrorMessage(error)});
+      toast.error(`Error fetching todos: ${getErrorMessage(error)}`);
     }
   }, [error]);
 
@@ -48,7 +48,7 @@ export function useTodoActions() {
       toast.success("Todo added!");
     }
     catch (err) {
-      toast.error(Failed to add todo: ${getErrorMessage(err)});
+      toast.error(`Failed to add todo: ${getErrorMessage(err)}`);
       mutate(state.todos, false);
     }
   };
@@ -71,7 +71,7 @@ export function useTodoActions() {
       toast.success("Todo updated!");
     }
     catch (err) {
-      toast.error(Failed to update todo: ${getErrorMessage(err)});
+      toast.error(`Failed to update todo: ${getErrorMessage(err)}`);
       mutate(state.todos, false);
     }
   };
@@ -86,7 +86,7 @@ export function useTodoActions() {
       toast.success("Todo deleted.");
     }
     catch (err) {
-      toast.error(Failed to delete todo: ${getErrorMessage(err)});
+      toast.error(`Failed to delete todo: ${getErrorMessage(err)}`);
       mutate(state.todos, false);
     }
   };
